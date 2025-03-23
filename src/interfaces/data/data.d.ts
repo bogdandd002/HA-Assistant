@@ -4,7 +4,7 @@ export interface IContractor {
     name: string;
     address: string;
     activity: string;
-    contact_people: IContactPerson;
+    contact_people: IContactPerson[];
     project: IProject
 }
 
