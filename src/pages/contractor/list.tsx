@@ -13,7 +13,7 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
   export const ContractorList = () => {
     const { tableProps } = useTable<IContractor>({
       meta: { 
-        populate: "*",
+        
       },
       syncWithLocation: true,
     });
@@ -46,6 +46,7 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
             render={(_, record) => (
               <Space>
                 <EditButton hideText size="small" recordItemId={record.documentId} />
+                <ShowButton hideText size="small" recordItemId={record.documentId} />
                 <DeleteButton hideText size="small" recordItemId={record.documentId} />
               </Space>
             )}
