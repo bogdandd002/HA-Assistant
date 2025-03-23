@@ -5,9 +5,9 @@ import {
     ShowButton,
     useTable,
   } from "@refinedev/antd";
-  import { type BaseRecord } from "@refinedev/core";
+  import { useMany, type BaseRecord } from "@refinedev/core";
   import { Space, Table } from "antd";
-  import { IContractor } from "../../interfaces/index";
+  import { IContactPerson, IContractor } from "../../interfaces/index";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
   
   export const ContractorList = () => {
@@ -18,6 +18,17 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
       syncWithLocation: true,
     });
 
+    const { data: categoryData, isLoading: categoryIsLoading } = useMany({
+      resource: "contact-people",
+      ids:
+        tableProps?.dataSource
+          ?.map((item) => item?.contact_people?.id)
+          .filter(Boolean) ?? [],
+      queryOptions: {
+        enabled: !!tableProps?.dataSource,
+      },
+    });
+
     return (
       <List>
         <Table {...tableProps} rowKey="documentId">
@@ -25,11 +36,10 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
           <Table.Column dataIndex="name" title={"Name"} />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="activity" title={"Activity"} />
-          <Table.Column 
-          dataIndex={"contact_people"}
-           title={"Contact Person"}
-           render= {(_, record) => {return record.contact_people.name;}}
-            />
+          <Table.Column
+          dataIndex={["contact_person", "name"]}
+          title={"Contact Person"}
+        />
           <Table.Column<{ documentId: string }>
             title="Actions"
             dataIndex="actions"

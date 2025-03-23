@@ -1,9 +1,10 @@
 import { Edit, useForm, useSelect } from "@refinedev/antd";
 import MDEditor from "@uiw/react-md-editor";
 import { Form, Input, Select } from "antd";
+import { IContractor } from "../../interfaces";
 
 export const ContractorEdit = () => {
-  const { formProps, saveButtonProps, queryResult, formLoading } = useForm({
+  const { formProps, saveButtonProps, queryResult, formLoading } = useForm<IContractor>({
     meta: {
       populate: ["contractor"],
     },
@@ -13,9 +14,9 @@ export const ContractorEdit = () => {
 
   const { selectProps: categorySelectProps } = useSelect({
     resource: "contractors",
-    defaultValue: blogPostsData?.category,
+    defaultValue: blogPostsData?.name,
     queryOptions: {
-      enabled: !!blogPostsData?.category,
+      enabled: !!blogPostsData?.name,
     },
   });
 
@@ -23,8 +24,8 @@ export const ContractorEdit = () => {
     <Edit saveButtonProps={saveButtonProps} isLoading={formLoading}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Title"}
-          name={["title"]}
+          label={"Name"}
+          name={["name"]}
           rules={[
             {
               required: true,
@@ -34,8 +35,8 @@ export const ContractorEdit = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Content"}
-          name="content"
+          label={"Address"}
+          name="address"
           rules={[
             {
               required: true,

@@ -1,20 +1,23 @@
 import { Create, useForm, useSelect } from "@refinedev/antd";
 import MDEditor from "@uiw/react-md-editor";
 import { Form, Input, Select } from "antd";
+import { IContractor } from "../../interfaces/data/data";
 
 export const ContractorCreate = () => {
-  const { formProps, saveButtonProps } = useForm({});
+  const { formProps, saveButtonProps } = useForm<IContractor>({});
 
   const { selectProps: categorySelectProps } = useSelect({
     resource: "categories",
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create
+    title="Add Contractor"
+    saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Title"}
-          name={["title"]}
+          label={"Name"}
+          name={["name"]}
           rules={[
             {
               required: true,
@@ -24,46 +27,26 @@ export const ContractorCreate = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Content"}
-          name="content"
+          label={"Address"}
+          name={["address"]}
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <MDEditor data-color-mode="light" />
+          <Input />
         </Form.Item>
         <Form.Item
-          label={"Category"}
-          name={["category", "id"]}
+          label={"Activity"}
+          name={["activity"]}
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <Select {...categorySelectProps} />
-        </Form.Item>
-        <Form.Item
-          label={"Status"}
-          name={["status"]}
-          initialValue={"draft"}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            defaultValue={"draft"}
-            options={[
-              { value: "draft", label: "Draft" },
-              { value: "published", label: "Published" },
-              { value: "rejected", label: "Rejected" },
-            ]}
-            style={{ width: 120 }}
-          />
+          <Input />
         </Form.Item>
       </Form>
     </Create>
