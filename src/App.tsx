@@ -68,18 +68,14 @@ function App() {
                 
                 resources={[
                   {
-                    name: "Contractors",
-                    icon: <TeamOutlined />
-                  },
-                  {
                     name: "contractors",
                     list: "/contractors",
                     create: "/contractors/create",
                     edit: "/contractors/edit/:id",
                     show: "/contractors/show/:id",
+                    icon: <TeamOutlined />,
                     meta: {
-                      parent: "Contractors",
-                      canDelete: true
+                      label: "Contractors"
                     }
                   },
                   {
@@ -121,16 +117,14 @@ function App() {
                           Header={Header}
                           Sider={(props) => <ThemedSiderV2 {...props} fixed />}
                         >
-                          <CanAccess>
                           <Outlet />
-                          </CanAccess>
                         </ThemedLayoutV2>
                       </Authenticated>
                     }
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="contractor" />}
+                      element={<NavigateToResource resource="contractors" />}
                     />
                     <Route path="/contractors">
                       <Route path="/contractors">

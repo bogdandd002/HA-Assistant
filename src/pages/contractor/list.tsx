@@ -46,14 +46,8 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
             dataIndex="actions"
             render={(_, record) => (
               <Space>
-                <CanAccess
-    resource="contractor"
-    action="show">
-                <EditButton hideText size="small" recordItemId={record.documentId} /></CanAccess>
-                <CanAccess
-    resource="contractor"
-    action="edit">
-                <ShowButton hideText size="small" recordItemId={record.documentId} /></CanAccess>
+                <EditButton hideText size="small" recordItemId={record.documentId} />
+                <ShowButton hideText size="small" recordItemId={record.documentId} />
                 <DeleteButton hideText size="small" recordItemId={record.documentId} />
               </Space>
             )}

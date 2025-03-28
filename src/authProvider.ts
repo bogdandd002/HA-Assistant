@@ -89,11 +89,13 @@ export const authProvider: AuthProvider = {
 
     const { data, status } = await strapiAuthHelper.me(token);
     if (status === 200) {
-      const { id, username, email } = data;
+      const { id, username, email, role } = data;
+      const { name: newrole } = role;
       return {
         id,
         name: username,
         email,
+        newrole
       };
     }
 
