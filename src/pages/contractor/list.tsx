@@ -5,7 +5,7 @@ import {
     ShowButton,
     useTable,
   } from "@refinedev/antd";
-  import { keys, useMany, type BaseRecord } from "@refinedev/core";
+  import { CanAccess, keys, useMany, type BaseRecord } from "@refinedev/core";
   import { Space, Table } from "antd";
   import { IContactPerson, IContractor } from "../../interfaces/index";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
@@ -46,8 +46,14 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
             dataIndex="actions"
             render={(_, record) => (
               <Space>
-                <EditButton hideText size="small" recordItemId={record.documentId} />
-                <ShowButton hideText size="small" recordItemId={record.documentId} />
+                <CanAccess
+    resource="contractor"
+    action="show">
+                <EditButton hideText size="small" recordItemId={record.documentId} /></CanAccess>
+                <CanAccess
+    resource="contractor"
+    action="edit">
+                <ShowButton hideText size="small" recordItemId={record.documentId} /></CanAccess>
                 <DeleteButton hideText size="small" recordItemId={record.documentId} />
               </Space>
             )}

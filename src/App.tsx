@@ -1,4 +1,4 @@
-import { Authenticated, Refine } from "@refinedev/core";
+import { Authenticated, CanAccess, CanParams, CanReturnType, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
@@ -40,6 +40,9 @@ import {
   CategoryList,
   CategoryShow,
 } from "./pages/categories";
+import { newEnforcer } from "casbin";
+import { adapter, model } from "./casbin/accessControl";
+import { accessControlProvider } from "./providers/accessControlProvider";
 
 const {
   UserAddOutlined,
@@ -58,17 +61,26 @@ function App() {
             <DevtoolsProvider>
               <Refine
                 authProvider={authProvider}
+                accessControlProvider={accessControlProvider}
                 dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
+                
                 resources={[
+                  {
+                    name: "Contractors",
+                    icon: <TeamOutlined />
+                  },
                   {
                     name: "contractors",
                     list: "/contractors",
                     create: "/contractors/create",
                     edit: "/contractors/edit/:id",
                     show: "/contractors/show/:id",
-                    icon: <TeamOutlined />
+                    meta: {
+                      parent: "Contractors",
+                      canDelete: true
+                    }
                   },
                   {
                     name: "contact-people",
@@ -109,7 +121,9 @@ function App() {
                           Header={Header}
                           Sider={(props) => <ThemedSiderV2 {...props} fixed />}
                         >
+                          <CanAccess>
                           <Outlet />
+                          </CanAccess>
                         </ThemedLayoutV2>
                       </Authenticated>
                     }
@@ -119,10 +133,12 @@ function App() {
                       element={<NavigateToResource resource="contractor" />}
                     />
                     <Route path="/contractors">
-                      <Route index element={<ContractorList />} />
-                      <Route path="create" element={<ContractorCreate />} />
-                      <Route path="edit/:id" element={<ContractorEdit />} />
-                      <Route path="show/:id" element={<ContractorShow />} />
+                      <Route path="/contractors">
+                        <Route index element={<ContractorList />} />
+                        <Route path="create" element={<ContractorCreate />} />
+                        <Route path="edit/:id" element={<ContractorEdit />} />
+                        <Route path="show/:id" element={<ContractorShow />} />
+                      </Route>
                     </Route>
                     <Route path="/contact-people">
                       <Route index element={<CategoryList />} />

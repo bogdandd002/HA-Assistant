@@ -62,7 +62,25 @@ export const authProvider: AuthProvider = {
       redirectTo: "/login",
     };
   },
-  getPermissions: async () => null,
+  getPermissions: async () => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+      return null;
+    }
+
+    const { data, status } = await strapiAuthHelper.me(token);
+    if (status === 200) {
+      const { id, username, email, role } = data;
+      return {
+        id,
+        name: username,
+        email,
+        role
+      };
+    }
+
+    return null;
+  },
   getIdentity: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {
