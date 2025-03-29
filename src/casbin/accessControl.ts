@@ -18,15 +18,20 @@ export const model = newModel(`
   `);
   
   export const adapter = new StringAdapter(`
-    p, Authenticated, contractors, show
-    p, Authenticated, contractors, list
-    p, Authenticated, contractors, create
-    p, Authenticated, contractors, (list)|(edit)|(delete)
+    p, Admin, contractors, show
+    p, Admin, contractors, list
+    p, Admin, contractors, create
+    p, Admin, contractors, (list)|(edit)|(delete)
 
-    p, Authenticated, contact-people, show
-    p, Authenticated, contact-people, list
-    p, Authenticated, contact-people, create
-    p, Authenticated, contact-people, (list)|(edit)|(delete)
+    p, Admin, projects, show
+    p, Admin, projects, list
+    p, Admin, projects, create
+    p, Admin, projects, (list)|(edit)|(delete)
+
+    p, Admin, contact-people, show
+    p, Admin, contact-people, list
+    p, Admin, contact-people, create
+    p, Admin, contact-people, (list)|(edit)|(delete)
   
     p, editor, users, list
     p, editor, canvases, (list)|(edit)

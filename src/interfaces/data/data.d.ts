@@ -1,10 +1,10 @@
 
 export interface IContractor {
-    documentId: number;
+    documentId: string;
     name: string;
     address: string;
     activity: string;
-    contact_people: IContactPerson[];
+    contact_person: IContactPerson[];
     project: IProject
 }
 
@@ -17,11 +17,13 @@ export interface IContactPerson {
 }
 
 export interface IProject {
-    id: number;
+    documentId: string;
     project_nr: number;
     name: string;
     address: string;
-    contractors: IContractor[];
     start_date: Date;
     end_date: Date;
+    contractors: IContractor[];
+    work_activity: IWorkActivity[];
+    contact_person: IContactPerson[];
 }

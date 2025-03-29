@@ -43,6 +43,7 @@ import {
 import { newEnforcer } from "casbin";
 import { adapter, model } from "./casbin/accessControl";
 import { accessControlProvider } from "./providers/accessControlProvider";
+import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/projects";
 
 const {
   UserAddOutlined,
@@ -76,6 +77,17 @@ function App() {
                     icon: <TeamOutlined />,
                     meta: {
                       label: "Contractors"
+                    }
+                  },
+                  {
+                    name: "projects",
+                    list: "/projects",
+                    create: "/projects/create",
+                    edit: "/projects/edit/:id",
+                    show: "/projects/show/:id",
+                    icon: <TeamOutlined />,
+                    meta: {
+                      label: "Projects"
                     }
                   },
                   {
@@ -133,6 +145,12 @@ function App() {
                         <Route path="edit/:id" element={<ContractorEdit />} />
                         <Route path="show/:id" element={<ContractorShow />} />
                       </Route>
+                    </Route>
+                    <Route path="/projects">
+                      <Route index element={<ProjectList />} />
+                      <Route path="create" element={<ProjectCreate />} />
+                      <Route path="edit/:id" element={<ProjectEdit />} />
+                      <Route path="show/:id" element={<ProjectShow />} />
                     </Route>
                     <Route path="/contact-people">
                       <Route index element={<CategoryList />} />

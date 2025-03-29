@@ -7,13 +7,13 @@ import {
   } from "@refinedev/antd";
   import { CanAccess, keys, useMany, type BaseRecord } from "@refinedev/core";
   import { Space, Table } from "antd";
-  import { IContactPerson, IContractor } from "../../interfaces/index";
+  import { IProject } from "../../interfaces/index";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
   
-  export const ContractorList = () => {
-    const { tableProps } = useTable<IContractor>({
+  export const ProjectList = () => {
+    const { tableProps } = useTable<IProject>({
       meta: { 
-        populate: "*"
+        populate: ["contractors"],
       },
       syncWithLocation: true,
     });
@@ -32,14 +32,15 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
     return (
       <List>
         <Table {...tableProps} rowKey="documentId">
-          <Table.Column dataIndex="documentId" title={"ID"} />
+          <Table.Column dataIndex="project_nr" title={"Project Nr."} />
           <Table.Column dataIndex="name" title={"Name"} />
           <Table.Column dataIndex="address" title={"Address"} />
-          <Table.Column dataIndex="activity" title={"Activity"} />
+          <Table.Column dataIndex="start_date" title={"Start Date"} />
+          <Table.Column dataIndex="end_date" title={"End Date"} />
           <Table.Column
-          dataIndex="contact_person"
-          title={"Contact Person"}
-          render={ (_, contact_person) => contact_person?.data?.map((item: any) => item?.contact_person?.name)}
+          dataIndex= "contractors"
+          title={"Active Contractors"}
+          render={ (_, contractors) =>  contractors}
         /> 
           <Table.Column<{ documentId: string }>
             title="Actions"
