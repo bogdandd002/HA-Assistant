@@ -10,15 +10,12 @@ import {
 } from "antd";
 import React, { useContext } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
+import { IUser } from "../../interfaces";
 
 const { Text } = Typography;
 const { useToken } = theme;
 
-type IUser = {
-  id: number;
-  name: string;
-  avatar: string;
-};
+
 
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
@@ -53,7 +50,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
         />
         <Space style={{ marginLeft: "8px" }} size="middle">
           {user?.name && <Text strong>{user.name}</Text>}
-          {user?.name && <Text strong>{user.name}</Text>}
+          {user?.user_role && <Text strong>{user.user_role}</Text>}
           {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
         </Space>
       </Space>

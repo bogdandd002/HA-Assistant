@@ -62,40 +62,42 @@ export const authProvider: AuthProvider = {
       redirectTo: "/login",
     };
   },
-  getPermissions: async () => {
+  getPermissions: async (): Promise<string> => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {
-      return null;
+      return "Noroleandnotlogin";
     }
+    // fetching user role from strapi by making an extra call - explore for aternative in the future
+      const response = await fetch('http://localhost:1337/api/users/me?populate=role', {
+      headers: {
+          authorization: `Bearer ${token}`,
+        }})
+      const {role: role} = await response.json();
+      const {name: user_role} = role;
 
-    const { data, status } = await strapiAuthHelper.me(token);
-    if (status === 200) {
-      const { id, username, email, role } = data;
-      return {
-        id,
-        name: username,
-        email,
-        role
-      };
-    }
-
-    return null;
+      return user_role
   },
   getIdentity: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {
       return null;
     }
-
+    // fetching user role from strapi by making an extra call - explore for aternative in the future
+      const response = await fetch('http://localhost:1337/api/users/me?populate=role', {
+      headers: {
+          authorization: `Bearer ${token}`,
+        }})
+      const {role: role} = await response.json();
+      const {name: user_role} = role;
+    
     const { data, status } = await strapiAuthHelper.me(token);
     if (status === 200) {
-      const { id, username, email, role } = data;
-      const { name: newrole } = role;
+      const { id, username, email } = data;
       return {
         id,
         name: username,
         email,
-        newrole
+        user_role
       };
     }
 

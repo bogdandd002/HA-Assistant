@@ -5,13 +5,12 @@ import { authProvider } from "../authProvider";
 
 export const accessControlProvider = {
     can: async ({ resource, action }: CanParams): Promise<CanReturnType> => {
-                        const  role  = await authProvider.getIdentity?.();
-                        const enforcer = await newEnforcer(model, adapter);
-                        const can = await enforcer.enforce(role, resource, action);
-                        console.log(role)
-                        return Promise.resolve({
-                          can,
-                        });
-                      },
+          const data  = await authProvider.getPermissions?.();
+          const enforcer = await newEnforcer(model, adapter);
+          const can = await enforcer.enforce(data, resource, action);                          
+              return Promise.resolve({
+                        can,
+              });
+    },
    
 };
