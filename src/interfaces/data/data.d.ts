@@ -5,7 +5,7 @@ export interface IContractor {
     address: string;
     activity: string;
     contact_person: IContactPerson[];
-    project: IProject
+    project: IProject[]
 }
 
 export interface IContactPerson {
@@ -23,7 +23,7 @@ export interface IProject {
     address: string;
     start_date: Date;
     end_date: Date;
-    contractors: IContractor[];
-    work_activity: IWorkActivity[];
-    contact_person: IContactPerson[];
+    contractors: IContractor;
+    work_activity: IWorkActivity;
+    contact_person: IContactPerson;
 }

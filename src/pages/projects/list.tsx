@@ -1,20 +1,49 @@
 import {
     DeleteButton,
     EditButton,
+    getDefaultSortOrder,
     List,
     ShowButton,
     useTable,
+    FilterDropdown,
+    SaveButton
   } from "@refinedev/antd";
-  import { CanAccess, keys, useMany, type BaseRecord } from "@refinedev/core";
-  import { Space, Table } from "antd";
+  import {  HttpError} from "@refinedev/core";
+  import { Space, Table, Radio, Form, Input } from "antd";
   import { IProject } from "../../interfaces/index";
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
+
+  interface ISearch {
+    title: string;
+  }
   
   export const ProjectList = () => {
-    const { tableProps } = useTable<IProject>({
+    const { tableProps, filters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
+      sorters: {
+        initial: [
+          {
+            field: "project_nr",
+            order: "desc",
+          },
+        ],
+        mode: "server"
+      },
+      onSearch: (values) => {
+        return [
+          {
+            field: "name",
+            operator: "contains",
+            value: values.title,
+          },
+        ];
+      },
+      filters: {
+        mode: "server",
+      },
+      liveMode: "auto",
       meta: { 
         populate: ["contractors"],
       },
+      
       syncWithLocation: true,
     });
 
@@ -31,21 +60,40 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
 
     return (
       <List>
-        <Table {...tableProps} rowKey="documentId">
-          <Table.Column dataIndex="project_nr" title={"Project Nr."} />
-          <Table.Column dataIndex="name" title={"Name"} />
+         <Form {...searchFormProps} layout="inline">
+        <Form.Item name="title">
+          <Input placeholder="Search by title" />
+        </Form.Item>
+        <SaveButton onClick={searchFormProps.form?.submit} />
+      </Form>
+        <Table {...tableProps} 
+        rowKey="documentId"
+        pagination={{
+          ...tableProps.pagination,
+          position: ["bottomCenter"],
+          size: "small",
+        }}>
+          <Table.Column dataIndex="project_nr" title={"Project Nr."}
+          sorter={{multiple:2}}
+          defaultSortOrder={getDefaultSortOrder("project_nr", sorters)}
+          />
+          <Table.Column dataIndex="name" title={"Name"}
+          sorter={{multiple:1}}
+          defaultSortOrder={getDefaultSortOrder("name", sorters)}
+          render={text =><a href="">{text}</a>}
+           />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />
           <Table.Column dataIndex="end_date" title={"End Date"} />
           <Table.Column
           dataIndex= "contractors"
           title={"Active Contractors"}
-          render={ (_, contractors) =>  contractors}
+          render={ (_, record)  => record}
         /> 
           <Table.Column<{ documentId: string }>
             title="Actions"
             dataIndex="actions"
-            render={(_, record) => (
+            render={(_, record) => ( 
               <Space>
                 <EditButton hideText size="small" recordItemId={record.documentId} />
                 <ShowButton hideText size="small" recordItemId={record.documentId} />
