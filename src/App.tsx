@@ -67,8 +67,10 @@ function App() {
                 dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
-                
                 resources={[
+                  {
+                    name: "select_project", list: () => null
+                  },
                   {
                     name: "contractors",
                     list: "/contractors",
@@ -137,15 +139,16 @@ function App() {
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="contractors" />}
+                      element={<NavigateToResource resource="project" />}
                     />
+                    <Route path="/select_project">
+                      <Route index element={<SelectProjectList/>} />
+                    </Route>
                     <Route path="/contractors">
-                      <Route path="/contractors">
                         <Route index element={<ContractorList />} />
                         <Route path="create" element={<ContractorCreate />} />
                         <Route path="edit/:id" element={<ContractorEdit />} />
                         <Route path="show/:id" element={<ContractorShow />} />
-                      </Route>
                     </Route>
                     <Route path="/projects">
                       <Route index element={<ProjectList />} />
@@ -161,12 +164,6 @@ function App() {
                     </Route>
                     <Route path="/project">
                       <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
-                    </Route>
-                    <Route path="/select_project">
-                      <Route index element={<SelectProjectList />} />
                       <Route path="create" element={<CategoryCreate />} />
                       <Route path="edit/:id" element={<CategoryEdit />} />
                       <Route path="show/:id" element={<CategoryShow />} />
