@@ -16,7 +16,7 @@ import {
     title: string;
   }
   
-  export const ProjectList = () => {
+  export const SelectProjectList = () => {
     const { tableProps, filters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
       sorters: {
         initial: [

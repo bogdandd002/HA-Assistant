@@ -5,13 +5,13 @@ import {
     ShowButton,
     useTable,
   } from "@refinedev/antd";
-  import { CanAccess, keys, useMany, type BaseRecord } from "@refinedev/core";
+  import { CanAccess, HttpError, keys, useMany, type BaseRecord } from "@refinedev/core";
   import { Space, Table } from "antd";
   import { IContactPerson, IContractor } from "../../interfaces/index";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
   
   export const ContractorList = () => {
-    const { tableProps } = useTable<IContractor>({
+    const { tableProps } = useTable<IContractor, HttpError>({
       meta: { 
         populate: "*"
       },
@@ -39,7 +39,7 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "rea
           <Table.Column
           dataIndex="contact_person"
           title={"Contact Person"}
-          render={ (_, contact_person) => contact_person?.data?.map((item: any) => item?.contact_person?.name)}
+          render={ (_, resource) => resource?.contact_person.map((item: any) => console.log(Object.keys(resource.contact_person).length))}
         /> 
           <Table.Column<{ documentId: string }>
             title="Actions"

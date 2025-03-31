@@ -44,6 +44,7 @@ import { newEnforcer } from "casbin";
 import { adapter, model } from "./casbin/accessControl";
 import { accessControlProvider } from "./providers/accessControlProvider";
 import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/projects";
+import { SelectProjectList } from "./pages/projects/select_project";
 
 const {
   UserAddOutlined,
@@ -160,6 +161,12 @@ function App() {
                     </Route>
                     <Route path="/project">
                       <Route index element={<CategoryList />} />
+                      <Route path="create" element={<CategoryCreate />} />
+                      <Route path="edit/:id" element={<CategoryEdit />} />
+                      <Route path="show/:id" element={<CategoryShow />} />
+                    </Route>
+                    <Route path="/select_project">
+                      <Route index element={<SelectProjectList />} />
                       <Route path="create" element={<CategoryCreate />} />
                       <Route path="edit/:id" element={<CategoryEdit />} />
                       <Route path="show/:id" element={<CategoryShow />} />
