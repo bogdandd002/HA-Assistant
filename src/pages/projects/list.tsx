@@ -15,6 +15,11 @@ import {
   interface ISearch {
     title: string;
   }
+
+  function selectProject(project: string) {
+        window.localStorage.setItem("project_name", project)
+        window.dispatchEvent(new Event("storage"));
+  }
   
   export const ProjectList = () => {
     const { tableProps, filters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
@@ -43,7 +48,6 @@ import {
       meta: { 
         populate: "*",
       },
-      
       syncWithLocation: true,
     });
 
@@ -77,10 +81,11 @@ import {
           sorter={{multiple:2}}
           defaultSortOrder={getDefaultSortOrder("project_nr", sorters)}
           />
-          <Table.Column dataIndex="name" title={"Name"}
+          <Table.Column <{ documentId: string }>
+          dataIndex="name" title={"Name"}
           sorter={{multiple:1}}
           defaultSortOrder={getDefaultSortOrder("name", sorters)}
-          render={text =><a href="">{text}</a>}
+          render={text =><a href="" onClick={() => selectProject(text)}>{text}</a>}
            />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />

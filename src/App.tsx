@@ -44,7 +44,6 @@ import { newEnforcer } from "casbin";
 import { adapter, model } from "./casbin/accessControl";
 import { accessControlProvider } from "./providers/accessControlProvider";
 import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/projects";
-import { SelectProjectList } from "./pages/projects/select_project";
 
 const {
   UserAddOutlined,
@@ -68,8 +67,19 @@ function App() {
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
                 resources={[
+                  // {
+                  //   name: "select_project", list: () => null
+                  // },
                   {
-                    name: "select_project", list: () => null
+                    name: "projects",
+                    list: "/projects",
+                    create: "/projects/create",
+                    edit: "/projects/edit/:id",
+                    show: "/projects/show/:id",
+                    icon: <TeamOutlined />,
+                    meta: {
+                      label: "Select project"
+                    }
                   },
                   {
                     name: "contractors",
@@ -82,17 +92,7 @@ function App() {
                       label: "Contractors"
                     }
                   },
-                  {
-                    name: "projects",
-                    list: "/projects",
-                    create: "/projects/create",
-                    edit: "/projects/edit/:id",
-                    show: "/projects/show/:id",
-                    icon: <TeamOutlined />,
-                    meta: {
-                      label: "Projects"
-                    }
-                  },
+                  
                   {
                     name: "contact-people",
                     list: "/contact-people",
@@ -121,7 +121,7 @@ function App() {
                   projectId: "k0ry9W-yvpLgr-gKoaAn",
                 }}
               >
-                <Routes>
+               <Routes>
                   <Route
                     element={
                       <Authenticated
@@ -139,22 +139,19 @@ function App() {
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="project" />}
+                      element={<NavigateToResource resource="projects" />}
                     />
-                    <Route path="/select_project">
-                      <Route index element={<SelectProjectList/>} />
+                    <Route path="/projects">
+                      <Route index element={<ProjectList />} />
+                      <Route path="create" element={<ProjectCreate />} />
+                      <Route path="edit/:id" element={<ProjectEdit />} />
+                      <Route path="show/:id" element={<ProjectShow />} />
                     </Route>
                     <Route path="/contractors">
                         <Route index element={<ContractorList />} />
                         <Route path="create" element={<ContractorCreate />} />
                         <Route path="edit/:id" element={<ContractorEdit />} />
                         <Route path="show/:id" element={<ContractorShow />} />
-                    </Route>
-                    <Route path="/projects">
-                      <Route index element={<ProjectList />} />
-                      <Route path="create" element={<ProjectCreate />} />
-                      <Route path="edit/:id" element={<ProjectEdit />} />
-                      <Route path="show/:id" element={<ProjectShow />} />
                     </Route>
                     <Route path="/contact-people">
                       <Route index element={<CategoryList />} />

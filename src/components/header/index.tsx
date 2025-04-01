@@ -15,7 +15,10 @@ import { IUser } from "../../interfaces";
 const { Text } = Typography;
 const { useToken } = theme;
 
-
+window.addEventListener('storage', () => {
+  console.log("Change to local storage!");
+  // ...
+})
 
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
