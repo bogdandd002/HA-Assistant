@@ -8,17 +8,17 @@ import {
   theme,
   Typography,
 } from "antd";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
 import { IUser } from "../../interfaces";
 
 const { Text } = Typography;
 const { useToken } = theme;
 
-window.addEventListener('storage', () => {
-  console.log("Change to local storage!");
-  // ...
-})
+// window.addEventListener('storage', () => {
+//   console.log("Change to local storage!");
+//   // ...
+// })
 
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
@@ -26,6 +26,20 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const { token } = useToken();
   const { data: user } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
+  const [selected_project, setSelectedProject] = useState("");
+  useEffect(() => { 
+    const project = localStorage.getItem('selected_project');   
+    if(project){
+      setSelectedProject(project)
+    }
+  }, [selected_project])
+
+  function DisplayProject(project:string){
+    if (project){
+      return <h2>You are in project: {project}</h2>
+    }
+    return <h2> Please select a project</h2>
+  }
 
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
@@ -44,7 +58,11 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   return (
     <AntdLayout.Header style={headerStyles}>
-      <Space>
+      <Space direction="horizontal" style={{width: '80%', justifyContent: 'left'}}>
+       {DisplayProject(selected_project)}
+      </Space>
+      <Space direction="horizontal" style={{width: '20%', justifyContent: 'right'}}>
+        
         <Switch
           checkedChildren="🌛"
           unCheckedChildren="🔆"

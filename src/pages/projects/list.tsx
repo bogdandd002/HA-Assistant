@@ -17,12 +17,12 @@ import {
   }
 
   function selectProject(project: string) {
-        window.localStorage.setItem("project_name", project)
-        window.dispatchEvent(new Event("storage"));
+        localStorage.setItem("selected_project", project)
+       // window.dispatchEvent(new Event("storage"));
   }
   
   export const ProjectList = () => {
-    const { tableProps, filters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
+    const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
       sorters: {
         initial: [
           {
@@ -48,6 +48,7 @@ import {
       meta: { 
         populate: "*",
       },
+
       syncWithLocation: true,
     });
 
@@ -66,9 +67,18 @@ import {
       <List>
          <Form {...searchFormProps} layout="inline">
         <Form.Item name="title">
-          <Input placeholder="Search by title" />
+          <Input placeholder="Search by project name" onChange={(e) => {
+            setFilters([
+              {
+                field: "name",
+                operator: "contains",
+                value: !!e.currentTarget.value
+                  ? e.currentTarget.value
+                  : undefined,
+              },
+            ]);
+          }} />
         </Form.Item>
-        <SaveButton onClick={searchFormProps.form?.submit} />
       </Form>
         <Table {...tableProps} 
         rowKey="documentId"
@@ -81,7 +91,7 @@ import {
           sorter={{multiple:2}}
           defaultSortOrder={getDefaultSortOrder("project_nr", sorters)}
           />
-          <Table.Column <{ documentId: string }>
+          <Table.Column 
           dataIndex="name" title={"Name"}
           sorter={{multiple:1}}
           defaultSortOrder={getDefaultSortOrder("name", sorters)}

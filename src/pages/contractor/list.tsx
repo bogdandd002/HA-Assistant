@@ -8,12 +8,22 @@ import {
   import { CanAccess, HttpError, keys, useMany, type BaseRecord } from "@refinedev/core";
   import { Space, Table } from "antd";
   import { IContactPerson, IContractor } from "../../interfaces/index";
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
+  import { useMemo } from "react";
   
+  const project = localStorage.getItem("selected_project")
   export const ContractorList = () => {
-    const { tableProps } = useTable<IContractor, HttpError>({
+    const { tableProps, tableQuery, filters, setFilters } = useTable<IContractor, HttpError>({
       meta: { 
         populate: "*"
+      },
+      filters: {
+        permanent: [
+          {
+            field: "name",
+            operator: "eq",
+            value: "SSC",
+          },
+        ],
       },
       syncWithLocation: true,
     });
