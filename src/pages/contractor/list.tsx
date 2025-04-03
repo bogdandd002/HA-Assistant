@@ -13,15 +13,16 @@ import {
   const project = localStorage.getItem("selected_project")
   export const ContractorList = () => {
     const { tableProps, tableQuery, filters, setFilters } = useTable<IContractor, HttpError>({
+     
       meta: { 
         populate: "*"
       },
       filters: {
         permanent: [
           {
-            field: "name",
+            field: "projects.name",
             operator: "eq",
-            value: "SSC",
+            value: project,
           },
         ],
       },
