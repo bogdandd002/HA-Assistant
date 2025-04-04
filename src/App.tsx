@@ -44,6 +44,7 @@ import { newEnforcer } from "casbin";
 import { adapter, model } from "./casbin/accessControl";
 import { accessControlProvider } from "./providers/accessControlProvider";
 import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/projects";
+import { WorkActivityCreate, WorkActivityEdit, WorkActivityList, WorkActivityShow } from "./pages/work_activities";
 
 const {
   UserAddOutlined,
@@ -66,54 +67,45 @@ function App() {
                 dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
-                resources={[
-                  // {
-                  //   name: "select_project", list: () => null
-                  // },
-                  {
-                    name: "projects",
-                    list: "/projects",
-                    create: "/projects/create",
-                    edit: "/projects/edit/:id",
-                    show: "/projects/show/:id",
-                    icon: <TeamOutlined />,
-                    meta: {
-                      label: "Select project"
-                    }
+                resources={[// {
+                //   name: "select_project", list: () => null
+                // },
+                {
+                  name: "projects",
+                  list: "/projects",
+                  create: "/projects/create",
+                  edit: "/projects/edit/:id",
+                  show: "/projects/show/:id",
+                  icon: <TeamOutlined />,
+                  meta: {
+                    label: "Select project"
+                  }
+                }, {
+                  name: "contractors",
+                  list: "/contractors",
+                  create: "/contractors/create",
+                  edit: "/contractors/edit/:id",
+                  show: "/contractors/show/:id",
+                  icon: <TeamOutlined />,
+                  meta: {
+                    label: "Contractors"
+                  }
+                }, {
+                  name: "contact-people",
+                  list: "/contact-people",
+                  create: "/contact-people/create",
+                  edit: "/contact-people/edit/:id",
+                  show: "/contact-people/show/:id",
+                  meta: {
+                    canDelete: true,
                   },
-                  {
-                    name: "contractors",
-                    list: "/contractors",
-                    create: "/contractors/create",
-                    edit: "/contractors/edit/:id",
-                    show: "/contractors/show/:id",
-                    icon: <TeamOutlined />,
-                    meta: {
-                      label: "Contractors"
-                    }
-                  },
-                  
-                  {
-                    name: "contact-people",
-                    list: "/contact-people",
-                    create: "/contact-people/create",
-                    edit: "/contact-people/edit/:id",
-                    show: "/contact-people/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "project",
-                    list: "/project",
-                    create: "/project/create",
-                    edit: "/project/edit/:id",
-                    show: "/project/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                ]}
+                }, {
+                  name: "work-activities",
+                  list: "/work-activities",
+                  create: "/work-activities/create",
+                  edit: "/work-activities/edit/:id",
+                  show: "/work-activities/show/:id"
+                }]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -159,12 +151,13 @@ function App() {
                       <Route path="edit/:id" element={<CategoryEdit />} />
                       <Route path="show/:id" element={<CategoryShow />} />
                     </Route>
-                    <Route path="/project">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
+                    <Route path="/work-activities">
+                      <Route index element={<WorkActivityList />} />
+                      <Route path="create" element={<WorkActivityCreate />} />
+                      <Route path="edit/:id" element={<WorkActivityEdit />} />
+                      <Route path="show/:id" element={<WorkActivityShow />} />
                     </Route>
+                    
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   <Route
