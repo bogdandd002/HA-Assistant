@@ -16,8 +16,9 @@ import {
     title: string;
   }
 
-  function selectProject(project: string) {
-        localStorage.setItem("selected_project", project)
+  function selectProject(project_name: string, project_id: string) {
+        localStorage.setItem("selected_project_name", project_name)
+        localStorage.setItem("selected_project_id", project_id)
        // window.dispatchEvent(new Event("storage"));
   }
   
@@ -95,7 +96,8 @@ import {
           dataIndex="name" title={"Name"}
           sorter={{multiple:1}}
           defaultSortOrder={getDefaultSortOrder("name", sorters)}
-          render={text =><a href="" onClick={() => selectProject(text)}>{text}</a>}
+          render={(text, record) => 
+          <a href="" onClick={() => selectProject(record.name, record.documentId)}>{text}</a>}
            />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />

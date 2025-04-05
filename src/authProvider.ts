@@ -32,7 +32,8 @@ export const authProvider: AuthProvider = {
   },
   logout: async () => {
     localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem("selected_project");
+    localStorage.removeItem("selected_project_name");
+    localStorage.removeItem("selected_project_id");
     return {
       success: true,
       redirectTo: "/login",

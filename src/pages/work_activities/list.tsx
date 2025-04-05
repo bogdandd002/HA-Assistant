@@ -6,7 +6,7 @@ import { Form, Input, Space, Table } from "antd";
 interface ISearch {
     title: string;
   }
-
+const project = localStorage.getItem("selected_project")
 export const WorkActivityList = () => {
      const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IWorkActivity, HttpError, ISearch>({
            sorters: {
@@ -28,7 +28,13 @@ export const WorkActivityList = () => {
              ];
            },
            filters: {
-             mode: "server",
+            permanent: [
+              {
+                field: "project.name",
+                operator: "eq",
+                value: project,
+              }
+            ],
            },
            liveMode: "auto",
            meta: { 
@@ -37,10 +43,6 @@ export const WorkActivityList = () => {
      
            syncWithLocation: true,
          });
-     
-    function selectProject(text: any): void {
-        throw new Error("Function not implemented.");
-    }
 
          // const { data: categoryData, isLoading: categoryIsLoading } = useMany({
          //   resource: "contact-people",

@@ -28,7 +28,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const { mode, setMode } = useContext(ColorModeContext);
   const [selected_project, setSelectedProject] = useState("");
   useEffect(() => { 
-    const project = localStorage.getItem('selected_project');   
+    const project = localStorage.getItem('selected_project_name');   
     if(project){
       setSelectedProject(project)
     }
