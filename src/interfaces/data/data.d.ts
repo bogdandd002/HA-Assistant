@@ -35,8 +35,7 @@ export interface IWorkActivity {
     start_date: Date;
     duration: number;
     approval_status: string;
-    risk_assessment: IRiskAssessment;
-    method_statement: IMethodStatement;
+    ms_file?: null | { url: string };
     contractor: IContractor;
     project: IProject;
 }
@@ -66,3 +65,11 @@ export interface IRiskAssessment {
     work_activity: IWorkActivity;
     files: Buffer
 }
+
+export interface UploadFile {
+    name: string;
+    url: string;
+    size: number;
+    uid: string;
+    type: string;
+  }

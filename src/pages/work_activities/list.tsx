@@ -1,7 +1,9 @@
 import { DateField, DeleteButton, EditButton, getDefaultSortOrder, List, ShowButton, useTable } from "@refinedev/antd";
 import { IWorkActivity } from "../../interfaces";
-import { BaseRecord, HttpError } from "@refinedev/core";
-import { Form, Input, Space, Table } from "antd";
+import { BaseRecord, HttpError, Link } from "@refinedev/core";
+import { Anchor, Form, Input, Space, Table } from "antd";
+import { API_URL } from "../../constants";
+import { LinkProps } from "react-router";
 
 interface ISearch {
     title: string;
@@ -79,7 +81,21 @@ export const WorkActivityList = () => {
                position: ["bottomCenter"],
                size: "small",
              }}>
-               <Table.Column dataIndex="title" title={"Title"}
+               <Table.Column 
+               dataIndex="title" 
+               title={"Title"}
+               render={(text, record) => (
+               <Link
+                  go={{
+                      to:{
+                        resource: "work-activities",
+                        action: "show",
+                        id: record.documentId,
+                      }
+               }}
+               >{record.title}</Link>
+                    
+               )}
                sorter={{multiple:2}}
                defaultSortOrder={getDefaultSortOrder("title", sorters)}
                />
