@@ -35,6 +35,17 @@ export interface IWorkActivity {
     start_date: Date;
     duration: number;
     approval_status: string;
+    ra_title: string;
+    ra_descrition: string;
+    ra_revision: number;
+    ra_revision_date: Date;
+    ra_approval_status: string;
+    ra_file?: null | { url: string };
+    ms_title: string;
+    ms_descrition: string;
+    ms_revision: number;
+    ms_revision_date: Date;
+    ms_approval_status: string;
     ms_file?: null | { url: string };
     contractor: IContractor;
     project: IProject;
