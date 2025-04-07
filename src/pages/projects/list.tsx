@@ -73,7 +73,7 @@ import {
               {
                 field: "name",
                 operator: "contains",
-                value: !!e.currentTarget.value
+                value: e.currentTarget.value
                   ? e.currentTarget.value
                   : undefined,
               },

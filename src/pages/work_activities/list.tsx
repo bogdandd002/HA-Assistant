@@ -66,6 +66,7 @@ export const WorkActivityList = () => {
                    {
                      field: "title",
                      operator: "contains",
+                     // eslint-disable-next-line no-extra-boolean-cast
                      value: !!e.currentTarget.value
                        ? e.currentTarget.value
                        : undefined,
