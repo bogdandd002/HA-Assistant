@@ -27,28 +27,17 @@ const project = localStorage.getItem("selected_project_id");
 
 export const WorkActivityCreate = () => {
   const { form, formProps, saveButtonProps } = useForm<IWorkActivity>();
-  const { selectProps: projectSelectProps } = useSelect<IProject>({
-    resource: "projects",
-    optionLabel: "name",
-    optionValue: "documentId",
-    pagination: {
-      mode: "server",
-    },
-  });
+  
+  //   const { selectProps: projectSelectProps } = useSelect<IProject>({
+  //     resource: "projects",
+  //     optionLabel: "name",
+  //     optionValue: "documentId",
+  //     pagination: {
+  //       mode: "server",
+  //     },
+  //   });
 
-  const uplodProps = {
-    name: 'file',
-    action: `${API_URL}/api/upload`,
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange(info) {
-      if (info.file.status === 'done') {
-          // Handle response from API
-          console.log(info.file.response);
-      }
-    },
-  };
+  let fileData = [];
 
   form.setFieldValue("approval_status", "pending review");
   form.setFieldValue("project", project);
@@ -62,6 +51,7 @@ export const WorkActivityCreate = () => {
         onFinish={(values) => {
           formProps.onFinish?.(mediaUploadMapper(values));
         }}
+        onValuesChange={}
       >
         <Divider style={{ borderColor: "#7cb305" }}>
           Work activity details
@@ -177,7 +167,7 @@ export const WorkActivityCreate = () => {
           getValueProps={(data) => getValueProps(data, API_URL)}
           noStyle
         >
-          <Upload.Dragger {...uplodProps}
+          <Upload.Dragger
             name="files"
             action={`${API_URL}/api/upload`}
             headers={{
@@ -186,6 +176,12 @@ export const WorkActivityCreate = () => {
             listType="picture-card"
             multiple
             style={{ width: "30%", justifyContent: "left" }}
+            onChange={(info) => {
+              if (info.file.status === "done") {
+                fileData = info.file.response.map((rsp: any) => rsp.documentId);
+                console.log(fileData);
+              }
+            }}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
