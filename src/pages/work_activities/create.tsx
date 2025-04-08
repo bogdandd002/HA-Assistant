@@ -36,6 +36,20 @@ export const WorkActivityCreate = () => {
     },
   });
 
+  const uplodProps = {
+    name: 'file',
+    action: `${API_URL}/api/upload`,
+    headers: {
+      authorization: 'authorization-text',
+    },
+    onChange(info) {
+      if (info.file.status === 'done') {
+          // Handle response from API
+          console.log(info.file.response);
+      }
+    },
+  };
+
   form.setFieldValue("approval_status", "pending review");
   form.setFieldValue("project", project);
 
@@ -163,7 +177,7 @@ export const WorkActivityCreate = () => {
           getValueProps={(data) => getValueProps(data, API_URL)}
           noStyle
         >
-          <Upload.Dragger
+          <Upload.Dragger {...uplodProps}
             name="files"
             action={`${API_URL}/api/upload`}
             headers={{
