@@ -31,22 +31,26 @@ export interface IProject {
 export interface IWorkActivity {
     documentId: string;
     title: string;
-    descrition: string;
+    description: string;
     start_date: Date;
     duration: number;
     approval_status: string;
     ra_title: string;
-    ra_descrition: string;
+    ra_description: string;
     ra_revision: number;
     ra_revision_date: Date;
     ra_approval_status: string;
     ra_file?: null | { url: string };
+    ra_file_url: string;
+    ra_file_id: string;
     ms_title: string;
-    ms_descrition: string;
+    ms_description: string;
     ms_revision: number;
     ms_revision_date: Date;
     ms_approval_status: string;
     ms_file?: null | { url: string };
+    ms_file_url: string;
+    ms_file_id: string;
     contractor: IContractor;
     project: IProject;
 }

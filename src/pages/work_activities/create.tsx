@@ -36,12 +36,14 @@ export const WorkActivityCreate = () => {
   //       mode: "server",
   //     },
   //   });
-
-  let fileData = [];
+  var ra_fileData_url = "";
+  var ra_fileData_id = "";
 
   form.setFieldValue("approval_status", "pending review");
-  form.setFieldValue("project", project);
-
+           form.setFieldValue("project", project);
+           form.setFieldValue("ra_file_id", "pending review");
+           form.setFieldValue("ra_file_url", project);
+           
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form
@@ -50,8 +52,9 @@ export const WorkActivityCreate = () => {
         layout="vertical"
         onFinish={(values) => {
           formProps.onFinish?.(mediaUploadMapper(values));
+           
+           console.log("on f" + ra_fileData_url, ra_fileData_id[0])
         }}
-        onValuesChange={}
       >
         <Divider style={{ borderColor: "#7cb305" }}>
           Work activity details
@@ -174,12 +177,12 @@ export const WorkActivityCreate = () => {
               Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
             }}
             listType="picture-card"
-            multiple
             style={{ width: "30%", justifyContent: "left" }}
+            maxCount={1}
             onChange={(info) => {
               if (info.file.status === "done") {
-                fileData = info.file.response.map((rsp: any) => rsp.documentId);
-                console.log(fileData);
+                 ra_fileData_url = info.file.response.map((rsp: any) => rsp.url);
+                 ra_fileData_id = info.file.response.map((rsp: any) => rsp.documentId);
               }
             }}
           >
@@ -187,7 +190,7 @@ export const WorkActivityCreate = () => {
               <InboxOutlined />
             </p>
             <p className="ant-upload-text">
-              Click to upload or drag & drop your risk assessment in this area
+              Click to upload or drag & drop your risk assessment in this area (1 file only)
             </p>
           </Upload.Dragger>
         </Form.Item>

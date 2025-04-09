@@ -4,12 +4,17 @@ import { BaseRecord, HttpError, Link } from "@refinedev/core";
 import { Anchor, Form, Input, Space, Table } from "antd";
 import { API_URL } from "../../constants";
 import { LinkProps } from "react-router";
+import { AxiosInstance } from "axios";
+import { axiosInstance } from "@refinedev/strapi-v4";
+
 
 interface ISearch {
     title: string;
   }
 const project = localStorage.getItem("selected_project")
-export const WorkActivityList = () => {
+export const WorkActivityList = (
+  httpClient: AxiosInstance = axiosInstance
+) => {
      const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IWorkActivity, HttpError, ISearch>({
            sorters: {
              initial: [
@@ -56,7 +61,17 @@ export const WorkActivityList = () => {
          //     enabled: !!tableProps?.dataSource,
          //   },
          // });
-     
+         
+        //  deleteOne: async ({ resource, id }) => {
+        //   const url = `${API_URL}/${resource}/${id}`;
+      
+        //   const { data } = await httpClient.delete(url);
+      
+        //   return {
+        //     data,
+        //   };
+        // }
+
          return (
            <List>
               <Form {...searchFormProps} layout="inline">
@@ -114,7 +129,10 @@ export const WorkActivityList = () => {
                    <Space>
                      <EditButton hideText size="small" recordItemId={record.documentId} />
                      <ShowButton hideText size="small" recordItemId={record.documentId} />
-                     <DeleteButton hideText size="small" recordItemId={record.documentId} />
+                     <DeleteButton hideText size="small" recordItemId={record.documentId} 
+                        onSuccess={ (value) =>{
+                          console.log(value)
+                        }} />
                    </Space>
                  )}
                />
