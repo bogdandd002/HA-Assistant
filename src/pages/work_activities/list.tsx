@@ -11,9 +11,18 @@ import { axiosInstance } from "@refinedev/strapi-v4";
 interface ISearch {
     title: string;
   }
+  const httpClient = axiosInstance
+  async function  deleteOne (ra_id: string, ms_id: string) {
+
+    const url = `${API_URL}/upload/files/${ra_id}`;
+    const { data } = await httpClient.delete(url);
+
+    return {
+      data,
+    };
+  }
 const project = localStorage.getItem("selected_project")
 export const WorkActivityList = (
-  httpClient: AxiosInstance = axiosInstance
 ) => {
      const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IWorkActivity, HttpError, ISearch>({
            sorters: {
@@ -61,17 +70,7 @@ export const WorkActivityList = (
          //     enabled: !!tableProps?.dataSource,
          //   },
          // });
-         
-        //  deleteOne: async ({ resource, id }) => {
-        //   const url = `${API_URL}/${resource}/${id}`;
-      
-        //   const { data } = await httpClient.delete(url);
-      
-        //   return {
-        //     data,
-        //   };
-        // }
-
+        
          return (
            <List>
               <Form {...searchFormProps} layout="inline">
@@ -122,7 +121,11 @@ export const WorkActivityList = (
                 />
                <Table.Column dataIndex="duration" title={"Duration"} />
                <Table.Column dataIndex="approval_status" title={"Status"} />
-               <Table.Column<{ documentId: string }>
+               <Table.Column<{ 
+                documentId: string,
+                 ra_file_id: string,
+                 ms_file_id: string
+                  }>
                  title="Actions"
                  dataIndex="actions"
                  render={(_, record) => ( 
@@ -131,7 +134,7 @@ export const WorkActivityList = (
                      <ShowButton hideText size="small" recordItemId={record.documentId} />
                      <DeleteButton hideText size="small" recordItemId={record.documentId} 
                         onSuccess={ (value) =>{
-                          console.log(value)
+                          deleteOne(record.ra_file_id, record.ms_file_id )
                         }} />
                    </Space>
                  )}

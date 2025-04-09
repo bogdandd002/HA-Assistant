@@ -27,7 +27,7 @@ const project = localStorage.getItem("selected_project_id");
 
 export const WorkActivityCreate = () => {
   const { form, formProps, saveButtonProps } = useForm<IWorkActivity>();
-  
+
   //   const { selectProps: projectSelectProps } = useSelect<IProject>({
   //     resource: "projects",
   //     optionLabel: "name",
@@ -36,14 +36,10 @@ export const WorkActivityCreate = () => {
   //       mode: "server",
   //     },
   //   });
-  var ra_fileData_url = "";
-  var ra_fileData_id = "";
 
   form.setFieldValue("approval_status", "pending review");
-           form.setFieldValue("project", project);
-           form.setFieldValue("ra_file_id", "pending review");
-           form.setFieldValue("ra_file_url", project);
-           
+  form.setFieldValue("project", project);
+
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form
@@ -52,8 +48,6 @@ export const WorkActivityCreate = () => {
         layout="vertical"
         onFinish={(values) => {
           formProps.onFinish?.(mediaUploadMapper(values));
-           
-           console.log("on f" + ra_fileData_url, ra_fileData_id[0])
         }}
       >
         <Divider style={{ borderColor: "#7cb305" }}>
@@ -106,9 +100,9 @@ export const WorkActivityCreate = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item noStyle name={["approval_status"]}>
-          {" "}
-        </Form.Item>{" "}
+        <Form.Item noStyle name={["approval_status"]}></Form.Item>
+        <Form.Item noStyle name={["ra_file_url"]}></Form.Item>
+        <Form.Item noStyle name={["ra_file_id"]}></Form.Item>
         {/*hardcoded above*/}
         <Divider style={{ borderColor: "#7cb305" }}>
           Risk assesment details
@@ -181,8 +175,12 @@ export const WorkActivityCreate = () => {
             maxCount={1}
             onChange={(info) => {
               if (info.file.status === "done") {
-                 ra_fileData_url = info.file.response.map((rsp: any) => rsp.url);
-                 ra_fileData_id = info.file.response.map((rsp: any) => rsp.documentId);
+                const ra_fileData = info.file.response.map((rsp: any) => rsp.url);
+                const ra_fileData_id = info.file.response.map(
+                  (rsp: any) => rsp.documentId
+                );
+                form.setFieldValue("ra_file_id", ra_fileData[0]);
+                form.setFieldValue("ra_file_url", ra_fileData_id[0]);
               }
             }}
           >
@@ -190,7 +188,8 @@ export const WorkActivityCreate = () => {
               <InboxOutlined />
             </p>
             <p className="ant-upload-text">
-              Click to upload or drag & drop your risk assessment in this area (1 file only)
+              Click to upload or drag & drop your risk assessment in this area
+              (1 file only)
             </p>
           </Upload.Dragger>
         </Form.Item>
@@ -261,8 +260,18 @@ export const WorkActivityCreate = () => {
               Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
             }}
             listType="picture-card"
-            multiple
+            maxCount={1}
             style={{ width: "30%", justifyContent: "left" }}
+            onChange={(info) => {
+                if (info.file.status === "done") {
+                  const ms_fileData = info.file.response.map((rsp: any) => rsp.url);
+                  const ms_fileData_id = info.file.response.map(
+                    (rsp: any) => rsp.documentId
+                  );
+                  form.setFieldValue("ra_file_id", ms_fileData[0]);
+                  form.setFieldValue("ra_file_url", ms_fileData_id[0]);
+                }
+              }}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
