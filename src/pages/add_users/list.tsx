@@ -1,21 +1,24 @@
 import { EditButton, List, ShowButton, useTable } from "@refinedev/antd";
-import { BaseRecord, HttpError } from "@refinedev/core";
+import { BaseRecord, HttpError, useGetIdentity } from "@refinedev/core";
 import { AntdInferencer } from "@refinedev/inferencer/antd";
 import { Form, Input, Space, Table } from "antd";
+import { IUser } from "../../interfaces";
 
 
 interface ISearch {
     title: string;
   }
 
+  
 
 export const AddUserList = () => {
-     const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<ISearch>({
+  const { data: user } = useGetIdentity<IUser>();
+     const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
             resource: "Users",
                sorters: {
                  initial: [
                    {
-                     field: "title",
+                     field: "id",
                      order: "desc",
                    },
                  ],
@@ -33,9 +36,14 @@ export const AddUserList = () => {
                filters: {
                 permanent: [
                   {
-                    field: "project.documentId",
+                    field: "projects.documentId",
                     operator: "eq",
                     value: localStorage.getItem("selected_project_id"),
+                  },
+                  {
+                    field: "contractor.documentId",
+                    operator: "eq",
+                    value: "iux0aq1bb65aj4d7uo71ue9s",
                   }
                 ],
                },

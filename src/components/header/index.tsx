@@ -70,9 +70,9 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           defaultChecked={mode === "dark"}
         />
         <Space style={{ marginLeft: "8px" }} size="middle">
-          {user?.name && <Text strong>{user.name}</Text>}
+          {user?.username && <Text strong>{user.username}</Text>}
           {user?.user_role && <Text strong>{user.user_role}</Text>}
-          {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
+          {user?.avatar && <Avatar src={user?.avatar} alt={user?.username} />}
         </Space>
       </Space>
     </AntdLayout.Header>

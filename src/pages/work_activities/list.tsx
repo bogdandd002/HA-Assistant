@@ -124,9 +124,7 @@ export const WorkActivityList = (
                      <EditButton hideText size="small" recordItemId={record.documentId} />
                      <ShowButton hideText size="small" recordItemId={record.documentId} />
                      <DeleteButton hideText size="small" recordItemId={record.documentId} 
-                        onSuccess={ (value) =>{
-          
-                        }} />
+                         />
                    </Space>
                  )}
                />
