@@ -37,6 +37,11 @@ export const model = newModel(`
     p, Admin, work-activities, list
     p, Admin, work-activities, create
     p, Admin, work-activities, (list)|(edit)|(delete)
+
+    p, Admin, add-user, show
+    p, Admin, add-user, list
+    p, Admin, add-user, create
+    p, Admin, add-user, (list)|(edit)|(delete)
   
     p, editor, users, list
     p, editor, canvases, (list)|(edit)

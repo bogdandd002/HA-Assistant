@@ -45,6 +45,7 @@ import { adapter, model } from "./casbin/accessControl";
 import { accessControlProvider } from "./providers/accessControlProvider";
 import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/projects";
 import { WorkActivityCreate, WorkActivityEdit, WorkActivityList, WorkActivityShow } from "./pages/work_activities";
+import { AddUserCreate, AddUserEdit, AddUserList, AddUserShow } from "./pages/add_users";
 
 const {
   UserAddOutlined,
@@ -105,6 +106,12 @@ function App() {
                   create: "/work-activities/create",
                   edit: "/work-activities/edit/:id",
                   show: "/work-activities/show/:id"
+                }, {
+                  name: "add-user",
+                  list: "/add-user",
+                  create: "/add-user/create",
+                  edit: "/add-user/edit/:id",
+                  show: "/add-user/show/:id"
                 }]}
                 options={{
                   syncWithLocation: true,
@@ -156,6 +163,12 @@ function App() {
                       <Route path="create" element={<WorkActivityCreate />} />
                       <Route path="edit/:id" element={<WorkActivityEdit />} />
                       <Route path="show/:id" element={<WorkActivityShow />} />
+                    </Route>
+                    <Route path="/add-user">
+                      <Route index element={<AddUserList />} />
+                      <Route path="create" element={<AddUserCreate />} />
+                      <Route path="edit/:id" element={<AddUserEdit />} />
+                      <Route path="show/:id" element={<AddUserShow />} />
                     </Route>
                     
                     <Route path="*" element={<ErrorComponent />} />

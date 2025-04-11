@@ -11,17 +11,8 @@ import { axiosInstance } from "@refinedev/strapi-v4";
 interface ISearch {
     title: string;
   }
-  const httpClient = axiosInstance
-  async function  deleteOne (ra_id: string, ms_id: string) {
 
-    const url = `${API_URL}/upload/files/${ra_id}`;
-    const { data } = await httpClient.delete(url);
-
-    return {
-      data,
-    };
-  }
-const project = localStorage.getItem("selected_project")
+const project = localStorage.getItem("selected_project_id")
 export const WorkActivityList = (
 ) => {
      const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IWorkActivity, HttpError, ISearch>({
@@ -46,7 +37,7 @@ export const WorkActivityList = (
            filters: {
             permanent: [
               {
-                field: "project.name",
+                field: "project.documentId",
                 operator: "eq",
                 value: project,
               }
@@ -134,7 +125,7 @@ export const WorkActivityList = (
                      <ShowButton hideText size="small" recordItemId={record.documentId} />
                      <DeleteButton hideText size="small" recordItemId={record.documentId} 
                         onSuccess={ (value) =>{
-                          deleteOne(record.ra_file_id, record.ms_file_id )
+          
                         }} />
                    </Space>
                  )}
