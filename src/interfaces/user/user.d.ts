@@ -11,3 +11,10 @@ export interface IUser{
     avatar?: string;
     user_role?: string;
 }
+
+export interface IRole{
+    id: number;
+    documentId: string;
+    name: string;
+    description: string;
+}

@@ -17,7 +17,7 @@ export const AddUserList = () => {
                  initial: [
                    {
                      field: "id",
-                     order: "desc",
+                     order: "asc",
                    },
                  ],
                  mode: "server"

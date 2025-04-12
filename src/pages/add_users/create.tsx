@@ -1,24 +1,27 @@
 import React from "react";
-import { Create, useForm } from "@refinedev/antd";
-import { Form, Input, Checkbox, DatePicker } from "antd";
+import { Create, useForm, useSelect } from "@refinedev/antd";
+import { Form, Input, Checkbox, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 import { useGetIdentity } from "@refinedev/core";
-import { IUser } from "../../interfaces";
+import { IRole, IUser } from "../../interfaces";
+import { API_URL } from "../../constants";
 
 export const UserCreate = () => {
     const { data: user } = useGetIdentity<IUser>();
     const { formProps, saveButtonProps, query, form } = useForm();
 
+    const { selectProps: roleSelectProps } = useSelect({
+        resource: "users-permissions/roles",
+        optionLabel: "name",
+        optionValue: "documentId"
+      });
+    console.log(roleSelectProps)
     return (
         <Create saveButtonProps={saveButtonProps}>
             <Form {...formProps} 
             layout="vertical"
-            onFinish={ () =>{
-                if (user?.user_role == "Contractor_super")
-                {
-                    form.setFieldValue("role", "Contractor")
-                }
-            }}>
+            form={form}
+            >
             <Form.Item
                     label="Name"
                     name={["name"]}
@@ -87,11 +90,6 @@ export const UserCreate = () => {
                 </Form.Item>
                 <Form.Item
                     name={["role"]}
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
                     noStyle
                 >
                    
@@ -103,6 +101,33 @@ export const UserCreate = () => {
                     rules={[
                         {
                             required: true,
+                        },
+                    ]}
+                >
+                    <Checkbox>Confirmed</Checkbox>
+                </Form.Item> 
+                <Form.Item
+                    label="Select user account type"
+                    name={["role"]}
+                    rules={[
+                        {
+                            required: true,
+                        },
+                    ]}
+                >
+                <Select
+      placeholder="Select user account type"
+      style={{ width: 300 }}
+      {...roleSelectProps}
+    />
+                </Form.Item>
+                <Form.Item
+                    label="Blocked"
+                    valuePropName="checked"
+                    name={["blocked"]}
+                    rules={[
+                        {
+                            required: false,
                         },
                     ]}
                 >
