@@ -1,4 +1,4 @@
-import { EditButton, List, ShowButton, useTable } from "@refinedev/antd";
+import { DeleteButton, EditButton, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, HttpError, useGetIdentity } from "@refinedev/core";
 import { AntdInferencer } from "@refinedev/inferencer/antd";
 import { Form, Input, Space, Table } from "antd";
@@ -8,8 +8,6 @@ import { IUser } from "../../interfaces";
 interface ISearch {
     title: string;
   }
-
-  
 
 export const AddUserList = () => {
   const { data: user } = useGetIdentity<IUser>();
@@ -27,7 +25,7 @@ export const AddUserList = () => {
                onSearch: (values) => {
                  return [
                    {
-                     field: "username",
+                     field: "name",
                      operator: "contains",
                      value: values,
                    },
@@ -43,7 +41,7 @@ export const AddUserList = () => {
                   {
                     field: "contractor.documentId",
                     operator: "eq",
-                    value: "iux0aq1bb65aj4d7uo71ue9s",
+                    value: user?.contractor_documentId,
                   }
                 ],
                },
@@ -58,11 +56,11 @@ export const AddUserList = () => {
     return (
         <List>
                <Form {...searchFormProps} layout="inline">
-        <Form.Item name="username">
-          <Input placeholder="Search by username" onChange={(e) => {
+        <Form.Item name="name">
+          <Input placeholder="Search by name" onChange={(e) => {
             setFilters([
               {
-                field: "username",
+                field: "name",
                 operator: "contains",
                 value: e.currentTarget.value
                   ? e.currentTarget.value
@@ -74,7 +72,8 @@ export const AddUserList = () => {
       </Form>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title={"ID"} />
-                <Table.Column dataIndex="username" title={"Username"} />
+                <Table.Column dataIndex={"name"} title={"Name"} />
+                <Table.Column dataIndex={"surname"} title={"Surname"} />
                 <Table.Column dataIndex="email" title={"Email"} />
                 <Table.Column
                     title="Actions"
@@ -87,6 +86,11 @@ export const AddUserList = () => {
                                 recordItemId={record.id}
                             />
                             <ShowButton
+                                hideText
+                                size="small"
+                                recordItemId={record.id}
+                            />
+                             <DeleteButton
                                 hideText
                                 size="small"
                                 recordItemId={record.id}
