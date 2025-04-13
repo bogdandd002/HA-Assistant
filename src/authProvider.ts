@@ -85,27 +85,28 @@ export const authProvider: AuthProvider = {
       return null;
     }
     // fetching user role from strapi by making an extra call - explore for aternative in the future
-      const response = await fetch('http://localhost:1337/api/users/me?populate=*', {
+      const response = await fetch('http://localhost:1337/api/users/me?populate[0]=role&populate[1]=contractor', {
       headers: {
           authorization: `Bearer ${token}`,
         }})
       const {role: role, contractor: contractor} = await response.json();
       const {name: user_role} = role;
-      // const {contractor: contractor} = await response.json();
-      const {documentId: contractor_documentId} = contractor;
+      const {documentId: contractor_documentId, id: contractor_id} = contractor;
     
     const { data, status } = await strapiAuthHelper.me(token);
     if (status === 200) {
       const { id, username, email } = data;
       return {
         id,
-        name: username,
+        username,
         email,
         user_role,
-        contractor_documentId
+        contractor_documentId,
+        contractor_id
       };
     }
 
     return null;
   },
+
 };

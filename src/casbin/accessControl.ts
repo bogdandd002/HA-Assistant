@@ -43,11 +43,6 @@ export const model = newModel(`
     p, Admin, users, create
     p, Admin, users, (list)|(edit)|(delete)
 
-     p, Contractor_super, contractors, show
-    p, Contractor_super, contractors, list
-    p, Contractor_super, contractors, create
-    p, Contractor_super, contractors, (list)|(edit)|(delete)
-
     p, Contractor_super, projects, show
     p, Contractor_super, projects, list
     p, Contractor_super, projects, create
@@ -67,6 +62,26 @@ export const model = newModel(`
     p, Contractor_super, users, list
     p, Contractor_super, users, create
     p, Contractor_super, users, (list)|(edit)|(delete)
+
+    p, Contractor, projects, show
+    p, Contractor, projects, list
+    p, Contractor, projects, create
+    p, Contractor, projects, (list)|(edit)|(delete)
+
+    p, Contractor, contact-people, show
+    p, Contractor, contact-people, list
+    p, Contractor, contact-people, create
+    p, Contractor, contact-people, (list)|(edit)|(delete)
+
+    p, Contractor, work-activities, show
+    p, Contractor, work-activities, list
+    p, Contractor, work-activities, create
+    p, Contractor, work-activities, (list)|(edit)|(delete)
+
+    p, Contractor, users, show
+    p, Contractor, users, list
+    p, Contractor, users, create
+    p, Contractor, users, (list)|(edit)|(delete)
   
     p, editor, users, list
     p, editor, canvases, (list)|(edit)

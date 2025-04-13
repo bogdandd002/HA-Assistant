@@ -18,6 +18,7 @@ export interface IContactPerson {
 }
 
 export interface IProject {
+    id: number;
     documentId: string;
     project_nr: number;
     name: string;
@@ -41,7 +42,6 @@ export interface IWorkActivity {
     ra_revision: number;
     ra_revision_date: Date;
     ra_approval_status: string;
-    ra_file?: null | { url: string };
     ra_file_url: string;
     ra_file_id: string;
     ms_title: string;
@@ -49,7 +49,6 @@ export interface IWorkActivity {
     ms_revision: number;
     ms_revision_date: Date;
     ms_approval_status: string;
-    ms_file?: null | { url: string };
     ms_file_url: string;
     ms_file_id: string;
     contractor: IContractor;

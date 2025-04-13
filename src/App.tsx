@@ -34,12 +34,6 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
   ContractorShow,
  } from "./pages/contractor";
 
-import {
-  CategoryCreate,
-  CategoryEdit,
-  CategoryList,
-  CategoryShow,
-} from "./pages/categories";
 import { newEnforcer } from "casbin";
 import { adapter, model } from "./casbin/accessControl";
 import { accessControlProvider } from "./providers/accessControlProvider";
@@ -151,12 +145,6 @@ function App() {
                         <Route path="create" element={<ContractorCreate />} />
                         <Route path="edit/:id" element={<ContractorEdit />} />
                         <Route path="show/:id" element={<ContractorShow />} />
-                    </Route>
-                    <Route path="/contact-people">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
                     </Route>
                     <Route path="/work-activities">
                       <Route index element={<WorkActivityList />} />

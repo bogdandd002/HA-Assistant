@@ -1,3 +1,5 @@
+import { IProject } from "../data/data";
+
 
 export interface IUser{
     id: number;
@@ -8,8 +10,10 @@ export interface IUser{
     username: string;
     email: string;
     contractor_documentId: string;
+    contractor_id: number;
     avatar?: string;
     user_role?: string;
+    projects: string[] ;
 }
 
 export interface IRole{

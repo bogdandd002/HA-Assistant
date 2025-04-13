@@ -38,6 +38,8 @@ export const WorkActivityCreate = () => {
   //   });
 
   form.setFieldValue("approval_status", "pending review");
+  form.setFieldValue("ra_approval_status", "pending review");
+  form.setFieldValue("ms_approval_status", "pending review");
   form.setFieldValue("project", project);
 
   return (
@@ -87,7 +89,7 @@ export const WorkActivityCreate = () => {
             value: value ? dayjs(value) : undefined,
           })}
         >
-          <DatePicker />
+          <DatePicker format={"DD-MM-YYYY"} />
         </Form.Item>
         <Form.Item
           label="Duration (in days)"
@@ -152,11 +154,10 @@ export const WorkActivityCreate = () => {
             value: value ? dayjs(value) : undefined,
           })}
         >
-          <DatePicker />
+          <DatePicker format={"DD-MM-YYYY"}/>
         </Form.Item>
         <Form.Item noStyle name={["ra_approval_status"]}>
-          {" "}
-        </Form.Item>{" "}
+        </Form.Item>
         {/*hardcoded above*/}
         <Form.Item
           name="ra_file"
@@ -179,8 +180,8 @@ export const WorkActivityCreate = () => {
                 const ra_fileData_id = info.file.response.map(
                   (rsp: any) => rsp.documentId
                 );
-                form.setFieldValue("ra_file_id", ra_fileData[0]);
-                form.setFieldValue("ra_file_url", ra_fileData_id[0]);
+                form.setFieldValue("ra_file_url", ra_fileData[0]);
+                form.setFieldValue("ra_file_id", ra_fileData_id[0]);
               }
             }}
           >
@@ -241,7 +242,7 @@ export const WorkActivityCreate = () => {
             value: value ? dayjs(value) : undefined,
           })}
         >
-          <DatePicker />
+          <DatePicker format={"DD-MM-YYYY"} />
         </Form.Item>
         <Form.Item noStyle name={["ms_approval_status"]}>
           {" "}
@@ -268,8 +269,8 @@ export const WorkActivityCreate = () => {
                   const ms_fileData_id = info.file.response.map(
                     (rsp: any) => rsp.documentId
                   );
-                  form.setFieldValue("ra_file_id", ms_fileData[0]);
-                  form.setFieldValue("ra_file_url", ms_fileData_id[0]);
+                  form.setFieldValue("ra_file_url", ms_fileData[0]);
+                  form.setFieldValue("ra_file_id", ms_fileData_id[0]);
                 }
               }}
           >

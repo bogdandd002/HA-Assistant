@@ -8,21 +8,26 @@ import {
     FilterDropdown,
     SaveButton
   } from "@refinedev/antd";
-  import {  HttpError} from "@refinedev/core";
+  import {  HttpError, useGetIdentity} from "@refinedev/core";
   import { Space, Table, Radio, Form, Input } from "antd";
-  import { IProject } from "../../interfaces/index";
+  import { IProject, IUser } from "../../interfaces/index";
 
   interface ISearch {
     title: string;
   }
 
-  function selectProject(project_name: string, project_id: string) {
+  function selectProject(
+    project_name: string, 
+    project_id: string, 
+    user_contractor?: string) {
         localStorage.setItem("selected_project_name", project_name)
         localStorage.setItem("selected_project_id", project_id)
+        localStorage.setItem("user_contractor", user_contractor || "")
        // window.dispatchEvent(new Event("storage"));
   }
   
   export const ProjectList = () => {
+    const { data: user } = useGetIdentity<IUser>();
     const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
       sorters: {
         initial: [
@@ -43,6 +48,13 @@ import {
         ];
       },
       filters: {
+        permanent: [
+          {
+            field: "contractors.documentId",
+            operator: "eq",
+            value: user?.contractor_documentId,
+          }
+        ],
         mode: "server",
       },
       liveMode: "auto",
@@ -97,7 +109,10 @@ import {
           sorter={{multiple:1}}
           defaultSortOrder={getDefaultSortOrder("name", sorters)}
           render={(text, record) => 
-          <a href="" onClick={() => selectProject(record.name, record.documentId)}>{text}</a>}
+          <a href="" onClick={() => selectProject(
+            record.name, 
+            record.documentId,
+            user?.contractor_documentId)}>{text}</a>}
            />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />

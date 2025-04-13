@@ -58,10 +58,10 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   return (
     <AntdLayout.Header style={headerStyles}>
-      <Space direction="horizontal" style={{width: '80%', justifyContent: 'left'}}>
+      <Space direction="horizontal" style={{width: '70%', justifyContent: 'left'}}>
        {DisplayProject(selected_project)}
       </Space>
-      <Space direction="horizontal" style={{width: '20%', justifyContent: 'right'}}>
+      <Space direction="horizontal" style={{width: '30%', justifyContent: 'right'}}>
         
         <Switch
           checkedChildren="🌛"

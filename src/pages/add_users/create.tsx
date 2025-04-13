@@ -2,20 +2,30 @@ import React from "react";
 import { Create, useForm, useSelect } from "@refinedev/antd";
 import { Form, Input, Checkbox, DatePicker, Select } from "antd";
 import dayjs from "dayjs";
-import { useGetIdentity } from "@refinedev/core";
-import { IRole, IUser } from "../../interfaces";
+import { HttpError, useGetIdentity } from "@refinedev/core";
+import { IProject, IRole, IUser } from "../../interfaces";
 import { API_URL } from "../../constants";
 
 export const UserCreate = () => {
     const { data: user } = useGetIdentity<IUser>();
     const { formProps, saveButtonProps, query, form } = useForm();
-
-    const { selectProps: roleSelectProps } = useSelect({
-        resource: "users-permissions/roles",
+    const { selectProps } = useSelect<IProject>({
+        resource: "projects",
         optionLabel: "name",
-        optionValue: "documentId"
-      });
-    console.log(roleSelectProps)
+        optionValue: "id",
+
+        filters: [
+            {
+              field: "contractors.documentId",
+              operator: "eq",
+              value: user?.contractor_documentId,
+            },
+          ],
+
+    });
+
+    form.setFieldValue("contractor", user?.contractor_id)
+
     return (
         <Create saveButtonProps={saveButtonProps}>
             <Form {...formProps} 
@@ -74,6 +84,7 @@ export const UserCreate = () => {
                             required: true,
                         },
                     ]}
+                    
                 >
                     <Input />
                 </Form.Item>
@@ -107,6 +118,23 @@ export const UserCreate = () => {
                     <Checkbox>Confirmed</Checkbox>
                 </Form.Item> 
                 <Form.Item
+                    label="Select projects asociated with this user"
+                    name={["project"]}
+                    rules={[
+                        {
+                            required: true,
+                        },
+                    ]}
+                >
+   <Select
+    placeholder="Select projects access for this user"
+    style={{ width: 300 }}
+    mode="multiple"
+    allowClear
+      {...selectProps}
+  />
+                </Form.Item>
+                <Form.Item
                     label="Select user account type"
                     name={["role"]}
                     rules={[
@@ -115,24 +143,20 @@ export const UserCreate = () => {
                         },
                     ]}
                 >
-                <Select
-      placeholder="Select user account type"
-      style={{ width: 300 }}
-      {...roleSelectProps}
-    />
+   <Select
+    placeholder="Account type"
+    options={[
+      { value: 4, label: 'Normal user' },
+      { value: 3, label: 'Super user' },
+    ]}
+  />
                 </Form.Item>
                 <Form.Item
-                    label="Blocked"
-                    valuePropName="checked"
-                    name={["blocked"]}
-                    rules={[
-                        {
-                            required: false,
-                        },
-                    ]}
+                    name={["contractor"]}
+                    noStyle
                 >
-                    <Checkbox>Confirmed</Checkbox>
-                </Form.Item> 
+                </Form.Item>
+            
             </Form>
         </Create>
     );

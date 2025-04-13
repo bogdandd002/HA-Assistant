@@ -87,6 +87,7 @@ export const WorkActivityList = (
                position: ["bottomCenter"],
                size: "small",
              }}>
+              <Table.Column dataIndex={["contractor", "name"]} title={"Contractor"} />
                <Table.Column 
                dataIndex="title" 
                title={"Title"}
