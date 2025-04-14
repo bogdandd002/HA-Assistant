@@ -269,8 +269,8 @@ export const WorkActivityCreate = () => {
                   const ms_fileData_id = info.file.response.map(
                     (rsp: any) => rsp.documentId
                   );
-                  form.setFieldValue("ra_file_url", ms_fileData[0]);
-                  form.setFieldValue("ra_file_id", ms_fileData_id[0]);
+                  form.setFieldValue("ms_file_url", ms_fileData[0]);
+                  form.setFieldValue("ms_file_id", ms_fileData_id[0]);
                 }
               }}
           >
