@@ -256,7 +256,7 @@ export const WorkActivityCreate = () => {
         >
           <Upload.Dragger
             name="files"
-            action={`${API_URL}/api/upload`}
+            action={`${API_URL}/api/upload/firstLevelFolder`}
             headers={{
               Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
             }}

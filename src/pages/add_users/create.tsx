@@ -92,10 +92,19 @@ export const UserCreate = () => {
                     label="Email"
                     name={["email"]}
                     rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                        { required: true, message: "Email is required!" },
+                        () => ({
+                          validator(rule, value, callBack) {
+                            if (!value) {
+                              return Promise.resolve();
+                            }
+                            if (!/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(value)) {
+                              return Promise.reject("Enter a valid email");
+                            }
+                            return Promise.resolve();
+                          }
+                        })
+                      ]}
                 >
                     <Input />
                 </Form.Item>

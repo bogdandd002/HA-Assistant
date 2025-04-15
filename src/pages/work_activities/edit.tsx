@@ -8,7 +8,7 @@ import { InboxOutlined } from "@ant-design/icons";
 
 export const WorkActivityEdit = () => {
     const { formProps, saveButtonProps, query, form } = useForm();
-    const [ra_rev, ra_setRev] = useState(form.getFieldValue("ra_revision"));
+    
     const [ms_rev, ms_setRev] = useState("");
     const record = query?.data?.data;
     const { TextArea } = Input;
@@ -122,17 +122,16 @@ export const WorkActivityEdit = () => {
             },
             {
                 validator: (_, value) => {
-                    if(!value) return;
-
-                    if (value <= form.getFieldValue("ra_revision"))
-                        return Promise.reject("New revision number can not be lower than previous one!")
+                  if (!value)
+                    return Promise.reject("Require revision number!")
+                    if (value <= record?.ra_revision)
+                        return Promise.reject("New revision number can not be equal or lower than previous one!")
                     return Promise.resolve()
                 }
             }
           ]}
         >
-          <Input onChange={(event) => ra_setRev(event.target.value)}
-           style={{ width: "10%", justifyContent: "left" }}/>
+          <Input style={{ width: "10%", justifyContent: "left" }}/>
         </Form.Item>
         <Form.Item
           label="Revision date"
@@ -231,13 +230,13 @@ export const WorkActivityEdit = () => {
                           required: false,
                         },
                         {
-                            validator: async (_, value) => {
-                                if(!value) return;
-            
-                                if (value <= form.getFieldValue("ms_revision"))
-                                    return Promise.reject("New revision number can not be lower than previous one!")
-                                return Promise.resolve()
-                            }
+                          validator: (_, value) => {
+                            if (!value)
+                              return Promise.reject("Require revision number!")
+                              if (value <= record?.ms_revision)
+                                  return Promise.reject("New revision number can not be equal or lower than previous one!")
+                              return Promise.resolve()
+                          }
                         }
                       ]}
                     >
