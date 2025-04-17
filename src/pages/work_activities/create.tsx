@@ -28,15 +28,6 @@ const project = localStorage.getItem("selected_project_id");
 export const WorkActivityCreate = () => {
   const { form, formProps, saveButtonProps } = useForm<IWorkActivity>();
 
-  //   const { selectProps: projectSelectProps } = useSelect<IProject>({
-  //     resource: "projects",
-  //     optionLabel: "name",
-  //     optionValue: "documentId",
-  //     pagination: {
-  //       mode: "server",
-  //     },
-  //   });
-
   form.setFieldValue("approval_status", "pending review");
   form.setFieldValue("ra_approval_status", "pending review");
   form.setFieldValue("ms_approval_status", "pending review");
@@ -261,24 +252,25 @@ export const WorkActivityCreate = () => {
               Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
             }}
             listType="picture-card"
-            maxCount={1}
             style={{ width: "30%", justifyContent: "left" }}
+            maxCount={1}
             onChange={(info) => {
-                if (info.file.status === "done") {
-                  const ms_fileData = info.file.response.map((rsp: any) => rsp.url);
-                  const ms_fileData_id = info.file.response.map(
-                    (rsp: any) => rsp.documentId
-                  );
-                  form.setFieldValue("ms_file_url", ms_fileData[0]);
-                  form.setFieldValue("ms_file_id", ms_fileData_id[0]);
-                }
-              }}
+              if (info.file.status === "done") {
+                const ms_fileData = info.file.response.map((rsp: any) => rsp.url);
+                const ms_fileData_id = info.file.response.map(
+                  (rsp: any) => rsp.documentId
+                );
+                form.setFieldValue("ms_file_url", ms_fileData[0]);
+                form.setFieldValue("ms_file_id", ms_fileData_id[0]);
+              }
+            }}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
             <p className="ant-upload-text">
-              Click to upload or drag & drop your method statement in this area
+              Click to upload or drag & drop your risk assessment in this area
+              (1 file only)
             </p>
           </Upload.Dragger>
         </Form.Item>
