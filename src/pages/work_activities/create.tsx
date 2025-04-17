@@ -274,6 +274,9 @@ export const WorkActivityCreate = () => {
             </p>
           </Upload.Dragger>
         </Form.Item>
+        <Form.Item noStyle name={["ms_file_url"]}></Form.Item>
+        <Form.Item noStyle name={["ms_file_id"]}></Form.Item>
+
         <Form.Item noStyle name={["project"]}>
           {" "}
         </Form.Item>{" "}
