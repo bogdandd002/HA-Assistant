@@ -19,10 +19,12 @@ import {
   function selectProject(
     project_name: string, 
     project_id: string, 
-    user_contractor?: string) {
+    user_contractor?: string,
+    user_contractor_id?: any) {
         localStorage.setItem("selected_project_name", project_name)
         localStorage.setItem("selected_project_id", project_id)
         localStorage.setItem("user_contractor", user_contractor || "")
+        localStorage.setItem("user_contractor_id", user_contractor_id || "")
        // window.dispatchEvent(new Event("storage"));
   }
   
@@ -112,7 +114,8 @@ import {
           <a href="" onClick={() => selectProject(
             record.name, 
             record.documentId,
-            user?.contractor_documentId)}>{text}</a>}
+            user?.contractor_documentId,
+            user?.contractor_id)}>{text}</a>}
            />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />

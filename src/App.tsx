@@ -40,6 +40,7 @@ import { accessControlProvider } from "./providers/accessControlProvider";
 import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/projects";
 import { WorkActivityCreate, WorkActivityEdit, WorkActivityList, WorkActivityShow } from "./pages/work_activities";
 import { AddUserEdit, AddUserList, AddUserShow, UserCreate } from "./pages/add_users";
+import { SignSheetCreate, SignSheetEdit, SignSheetList, SignSheetShow } from "./pages/sign_sheets";
 
 const {
   UserAddOutlined,
@@ -106,6 +107,12 @@ function App() {
                   create: "/add-user/create",
                   edit: "/add-user/edit/:id",
                   show: "/add-user/show/:id"
+                }, {
+                  name: "sign-sheets",
+                  list: "/sign-sheets",
+                  create: "/sign-sheets/create",
+                  edit: "/sign-sheets/edit/:id",
+                  show: "/sign-sheets/show/:id"
                 }]}
                 options={{
                   syncWithLocation: true,
@@ -157,6 +164,12 @@ function App() {
                       <Route path="create" element={<UserCreate />} />
                       <Route path="edit/:id" element={<AddUserEdit />} />
                       <Route path="show/:id" element={<AddUserShow />} />
+                    </Route>
+                    <Route path="/sign-sheets">
+                      <Route index element={<SignSheetList />} />
+                      <Route path="create" element={<SignSheetCreate />} />
+                      <Route path="edit/:id" element={<SignSheetEdit />} />
+                      <Route path="show/:id" element={<SignSheetShow />} />
                     </Route>
                     
                     <Route path="*" element={<ErrorComponent />} />

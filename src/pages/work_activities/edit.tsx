@@ -118,7 +118,7 @@ export const WorkActivityEdit = () => {
           name={["ra_revision"]}
           rules={[
             {
-              required: false,
+              required: true,
             },
             {
                 validator: (_, value) => {

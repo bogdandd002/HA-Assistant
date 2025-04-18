@@ -17,13 +17,13 @@ import {
   Divider,
 } from "antd";
 import dayjs from "dayjs";
-import { InboxOutlined, PlusOutlined } from "@ant-design/icons";
-import { IMethodStatement, IProject, IWorkActivity } from "../../interfaces";
+import { InboxOutlined } from "@ant-design/icons";
+import {  IWorkActivity } from "../../interfaces";
 import { HttpError } from "@refinedev/core";
 import { API_URL, TOKEN_KEY } from "../../constants";
 import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
 
-const project = localStorage.getItem("selected_project_id");
+const project = localStorage.getItem("selected_project_id")
 
 export const WorkActivityCreate = () => {
   const { form, formProps, saveButtonProps } = useForm<IWorkActivity>();
@@ -32,6 +32,7 @@ export const WorkActivityCreate = () => {
   form.setFieldValue("ra_approval_status", "pending review");
   form.setFieldValue("ms_approval_status", "pending review");
   form.setFieldValue("project", project);
+  form.setFieldValue("contractor", localStorage.getItem("user_contractor_id"));
 
   return (
     <Create saveButtonProps={saveButtonProps}>
@@ -145,10 +146,9 @@ export const WorkActivityCreate = () => {
             value: value ? dayjs(value) : undefined,
           })}
         >
-          <DatePicker format={"DD-MM-YYYY"}/>
+          <DatePicker format={"DD-MM-YYYY"} />
         </Form.Item>
-        <Form.Item noStyle name={["ra_approval_status"]}>
-        </Form.Item>
+        <Form.Item noStyle name={["ra_approval_status"]}></Form.Item>
         {/*hardcoded above*/}
         <Form.Item
           name="ra_file"
@@ -167,7 +167,9 @@ export const WorkActivityCreate = () => {
             maxCount={1}
             onChange={(info) => {
               if (info.file.status === "done") {
-                const ra_fileData = info.file.response.map((rsp: any) => rsp.url);
+                const ra_fileData = info.file.response.map(
+                  (rsp: any) => rsp.url
+                );
                 const ra_fileData_id = info.file.response.map(
                   (rsp: any) => rsp.documentId
                 );
@@ -256,7 +258,9 @@ export const WorkActivityCreate = () => {
             maxCount={1}
             onChange={(info) => {
               if (info.file.status === "done") {
-                const ms_fileData = info.file.response.map((rsp: any) => rsp.url);
+                const ms_fileData = info.file.response.map(
+                  (rsp: any) => rsp.url
+                );
                 const ms_fileData_id = info.file.response.map(
                   (rsp: any) => rsp.documentId
                 );
@@ -276,7 +280,6 @@ export const WorkActivityCreate = () => {
         </Form.Item>
         <Form.Item noStyle name={["ms_file_url"]}></Form.Item>
         <Form.Item noStyle name={["ms_file_id"]}></Form.Item>
-
         <Form.Item noStyle name={["project"]}>
           {" "}
         </Form.Item>{" "}

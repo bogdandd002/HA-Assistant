@@ -38,6 +38,11 @@ export const model = newModel(`
     p, Admin, work-activities, create
     p, Admin, work-activities, (list)|(edit)|(delete)
 
+    p, Admin, sign-sheets, show
+    p, Admin, sign-sheets, list
+    p, Admin, sign-sheets, create
+    p, Admin, sign-sheets, (list)|(edit)|(delete)
+
     p, Admin, users, show
     p, Admin, users, list
     p, Admin, users, create

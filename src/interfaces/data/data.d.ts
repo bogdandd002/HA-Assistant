@@ -31,6 +31,7 @@ export interface IProject {
 }
 
 export interface IWorkActivity {
+    id: number;
     documentId: string;
     title: string;
     description: string;
@@ -55,36 +56,14 @@ export interface IWorkActivity {
     project: IProject;
 }
 
-export interface IMethodStatement {
+export interface ISignSheet {
+    id: number;
     documentId: string;
-    title: string;
-    descrition: string;
-    revision: number;
-    revision_date: Date;
-    approval_status: string;
-    project: IProject;
-    contractor: IContractor;
-    work_activity: IWorkActivity;
-    files: Buffer;
-}
-
-export interface IRiskAssessment {
-    documentId: string;
-    title: string;
-    descrition: string;
-    revision: number;
-    revision_date: Date;
-    approval_status: string;
-    project: IProject;
-    contractor: IContractor;
-    work_activity: IWorkActivity;
-    files: Buffer
-}
-
-export interface UploadFile {
     name: string;
-    url: string;
-    size: number;
-    uid: string;
-    type: string;
-  }
+    surname: string;
+    trade: string;
+    email: string;
+    confirmation: boolean;
+    signature: string;
+    work_activity: IWorkActivity;
+}
