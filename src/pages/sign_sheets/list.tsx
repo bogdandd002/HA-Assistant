@@ -2,9 +2,11 @@ import React from "react";
 import { BaseRecord } from "@refinedev/core";
 import { useTable, List, EditButton, ShowButton } from "@refinedev/antd";
 import { Table, Space, Image } from "antd";
+import { ISignSheet } from "../../interfaces";
 
 export const SignSheetList = () => {
-    const { tableProps } = useTable({
+    const { tableProps } = useTable<ISignSheet>({
+        
         syncWithLocation: true,
     });
 
@@ -24,6 +26,14 @@ export const SignSheetList = () => {
                 dataIndex={"trade"}
                 />
                  <Table.Column 
+                title="Ms Rev"
+                dataIndex={"ms_revision"}
+                />
+                 <Table.Column 
+                title="Ra Rev"
+                dataIndex={"ra_revision"}
+                />
+                 {/* <Table.Column 
                 title="Signature"
                 dataIndex={"signature"}
                 render={(_, record) => (
@@ -36,17 +46,12 @@ export const SignSheetList = () => {
                    
 
                 ) }
-                />
+                /> */}
                 <Table.Column
                     title="Actions"
                     dataIndex="actions"
                     render={(_, record: BaseRecord) => (
                         <Space>
-                            <EditButton
-                                hideText
-                                size="small"
-                                recordItemId={record.id}
-                            />
                             <ShowButton
                                 hideText
                                 size="small"

@@ -31,9 +31,7 @@ export const authProvider: AuthProvider = {
     };
   },
   logout: async () => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem("selected_project_name");
-    localStorage.removeItem("selected_project_id");
+    localStorage.clear();
     return {
       success: true,
       redirectTo: "/login",
@@ -79,6 +77,7 @@ export const authProvider: AuthProvider = {
 
       return user_role
   },
+
   getIdentity: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {

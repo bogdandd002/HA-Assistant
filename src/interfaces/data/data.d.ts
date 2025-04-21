@@ -66,4 +66,6 @@ export interface ISignSheet {
     confirmation: boolean;
     signature: string;
     work_activity: IWorkActivity;
+    ms_revision: number;
+    ra_revision: number;
 }

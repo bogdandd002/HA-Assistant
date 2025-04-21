@@ -10,6 +10,7 @@ interface ISearch {
   }
 
 export const AddUserList = () => {
+
   const { data: user } = useGetIdentity<IUser>();
      const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
             resource: "Users",

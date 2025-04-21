@@ -11,6 +11,7 @@ import {
   import {  HttpError, useGetIdentity} from "@refinedev/core";
   import { Space, Table, Radio, Form, Input } from "antd";
   import { IProject, IUser } from "../../interfaces/index";
+import { useEffect } from "react";
 
   interface ISearch {
     title: string;
@@ -18,13 +19,9 @@ import {
 
   function selectProject(
     project_name: string, 
-    project_id: string, 
-    user_contractor?: string,
-    user_contractor_id?: any) {
+    project_id: string, ) {
         localStorage.setItem("selected_project_name", project_name)
         localStorage.setItem("selected_project_id", project_id)
-        localStorage.setItem("user_contractor", user_contractor || "")
-        localStorage.setItem("user_contractor_id", user_contractor_id || "")
        // window.dispatchEvent(new Event("storage"));
   }
   
@@ -113,9 +110,7 @@ import {
           render={(text, record) => 
           <a href="" onClick={() => selectProject(
             record.name, 
-            record.documentId,
-            user?.contractor_documentId,
-            user?.contractor_id)}>{text}</a>}
+            record.documentId)}>{text}</a>}
            />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />

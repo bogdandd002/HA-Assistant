@@ -1,20 +1,24 @@
-import React, { useState } from "react";
-import { useGo, useShow } from "@refinedev/core";
+import { useState } from "react";
+import { HttpError, useGetIdentity, useGo, useShow } from "@refinedev/core";
 import {
-  Show,
-  NumberField,
-  TagField,
-  TextField,
   DateField,
+  Show,
+  TextField,
+  useTable,
 } from "@refinedev/antd";
 import {
   Button,
   Descriptions,
   DescriptionsProps,
+  Divider,
+  Form,
+  Input,
+  List,
+  Space,
+  Table,
   Tabs,
   TabsProps,
   Tag,
-  Typography,
 } from "antd";
 import { API_URL } from "../../constants";
 import {
@@ -22,13 +26,55 @@ import {
   EyeOutlined,
   FontSizeOutlined,
 } from "@ant-design/icons";
+import { ISignSheet, IUser } from "../../interfaces";
+
+interface ISearch {
+  title: string;
+}
 
 export const WorkActivityShow = () => {
   const { query } = useShow({});
   const { data, isLoading } = query;
-
+  const { data: user } = useGetIdentity<IUser>();
   const record = data?.data;
-  // console.log(record)
+
+   const { tableProps, setFilters, sorters, searchFormProps } = useTable<ISignSheet, HttpError, ISearch>({
+    resource: "sign-sheets",
+    sorters: {
+      initial: [
+        {
+          field: "name",
+          order: "asc",
+        },
+      ],
+      mode: "server"
+    },
+    onSearch: (values) => {
+      return [
+        {
+          field: "name",
+          operator: "contains",
+          value: values.title,
+        },
+      ];
+    },
+    filters: {
+      permanent: [
+        {
+          field: "work_activity.documentId",
+          operator: "eq",
+          value: record?.documentId,
+        }
+      ],
+      mode: "server",
+    },
+    liveMode: "auto",
+    meta: { 
+      populate: ["work_activity"],
+    },
+
+    syncWithLocation: true,
+  });
 
   const go = useGo();
 
@@ -101,9 +147,16 @@ export const WorkActivityShow = () => {
             onClick={() => {
               go({
                 to: {
-                  resource: "sign-sheet",
-                  action: "list",
+                  resource: "sign-sheets",
+                  action: "create",
                 },
+                query: {
+                  wa: record?.documentId,
+                  ra: record?.ra_revision,
+                  ms: record?.ms_revision
+                },
+                type: "push",
+
               });
             }}
           >
@@ -156,7 +209,9 @@ export const WorkActivityShow = () => {
           icon={<EyeOutlined />}
           size={"large"}
           type="primary"
-          onClick={() => previewFile(record?.ra_file_url, "ra")}
+          onClick={() => { 
+            previewFile(record?.ra_file_url, "ra")
+          }}
         >
           Preview
         </Button>
@@ -339,7 +394,62 @@ export const WorkActivityShow = () => {
 
   return (
     <Show isLoading={isLoading} title="Work activity general information">
-      <Tabs defaultActiveKey="1" items={tabItems} size="large" type="card" />
+      <Space> 
+        <Tabs defaultActiveKey="1" items={tabItems} size="large" type="card" />
+      </Space>
+      <Divider style={{fontSize:20, borderColor: "#7cb305" }}>
+          List of operatives that have signed method statement and risk assesment for this activity
+        </Divider>
+      <List>
+         <Form {...searchFormProps} layout="inline">
+                <Form.Item name="name">
+                  <Input placeholder="Search by name" onChange={(e) => {
+                    setFilters([
+                      {
+                        field: "name",
+                        operator: "contains",
+                        value: e.currentTarget.value
+                          ? e.currentTarget.value
+                          : undefined,
+                      },
+                    ]);
+                  }} />
+                </Form.Item>
+              </Form>
+         <Table {...tableProps} rowKey="id">
+                <Table.Column 
+                title="Name"
+                dataIndex={"name"}
+                />
+                 <Table.Column 
+                title="Surame"
+                dataIndex={"surname"}
+                />
+                 <Table.Column 
+                title="Trade"
+                dataIndex={"trade"}
+                />
+                <Table.Column 
+                title="Last signed Ms rev"
+                dataIndex={"ms_revision"}
+                />
+                  <Table.Column 
+                title="Last signed Ra rev"
+                dataIndex={"ra_revision"}
+                />
+                  <Table.Column 
+                title="Signed on"
+                dataIndex={"createdAt"}
+                render={(value) => 
+                <DateField value={value} 
+                format="DD-MM-YYYY HH:MM" /> }
+                />
+                 
+            </Table>
+      </List>
+      
+           
+
     </Show>
   );
 };

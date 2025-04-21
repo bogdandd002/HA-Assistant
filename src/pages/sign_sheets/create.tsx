@@ -4,12 +4,15 @@ import { Button, Checkbox, Form, Input, Space } from "antd";
 import { ISignSheet } from "../../interfaces";
 import SignaturePad from "react-signature-canvas";
 import "./signCanvas.css";
+import { useSearchParams } from "react-router";
 
 export const SignSheetCreate = () => {
-  const { formProps, saveButtonProps, form } = useForm<ISignSheet>();
+  const { formProps, saveButtonProps, form} = useForm<ISignSheet>();
 
   const sigCanvas = useRef<SignaturePad>(null);
-  const [trimmedDataURL, setTrimmedDataURL] = useState(null)
+
+  const [searchParams] = useSearchParams();
+  searchParams.get('id');
   
   function clear() {
     sigCanvas?.current?.clear();
@@ -20,16 +23,21 @@ export const SignSheetCreate = () => {
             "signature", 
             sigCanvas?.current?.getCanvas().toDataURL('image/png')); 
   }
+
   function onChange(e: any) {
     let agreed: boolean; 
        if(e.target.checked)
         agreed = true;
        else
         agreed = false;
-    console.log(`checked = ${agreed}`);
     form.setFieldValue("confirmation", agreed)
-
+    console.log(agreed)
   }
+
+  form.setFieldValue("work_activity", searchParams.get('wa'))
+  form.setFieldValue("ms_revision", Number(searchParams.get('ms')))
+  form.setFieldValue("ra_revision", Number(searchParams.get('ra')))
+
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form 
@@ -127,6 +135,14 @@ export const SignSheetCreate = () => {
               required: false,
             },
           ]}
+        ></Form.Item>
+         <Form.Item
+          name="ms_revision"
+          noStyle
+        ></Form.Item>
+        <Form.Item
+          name="ra_revision"
+          noStyle
         ></Form.Item>
       </Form>
     </Create>

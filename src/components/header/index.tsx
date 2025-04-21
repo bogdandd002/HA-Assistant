@@ -11,6 +11,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
 import { IUser } from "../../interfaces";
+import  useGetUserIdentity  from "../../store/user_data"
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -26,13 +27,19 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const { token } = useToken();
   const { data: user } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
-  const [selected_project, setSelectedProject] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
+  localStorage.setItem('user', JSON.stringify(user))
+  const [ userData ] = useState (user);
+  
+  const logedUser = useGetUserIdentity ((state: any) => state.getIdentity)
+
   useEffect(() => { 
+    localStorage.setItem('user', JSON.stringify(userData));
     const project = localStorage.getItem('selected_project_name');   
     if(project){
       setSelectedProject(project)
     }
-  }, [selected_project])
+  }, [selectedProject, userData])
 
   function DisplayProject(project:string){
     if (project){
@@ -59,7 +66,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   return (
     <AntdLayout.Header style={headerStyles}>
       <Space direction="horizontal" style={{width: '70%', justifyContent: 'left'}}>
-       {DisplayProject(selected_project)}
+       {DisplayProject(selectedProject)}
       </Space>
       <Space direction="horizontal" style={{width: '30%', justifyContent: 'right'}}>
         

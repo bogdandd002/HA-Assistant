@@ -41,6 +41,7 @@ import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/pr
 import { WorkActivityCreate, WorkActivityEdit, WorkActivityList, WorkActivityShow } from "./pages/work_activities";
 import { AddUserEdit, AddUserList, AddUserShow, UserCreate } from "./pages/add_users";
 import { SignSheetCreate, SignSheetEdit, SignSheetList, SignSheetShow } from "./pages/sign_sheets";
+import { Provider } from "react-redux";
 
 const {
   UserAddOutlined,
@@ -51,12 +52,14 @@ const {
 } = Icons;
 
 function App() {
+
   return (
     <BrowserRouter>
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
             <DevtoolsProvider>
+            
               <Refine
                 authProvider={authProvider}
                 accessControlProvider={accessControlProvider}
@@ -213,6 +216,7 @@ function App() {
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
               </Refine>
+             
               <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>
