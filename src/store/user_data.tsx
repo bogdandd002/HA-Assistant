@@ -2,18 +2,33 @@ import { create } from "zustand";
 import { IUser } from "../interfaces";
 import { useGetIdentity } from "@refinedev/core";
 
-const useGetUserIdentity = create((set) => ({
-  user: {
-    contractor_documentId: "",
-    contractor_id: null,
-    email: "",
-    id: null,
-    user_role: "",
+interface UserDetails {
+        id: string,
+        username: string,
+        email: string,
+        user_role: string,
+        contractor_documentId: string,
+        contractor_id: number
+}
+
+interface UserState {
+        user: UserDetails,
+        setUserState: (user: UserDetails ) => void
+}
+
+const useGetUserIdentity = create<UserState>()((set) => ({
+user:{
+  id: "",
     username: "",
-  },
-  getIdentity: (logeduser: any) =>
+    email: "",
+    user_role: "",
+    contractor_documentId: "",
+    contractor_id: -1,
+},
+    
+  setUserState: (logeduser: UserDetails) =>
     set((state: any) => ({
-      use: { ...state.user, ...logeduser } ,
+      user: state.user,
      }))
   
 })

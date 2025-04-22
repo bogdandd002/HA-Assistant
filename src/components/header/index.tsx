@@ -12,6 +12,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
 import { IUser } from "../../interfaces";
 import  useGetUserIdentity  from "../../store/user_data"
+import { useStore } from "zustand";
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -29,13 +30,14 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const { mode, setMode } = useContext(ColorModeContext);
   const [selectedProject, setSelectedProject] = useState("");
   localStorage.setItem('user', JSON.stringify(user))
+  const { setUserState} = useGetUserIdentity((state: any) => {
+   return { user: state.user, setUserState: state.setUserState };})
   const [ userData ] = useState (user);
-  
-  const logedUser = useGetUserIdentity ((state: any) => state.getIdentity)
 
   useEffect(() => { 
     localStorage.setItem('user', JSON.stringify(userData));
-    const project = localStorage.getItem('selected_project_name');   
+    const project = localStorage.getItem('selected_project_name');  
+    
     if(project){
       setSelectedProject(project)
     }

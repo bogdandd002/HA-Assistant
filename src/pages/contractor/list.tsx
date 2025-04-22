@@ -47,11 +47,11 @@ import {
           <Table.Column dataIndex="name" title={"Name"} />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="activity" title={"Activity"} />
-          <Table.Column
+          {/* <Table.Column
           dataIndex="contact_person"
           title={"Contact Person"}
           render={ (_, resource) => resource?.contact_person.map((item: any) => console.log(Object.keys(resource.contact_person).length))}
-        /> 
+        />  */}
           <Table.Column<{ documentId: string }>
             title="Actions"
             dataIndex="actions"
