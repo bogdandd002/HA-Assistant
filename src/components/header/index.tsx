@@ -12,7 +12,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
 import { IUser } from "../../interfaces";
 import  useGetUserIdentity  from "../../store/user_data"
-import { useStore } from "zustand";
+import { shallow } from "zustand/shallow";
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -26,22 +26,22 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
 }) => {
   const { token } = useToken();
-  const { data: user } = useGetIdentity<IUser>();
+  const { data: userD } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
   const [selectedProject, setSelectedProject] = useState("");
-  localStorage.setItem('user', JSON.stringify(user))
-  const { setUserState} = useGetUserIdentity((state: any) => {
-   return { user: state.user, setUserState: state.setUserState };})
-  const [ userData ] = useState (user);
-
+  const  setUserState  = useGetUserIdentity((state: any) => state.setUserState)
+  setUserState(userD)
+  const user  = useGetUserIdentity((state: any) => state.user)
+  
+localStorage.setItem('user', JSON.stringify(user))
   useEffect(() => { 
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('user', JSON.stringify(user));
     const project = localStorage.getItem('selected_project_name');  
     
     if(project){
       setSelectedProject(project)
     }
-  }, [selectedProject, userData])
+  }, [selectedProject, user])
 
   function DisplayProject(project:string){
     if (project){
