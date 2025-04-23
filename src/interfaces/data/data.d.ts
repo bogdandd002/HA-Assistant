@@ -30,6 +30,7 @@ export interface IProject {
     contact_person: IContactPerson[];
 }
 
+
 export interface IWorkActivity {
     id: number;
     documentId: string;
@@ -69,3 +70,9 @@ export interface ISignSheet {
     ms_revision: number;
     ra_revision: number;
 }
+
+interface ProjectDetails {
+    project_id: string;
+    project_name: string;
+    project_number: number;
+  }

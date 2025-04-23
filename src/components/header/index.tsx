@@ -13,7 +13,8 @@ import { ColorModeContext } from "../../contexts/color-mode";
 import { IUser } from "../../interfaces";
 import  useGetUserIdentity  from "../../store/user_data"
 import { shallow } from "zustand/shallow";
-import useSetProject from "../../store/app_data";
+import { useParams } from "react-router";
+import useProjectDetails from "../../store/app_data";
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -28,25 +29,24 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 }) => {
   const { token } = useToken();
   const { mode, setMode } = useContext(ColorModeContext);
-  const project = useSetProject((state: any) => state.project)
-  const [selectedProject, setSelectedProject] = useState("");
+  const selectedProject = useProjectDetails((state: any) => state.project)
   const  setUserState  = useGetUserIdentity((state: any) => state.setUserState)
   setUserState(useGetIdentity<IUser>())
   const user  = useGetUserIdentity((state: any) => state.user)
   
 localStorage.setItem('user', JSON.stringify(user))
-  useEffect(() => { 
-    localStorage.setItem('user', JSON.stringify(user));
-    const project = localStorage.getItem('selected_project_name');  
+  // useEffect(() => { 
+  //   localStorage.setItem('user', JSON.stringify(user));
+  //   const project = selectedProject.project_name;
     
-    if(project){
-      setSelectedProject(project)
-    }
-  }, [selectedProject, user])
+  //   // if(project){
+  //   //   setSelectedProject(project)
+  //   // }
+  // }, [selectedProject, user])
 
-  function DisplayProject(project:string){
-    if (project){
-      return <h2>You are in project: {project}</h2>
+  function DisplayProject(){
+    if (selectedProject){
+      return <h2>You are in project: {selectedProject.project_name}</h2>
     }
     return <h2> Please select a project</h2>
   }
@@ -69,7 +69,7 @@ localStorage.setItem('user', JSON.stringify(user))
   return (
     <AntdLayout.Header style={headerStyles}>
       <Space direction="horizontal" style={{width: '70%', justifyContent: 'left'}}>
-       {DisplayProject(selectedProject)}
+       {DisplayProject()}
       </Space>
       <Space direction="horizontal" style={{width: '30%', justifyContent: 'right'}}>
         

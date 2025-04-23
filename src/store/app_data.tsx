@@ -1,9 +1,23 @@
-import { create } from 'zustand'
+import { create } from "zustand";
+import { ProjectDetails } from "../interfaces";
+
+interface ProjectState {
+  project: ProjectDetails;
+  setProjectState: (project: ProjectDetails) => void;
+}
+
+const useProjectDetails = create<ProjectState>()((set) => ({
+  project: {
+    project_id: "",
+    project_name: "",
+    project_number: 0,
+  },
+  setProjectState: (project: ProjectDetails) =>
+    set(() => ({
+      project: project,
+    })),
+}));
+
+export default  useProjectDetails ;
 
 
-const useBearStore = create()((set) => ({
-  project: "",
-  setProject: (by: any) => set((state: any) => ({ bears: state.bears + by })),
-}))
-
-export default useBearStore;

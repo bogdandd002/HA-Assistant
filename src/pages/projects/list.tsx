@@ -11,7 +11,8 @@ import {
   import {  HttpError, useGetIdentity} from "@refinedev/core";
   import { Space, Table, Radio, Form, Input } from "antd";
   import { IProject, IUser } from "../../interfaces/index";
-import { useEffect } from "react";
+  import { useEffect } from "react";
+  import  useProjectDetails from "../../store/app_data";
 
   interface ISearch {
     title: string;
@@ -27,6 +28,7 @@ import { useEffect } from "react";
   
   export const ProjectList = () => {
     const { data: user } = useGetIdentity<IUser>();
+    const setProjectState = useProjectDetails((state: any) => state.setProjectState)
     const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
       sorters: {
         initial: [
@@ -108,9 +110,13 @@ import { useEffect } from "react";
           sorter={{multiple:1}}
           defaultSortOrder={getDefaultSortOrder("name", sorters)}
           render={(text, record) => 
-          <a href="" onClick={() => selectProject(
-            record.name, 
-            record.documentId)}>{text}</a>}
+          <a href="" onClick={() => setProjectState({
+            project_id : record.documentId,
+            project_name : record.name,
+            project_number : record.project_nr
+          }
+            
+          )}>{text}</a>}
            />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />
