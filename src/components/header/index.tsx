@@ -13,6 +13,7 @@ import { ColorModeContext } from "../../contexts/color-mode";
 import { IUser } from "../../interfaces";
 import  useGetUserIdentity  from "../../store/user_data"
 import { shallow } from "zustand/shallow";
+import useSetProject from "../../store/app_data";
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -26,11 +27,11 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
 }) => {
   const { token } = useToken();
-  const { data: userD } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
+  const project = useSetProject((state: any) => state.project)
   const [selectedProject, setSelectedProject] = useState("");
   const  setUserState  = useGetUserIdentity((state: any) => state.setUserState)
-  setUserState(userD)
+  setUserState(useGetIdentity<IUser>())
   const user  = useGetUserIdentity((state: any) => state.user)
   
 localStorage.setItem('user', JSON.stringify(user))
