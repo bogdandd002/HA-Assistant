@@ -13,7 +13,7 @@ const useProjectDetails = create<ProjectState>()((set) => ({
     project_number: 0,
   },
   setProjectState: (project: ProjectDetails) =>
-    set(() => ({
+    set((state) => ({
       project: project,
     })),
 }));

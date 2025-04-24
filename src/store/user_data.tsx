@@ -27,7 +27,7 @@ user:{
 },
     
   setUserState: (logeduser: UserDetails) =>
-    set((state: any) => ({
+    set(() => ({
       user: logeduser,
      }))
   

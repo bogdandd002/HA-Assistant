@@ -33,15 +33,16 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const selectedProject = useProjectDetails((state: any) => state.project)
   const  setUserState  = useGetUserIdentity((state: any) => state.setUserState)
   const user  = useGetUserIdentity((state: any) => state.user)
+
   
   useEffect(() => { 
     localStorage.setItem('user', JSON.stringify(user));
-    const project = selectedProject.project_name;
-     setUserState(userData)
+      setUserState(userData)
+    console.log(selectedProject.project_name)
     // if(project){
     //   setSelectedProject(project)
     // }
-  }, [ userData])
+  }, [selectedProject.project_name, setUserState, user, userData])
 
   function DisplayProject(){
     if (selectedProject){

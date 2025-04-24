@@ -9,26 +9,37 @@ import {
     SaveButton
   } from "@refinedev/antd";
   import {  HttpError, useGetIdentity} from "@refinedev/core";
-  import { Space, Table, Radio, Form, Input, Anchor } from "antd";
+  import { Space, Table, Radio, Form, Input, Anchor, Button } from "antd";
   import { IProject, IUser } from "../../interfaces/index";
   import { useEffect } from "react";
   import  useProjectDetails from "../../store/app_data";
+import { text } from "stream/consumers";
+import useGetUserIdentity from "../../store/user_data";
+import { shallow } from "zustand/shallow";
 
   interface ISearch {
     title: string;
   }
 
-  function selectProject(
-    project_name: string, 
-    project_id: string, ) {
-        localStorage.setItem("selected_project_name", project_name)
-        localStorage.setItem("selected_project_id", project_id)
-       // window.dispatchEvent(new Event("storage"));
-  }
+  // function selectProject(
+  //   project_name: string, 
+  //   project_id: string,
+  //   project_number: number) {
+  //       localStorage.setItem("selected_project_name", project_name)
+  //       localStorage.setItem("selected_project_id", project_id)
+  //      // window.dispatchEvent(new Event("storage"));
+  // }
   
   export const ProjectList = () => {
-    const { data: user } = useGetIdentity<IUser>();
-    const setProjectState = useProjectDetails((state: any) => state.setProjectState)
+    // const { data: user } = useGetIdentity<IUser>();
+    const user  = useGetUserIdentity((state: any) => state.user)
+    
+    useEffect(()=> {
+      
+      console.log(user)
+    }, [user])
+
+    const selectProject = useProjectDetails((state: any) => state.setProjectState)
     const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IProject, HttpError, ISearch>({
       sorters: {
         initial: [
@@ -56,7 +67,7 @@ import {
             value: user?.contractor_documentId,
           }
         ],
-        mode: "server",
+        
       },
       liveMode: "auto",
       meta: { 
@@ -109,21 +120,14 @@ import {
           dataIndex="name" title={"Name"}
           sorter={{multiple:1}}
           defaultSortOrder={getDefaultSortOrder("name", sorters)}
-          render={(text, record) => { return <Anchor
-            onClick={setProjectState({
-              project_id: record.documentId,
-              project_name: record.name,
-              project_number: record.project_nr
-            }
-            )}
-            items={[
-              {
-                key: 'part-1',
-                href: '',
-                title: record.name,
-              }
-            ]} />
-          e.preventDefault(); }
+          render={(text, record) => 
+            <Button type="link" onClick={() => selectProject({
+                project_id: record.documentId,
+                project_name: record.name,
+                project_number: record.project_nr
+            })}
+            >{text}</Button>
+           
            }
            />
           <Table.Column dataIndex="address" title={"Address"} />
