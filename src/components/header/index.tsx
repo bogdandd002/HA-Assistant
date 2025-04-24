@@ -28,21 +28,20 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
 }) => {
   const { token } = useToken();
+ const { data: userData  } = useGetIdentity<IUser>()
   const { mode, setMode } = useContext(ColorModeContext);
   const selectedProject = useProjectDetails((state: any) => state.project)
   const  setUserState  = useGetUserIdentity((state: any) => state.setUserState)
-  setUserState(useGetIdentity<IUser>())
   const user  = useGetUserIdentity((state: any) => state.user)
   
-localStorage.setItem('user', JSON.stringify(user))
-  // useEffect(() => { 
-  //   localStorage.setItem('user', JSON.stringify(user));
-  //   const project = selectedProject.project_name;
-    
-  //   // if(project){
-  //   //   setSelectedProject(project)
-  //   // }
-  // }, [selectedProject, user])
+  useEffect(() => { 
+    localStorage.setItem('user', JSON.stringify(user));
+    const project = selectedProject.project_name;
+     setUserState(userData)
+    // if(project){
+    //   setSelectedProject(project)
+    // }
+  }, [ userData])
 
   function DisplayProject(){
     if (selectedProject){

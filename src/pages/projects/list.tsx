@@ -9,7 +9,7 @@ import {
     SaveButton
   } from "@refinedev/antd";
   import {  HttpError, useGetIdentity} from "@refinedev/core";
-  import { Space, Table, Radio, Form, Input } from "antd";
+  import { Space, Table, Radio, Form, Input, Anchor } from "antd";
   import { IProject, IUser } from "../../interfaces/index";
   import { useEffect } from "react";
   import  useProjectDetails from "../../store/app_data";
@@ -109,14 +109,22 @@ import {
           dataIndex="name" title={"Name"}
           sorter={{multiple:1}}
           defaultSortOrder={getDefaultSortOrder("name", sorters)}
-          render={(text, record) => 
-          <a href="" onClick={() => setProjectState({
-            project_id : record.documentId,
-            project_name : record.name,
-            project_number : record.project_nr
-          }
-            
-          )}>{text}</a>}
+          render={(text, record) => { return <Anchor
+            onClick={setProjectState({
+              project_id: record.documentId,
+              project_name: record.name,
+              project_number: record.project_nr
+            }
+            )}
+            items={[
+              {
+                key: 'part-1',
+                href: '',
+                title: record.name,
+              }
+            ]} />
+          e.preventDefault(); }
+           }
            />
           <Table.Column dataIndex="address" title={"Address"} />
           <Table.Column dataIndex="start_date" title={"Start Date"} />
