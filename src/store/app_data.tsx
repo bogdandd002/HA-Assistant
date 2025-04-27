@@ -13,11 +13,9 @@ const useProjectDetails = create<ProjectState>()((set) => ({
     project_number: 0,
   },
   setProjectState: (project: ProjectDetails) =>
-    set((state) => ({
+    set(() => ({
       project: project,
     })),
 }));
 
-export default  useProjectDetails ;
-
-
+export default useProjectDetails;

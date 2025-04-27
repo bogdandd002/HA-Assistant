@@ -1,4 +1,4 @@
-import { Authenticated, CanAccess, CanParams, CanReturnType, Refine } from "@refinedev/core";
+import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
@@ -27,39 +27,47 @@ import { Header } from "./components/header";
 import { API_URL } from "./constants";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 
- import {
+import {
   ContractorCreate,
   ContractorEdit,
   ContractorList,
   ContractorShow,
- } from "./pages/contractor";
+} from "./pages/contractor";
 
-import { newEnforcer } from "casbin";
-import { adapter, model } from "./casbin/accessControl";
 import { accessControlProvider } from "./providers/accessControlProvider";
-import { ProjectCreate, ProjectEdit, ProjectList, ProjectShow } from "./pages/projects";
-import { WorkActivityCreate, WorkActivityEdit, WorkActivityList, WorkActivityShow } from "./pages/work_activities";
-import { AddUserEdit, AddUserList, AddUserShow, UserCreate } from "./pages/add_users";
-import { SignSheetCreate, SignSheetEdit, SignSheetList, SignSheetShow } from "./pages/sign_sheets";
-import { Provider } from "react-redux";
+import {
+  ProjectCreate,
+  ProjectEdit,
+  ProjectList,
+  ProjectShow,
+} from "./pages/projects";
+import {
+  WorkActivityCreate,
+  WorkActivityEdit,
+  WorkActivityList,
+  WorkActivityShow,
+} from "./pages/work_activities";
+import {
+  AddUserEdit,
+  AddUserList,
+  AddUserShow,
+  UserCreate,
+} from "./pages/add_users";
+import {
+  SignSheetCreate,
+  SignSheetEdit,
+  SignSheetList,
+  SignSheetShow,
+} from "./pages/sign_sheets";
 
-const {
-  UserAddOutlined,
-  TeamOutlined,
-  InfoCircleOutlined,
-  SlidersOutlined,
-  FileAddOutlined,
-} = Icons;
 
 function App() {
-
   return (
     <BrowserRouter>
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
             <DevtoolsProvider>
-            
               <Refine
                 authProvider={authProvider}
                 accessControlProvider={accessControlProvider}
@@ -69,32 +77,46 @@ function App() {
                 resources={[// {
                 //   name: "select_project", list: () => null
                 // },
+                 {
+                  name: "dashboard",
+                  list: "/dashboard",
+                  create: "/dashboard/create",
+                  edit: "/dashboard/edit/:id",
+                  show: "/dashboard/show/:id",
+                  icon: <Icons.DashboardOutlined />,
+                  meta:{
+                    label: "Dashboard" ,
+                  }
+                },
                 {
                   name: "projects",
                   list: "/projects",
                   create: "/projects/create",
                   edit: "/projects/edit/:id",
                   show: "/projects/show/:id",
-                  icon: <TeamOutlined />,
+                  icon: <Icons.ProjectOutlined />,
                   meta: {
-                    label: "Select project"
-                  }
-                }, {
+                    label: "Projects",
+                  },
+                },
+               
+                {
                   name: "contractors",
                   list: "/contractors",
                   create: "/contractors/create",
                   edit: "/contractors/edit/:id",
                   show: "/contractors/show/:id",
-                  icon: <TeamOutlined />,
+                  icon: <Icons.UsergroupAddOutlined />,
                   meta: {
-                    label: "Contractors"
-                  }
+                    label: "Contractors",
+                  },
                 }, {
                   name: "contact-people",
                   list: "/contact-people",
                   create: "/contact-people/create",
                   edit: "/contact-people/edit/:id",
                   show: "/contact-people/show/:id",
+                  icon: <Icons.DiffOutlined />,
                   meta: {
                     canDelete: true,
                   },
@@ -103,20 +125,24 @@ function App() {
                   list: "/work-activities",
                   create: "/work-activities/create",
                   edit: "/work-activities/edit/:id",
-                  show: "/work-activities/show/:id"
+                  show: "/work-activities/show/:id",
+                  icon: <Icons.DiffOutlined />
                 }, {
                   name: "users",
                   list: "/add-user",
                   create: "/add-user/create",
                   edit: "/add-user/edit/:id",
-                  show: "/add-user/show/:id"
+                  show: "/add-user/show/:id",
+                  icon: <Icons.TeamOutlined />,
                 }, {
                   name: "sign-sheets",
                   list: "/sign-sheets",
                   create: "/sign-sheets/create",
                   edit: "/sign-sheets/edit/:id",
-                  show: "/sign-sheets/show/:id"
-                }]}
+                  show: "/sign-sheets/show/:id",
+                  icon: <Icons.FormOutlined />,
+                },
+              ]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -124,7 +150,7 @@ function App() {
                   projectId: "k0ry9W-yvpLgr-gKoaAn",
                 }}
               >
-               <Routes>
+                <Routes>
                   <Route
                     element={
                       <Authenticated
@@ -151,10 +177,10 @@ function App() {
                       <Route path="show/:id" element={<ProjectShow />} />
                     </Route>
                     <Route path="/contractors">
-                        <Route index element={<ContractorList />} />
-                        <Route path="create" element={<ContractorCreate />} />
-                        <Route path="edit/:id" element={<ContractorEdit />} />
-                        <Route path="show/:id" element={<ContractorShow />} />
+                      <Route index element={<ContractorList />} />
+                      <Route path="create" element={<ContractorCreate />} />
+                      <Route path="edit/:id" element={<ContractorEdit />} />
+                      <Route path="show/:id" element={<ContractorShow />} />
                     </Route>
                     <Route path="/work-activities">
                       <Route index element={<WorkActivityList />} />
@@ -174,7 +200,7 @@ function App() {
                       <Route path="edit/:id" element={<SignSheetEdit />} />
                       <Route path="show/:id" element={<SignSheetShow />} />
                     </Route>
-                    
+
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   <Route
@@ -216,7 +242,7 @@ function App() {
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
               </Refine>
-             
+
               <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>

@@ -1,29 +1,14 @@
 import React from "react";
-import {
-  Create,
-  getValueFromEvent,
-  useForm,
-  useModalForm,
-  useSelect,
-} from "@refinedev/antd";
-import {
-  Form,
-  Input,
-  DatePicker,
-  Upload,
-  Select,
-  Button,
-  Modal,
-  Divider,
-} from "antd";
+import { Create, useForm } from "@refinedev/antd";
+import { Form, Input, DatePicker, Upload, Divider } from "antd";
 import dayjs from "dayjs";
 import { InboxOutlined } from "@ant-design/icons";
-import {  IWorkActivity } from "../../interfaces";
-import { HttpError } from "@refinedev/core";
+import { IWorkActivity } from "../../interfaces";
+
 import { API_URL, TOKEN_KEY } from "../../constants";
 import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
 
-const project = localStorage.getItem("selected_project_id")
+const project = localStorage.getItem("selected_project_id");
 
 export const WorkActivityCreate = () => {
   const { form, formProps, saveButtonProps } = useForm<IWorkActivity>();
@@ -168,9 +153,11 @@ export const WorkActivityCreate = () => {
             onChange={(info) => {
               if (info.file.status === "done") {
                 const ra_fileData = info.file.response.map(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (rsp: any) => rsp.url
                 );
                 const ra_fileData_id = info.file.response.map(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (rsp: any) => rsp.documentId
                 );
                 form.setFieldValue("ra_file_url", ra_fileData[0]);
@@ -259,9 +246,11 @@ export const WorkActivityCreate = () => {
             onChange={(info) => {
               if (info.file.status === "done") {
                 const ms_fileData = info.file.response.map(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (rsp: any) => rsp.url
                 );
                 const ms_fileData_id = info.file.response.map(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (rsp: any) => rsp.documentId
                 );
                 form.setFieldValue("ms_file_url", ms_fileData[0]);
@@ -280,13 +269,9 @@ export const WorkActivityCreate = () => {
         </Form.Item>
         <Form.Item noStyle name={["ms_file_url"]}></Form.Item>
         <Form.Item noStyle name={["ms_file_id"]}></Form.Item>
-        <Form.Item noStyle name={["project"]}>
-          {" "}
-        </Form.Item>{" "}
+        <Form.Item noStyle name={["project"]}></Form.Item>
         {/*automaticaly set based on the selected project*/}
-        <Form.Item noStyle name={["contractor"]}>
-          {" "}
-        </Form.Item>{" "}
+        <Form.Item noStyle name={["contractor"]}></Form.Item>
         {/*automaticaly set based on the user*/}
       </Form>
     </Create>

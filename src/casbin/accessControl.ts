@@ -23,6 +23,11 @@ export const model = newModel(`
     p, Admin, contractors, create
     p, Admin, contractors, (list)|(edit)|(delete)
 
+    p, Admin, dashboard, show
+    p, Admin, dashboard, list
+    p, Admin, dashboard, create
+    p, Admin, dashboard, (list)|(edit)|(delete)
+
     p, Admin, projects, show
     p, Admin, projects, list
     p, Admin, projects, create
@@ -88,6 +93,4 @@ export const model = newModel(`
     p, Contractor, users, create
     p, Contractor, users, (list)|(edit)|(delete)
   
-    p, editor, users, list
-    p, editor, canvases, (list)|(edit)
   `);

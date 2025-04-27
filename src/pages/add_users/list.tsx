@@ -1,8 +1,9 @@
 import { DeleteButton, EditButton, List, ShowButton, useTable } from "@refinedev/antd";
-import { BaseRecord, HttpError, useGetIdentity } from "@refinedev/core";
-import { AntdInferencer } from "@refinedev/inferencer/antd";
+import { BaseRecord, HttpError } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
 import { IUser } from "../../interfaces";
+import useGetUserIdentity from "../../store/user_data";
+import { useShallow } from "zustand/shallow";
 
 
 interface ISearch {
@@ -11,8 +12,8 @@ interface ISearch {
 
 export const AddUserList = () => {
 
-  const { data: user } = useGetIdentity<IUser>();
-     const { tableProps, filters, setFilters, sorters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
+  const user = useGetUserIdentity(useShallow((state) => state?.user));
+     const { tableProps, setFilters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
             resource: "Users",
                sorters: {
                  initial: [

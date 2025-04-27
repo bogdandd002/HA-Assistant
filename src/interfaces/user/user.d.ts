@@ -22,3 +22,12 @@ export interface IRole{
     name: string;
     description: string;
 }
+
+interface UserDetails {
+    id: string | number,
+    username: string,
+    email: string,
+    user_role: string,
+    contractor_documentId: string,
+    contractor_id: number
+}

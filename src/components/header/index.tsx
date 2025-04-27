@@ -3,52 +3,52 @@ import { useGetIdentity } from "@refinedev/core";
 import {
   Layout as AntdLayout,
   Avatar,
+  Button,
   Space,
   Switch,
   theme,
   Typography,
 } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect} from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
-import { IUser } from "../../interfaces";
-import  useGetUserIdentity  from "../../store/user_data"
-import { shallow } from "zustand/shallow";
-import { useParams } from "react-router";
+import useGetUserIdentity from "../../store/user_data";
+import {  useShallow } from "zustand/shallow";
+
 import useProjectDetails from "../../store/app_data";
+import { UserDetails } from "../../interfaces";
+import { useNavigate } from "react-router";
 
 const { Text } = Typography;
+const { Title } = Typography;
 const { useToken } = theme;
-
-// window.addEventListener('storage', () => {
-//   console.log("Change to local storage!");
-//   // ...
-// })
 
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
 }) => {
   const { token } = useToken();
- const { data: userData  } = useGetIdentity<IUser>()
+  useGetIdentity<UserDetails>();
+  const navigate = useNavigate();
   const { mode, setMode } = useContext(ColorModeContext);
-  const selectedProject = useProjectDetails((state: any) => state.project)
-  const  setUserState  = useGetUserIdentity((state: any) => state.setUserState)
-  const user  = useGetUserIdentity((state: any) => state.user)
+  const selectedProject = useProjectDetails((state) => state?.project);
+  const user = useGetUserIdentity(useShallow((state) => state?.user));
+  let selectedProjectName = localStorage.getItem("selected_project");
 
-  
-  useEffect(() => { 
-    localStorage.setItem('user', JSON.stringify(user));
-      setUserState(userData)
-    console.log(selectedProject.project_name)
-    // if(project){
-    //   setSelectedProject(project)
-    // }
-  }, [selectedProject.project_name, setUserState, user, userData])
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    selectedProjectName = localStorage.getItem("selected_project");
+  }, [selectedProject]);
 
-  function DisplayProject(){
-    if (selectedProject){
-      return <h2>You are in project: {selectedProject.project_name}</h2>
+  function DisplayProject() {
+    const displayName = JSON.parse(selectedProjectName || '{}');
+    if (displayName.project_name) {
+      return <><Title level={4} type="secondary">
+        You are in project: {displayName.project_number} - {displayName.project_name}
+      </Title>
+      <Button type="primary" onClick={()=> navigate("projects") }>Change project</Button></>;
     }
-    return <h2> Please select a project</h2>
+    return  <Button type="primary" size="large" onClick={
+      () => navigate("projects")
+    }>Select a project</Button>
   }
 
   const headerStyles: React.CSSProperties = {
@@ -68,11 +68,16 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   return (
     <AntdLayout.Header style={headerStyles}>
-      <Space direction="horizontal" style={{width: '70%', justifyContent: 'left'}}>
-       {DisplayProject()}
+      <Space
+        direction="horizontal"
+        style={{ width: "70%", justifyContent: "left" }}
+      >
+        {DisplayProject()}
       </Space>
-      <Space direction="horizontal" style={{width: '30%', justifyContent: 'right'}}>
-        
+      <Space
+        direction="horizontal"
+        style={{ width: "30%", justifyContent: "right" }}
+      >
         <Switch
           checkedChildren="🌛"
           unCheckedChildren="🔆"
@@ -82,7 +87,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
         <Space style={{ marginLeft: "8px" }} size="middle">
           {user?.username && <Text strong>{user.username}</Text>}
           {user?.user_role && <Text strong>{user.user_role}</Text>}
-          {user?.avatar && <Avatar src={user?.avatar} alt={user?.username} />}
+          {/* {user?.avatar && <Avatar src={user?.avatar} alt={user?.username} />} */}
         </Space>
       </Space>
     </AntdLayout.Header>

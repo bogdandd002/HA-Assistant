@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { HttpError, useGetIdentity, useGo, useShow } from "@refinedev/core";
-import {
-  DateField,
-  Show,
-  TextField,
-  useTable,
-} from "@refinedev/antd";
+import { DateField, Show, useTable } from "@refinedev/antd";
 import {
   Button,
   Descriptions,
@@ -21,12 +16,8 @@ import {
   Tag,
 } from "antd";
 import { API_URL } from "../../constants";
-import {
-  DownloadOutlined,
-  EyeOutlined,
-  FontSizeOutlined,
-} from "@ant-design/icons";
-import { ISignSheet, IUser } from "../../interfaces";
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
+import { ISignSheet } from "../../interfaces";
 
 interface ISearch {
   title: string;
@@ -35,10 +26,14 @@ interface ISearch {
 export const WorkActivityShow = () => {
   const { query } = useShow({});
   const { data, isLoading } = query;
-  const { data: user } = useGetIdentity<IUser>();
+
   const record = data?.data;
 
-   const { tableProps, setFilters, sorters, searchFormProps } = useTable<ISignSheet, HttpError, ISearch>({
+  const { tableProps, setFilters, searchFormProps } = useTable<
+    ISignSheet,
+    HttpError,
+    ISearch
+  >({
     resource: "sign-sheets",
     sorters: {
       initial: [
@@ -47,7 +42,7 @@ export const WorkActivityShow = () => {
           order: "asc",
         },
       ],
-      mode: "server"
+      mode: "server",
     },
     onSearch: (values) => {
       return [
@@ -64,12 +59,12 @@ export const WorkActivityShow = () => {
           field: "work_activity.documentId",
           operator: "eq",
           value: record?.documentId,
-        }
+        },
       ],
       mode: "server",
     },
     liveMode: "auto",
-    meta: { 
+    meta: {
       populate: ["work_activity"],
     },
 
@@ -78,8 +73,8 @@ export const WorkActivityShow = () => {
 
   const go = useGo();
 
-  let confirm_ra_read = false ;
-  let confirm_ms_read = false ;
+  let confirm_ra_read = false;
+  let confirm_ms_read = false;
   const [isEnabled, setIsEnabled] = useState(false);
 
   const itemsTab1: DescriptionsProps["items"] = [
@@ -153,10 +148,9 @@ export const WorkActivityShow = () => {
                 query: {
                   wa: record?.documentId,
                   ra: record?.ra_revision,
-                  ms: record?.ms_revision
+                  ms: record?.ms_revision,
                 },
                 type: "push",
-
               });
             }}
           >
@@ -209,8 +203,8 @@ export const WorkActivityShow = () => {
           icon={<EyeOutlined />}
           size={"large"}
           type="primary"
-          onClick={() => { 
-            previewFile(record?.ra_file_url, "ra")
+          onClick={() => {
+            previewFile(record?.ra_file_url, "ra");
           }}
         >
           Preview
@@ -359,14 +353,14 @@ export const WorkActivityShow = () => {
     window.URL.revokeObjectURL(href);
   }
 
-  function duration(record: any) {
+  function duration(record: number) {
     if (record == 1) {
       return " day";
     }
     return " days";
   }
 
-  function tagColor(record: any) {
+  function tagColor(record: string) {
     switch (record) {
       case "approved":
         return "success";
@@ -377,79 +371,61 @@ export const WorkActivityShow = () => {
     }
   }
 
-  function previewFile(record: any, document: string) {
-    if(document === "ra")
-      confirm_ra_read = true;
-    if(document === "ms")
-      confirm_ms_read = true;
+  function previewFile(record: string, document: string) {
+    if (document === "ra") confirm_ra_read = true;
+    if (document === "ms") confirm_ms_read = true;
     const link = API_URL + record;
     window.open(link, "_blank");
     activateSignButton();
   }
 
   const activateSignButton = () => {
-    if(confirm_ra_read && confirm_ms_read)
-      setIsEnabled(true);
+    if (confirm_ra_read && confirm_ms_read) setIsEnabled(true);
   };
 
   return (
     <Show isLoading={isLoading} title="Work activity general information">
-      <Space> 
+      <Space>
         <Tabs defaultActiveKey="1" items={tabItems} size="large" type="card" />
       </Space>
-      <Divider style={{fontSize:20, borderColor: "#7cb305" }}>
-          List of operatives that have signed method statement and risk assesment for this activity
-        </Divider>
+      <Divider style={{ fontSize: 20, borderColor: "#7cb305" }}>
+        List of operatives that have signed method statement and risk assesment
+        for this activity
+      </Divider>
       <List>
-         <Form {...searchFormProps} layout="inline">
-                <Form.Item name="name">
-                  <Input placeholder="Search by name" onChange={(e) => {
-                    setFilters([
-                      {
-                        field: "name",
-                        operator: "contains",
-                        value: e.currentTarget.value
-                          ? e.currentTarget.value
-                          : undefined,
-                      },
-                    ]);
-                  }} />
-                </Form.Item>
-              </Form>
-         <Table {...tableProps} rowKey="id">
-                <Table.Column 
-                title="Name"
-                dataIndex={"name"}
-                />
-                 <Table.Column 
-                title="Surame"
-                dataIndex={"surname"}
-                />
-                 <Table.Column 
-                title="Trade"
-                dataIndex={"trade"}
-                />
-                <Table.Column 
-                title="Last signed Ms rev"
-                dataIndex={"ms_revision"}
-                />
-                  <Table.Column 
-                title="Last signed Ra rev"
-                dataIndex={"ra_revision"}
-                />
-                  <Table.Column 
-                title="Signed on"
-                dataIndex={"createdAt"}
-                render={(value) => 
-                <DateField value={value} 
-                format="DD-MM-YYYY HH:MM" /> }
-                />
-                 
-            </Table>
+        <Form {...searchFormProps} layout="inline">
+          <Form.Item name="name">
+            <Input
+              placeholder="Search by name"
+              onChange={(e) => {
+                setFilters([
+                  {
+                    field: "name",
+                    operator: "contains",
+                    value: e.currentTarget.value
+                      ? e.currentTarget.value
+                      : undefined,
+                  },
+                ]);
+              }}
+            />
+          </Form.Item>
+        </Form>
+        <Table {...tableProps} rowKey="id">
+          <Table.Column title="Name" dataIndex={"name"} />
+          <Table.Column title="Surame" dataIndex={"surname"} />
+          <Table.Column title="Trade" dataIndex={"trade"} />
+          <Table.Column title="Last signed Ms rev" dataIndex={"ms_revision"} />
+          <Table.Column title="Last signed Ra rev" dataIndex={"ra_revision"} />
+          <Table.Column
+            title="Signed on"
+            dataIndex={"createdAt"}
+            render={(value) => (
+              <DateField value={value} format="DD-MM-YYYY HH:MM" />
+            )}
+          />
+        </Table>
       </List>
-      
-           
-
     </Show>
   );
 };

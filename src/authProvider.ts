@@ -2,6 +2,8 @@ import type { AuthProvider } from "@refinedev/core";
 import { AuthHelper } from "@refinedev/strapi-v4";
 import axios from "axios";
 import { API_URL, TOKEN_KEY } from "./constants";
+import useGetUserIdentity from "./store/user_data";
+import { UserDetails } from "./interfaces";
 
 export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
@@ -16,7 +18,6 @@ export const authProvider: AuthProvider = {
       axiosInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data.jwt}`;
-
       return {
         success: true,
         redirectTo: "/",
@@ -68,14 +69,18 @@ export const authProvider: AuthProvider = {
       return "Noroleandnotlogin";
     }
     // fetching user role from strapi by making an extra call - explore for aternative in the future
-      const response = await fetch('http://localhost:1337/api/users/me?populate=role', {
-      headers: {
+    const response = await fetch(
+      "http://localhost:1337/api/users/me?populate=role",
+      {
+        headers: {
           authorization: `Bearer ${token}`,
-        }})
-      const {role: role} = await response.json();
-      const {name: user_role} = role;
+        },
+      }
+    );
+    const { role: role } = await response.json();
+    const { name: user_role } = role;
 
-      return user_role
+    return user_role;
   },
 
   getIdentity: async () => {
@@ -84,28 +89,33 @@ export const authProvider: AuthProvider = {
       return null;
     }
     // fetching user role from strapi by making an extra call - explore for aternative in the future
-      const response = await fetch('http://localhost:1337/api/users/me?populate[0]=role&populate[1]=contractor', {
-      headers: {
+    const response = await fetch(
+      "http://localhost:1337/api/users/me?populate[0]=role&populate[1]=contractor",
+      {
+        headers: {
           authorization: `Bearer ${token}`,
-        }})
-      const {role: role, contractor: contractor} = await response.json();
-      const {name: user_role} = role;
-      const {documentId: contractor_documentId, id: contractor_id} = contractor;
-    
+        },
+      }
+    );
+    const { role: role, contractor: contractor } = await response.json();
+    const { name: user_role } = role;
+    const { documentId: contractor_documentId, id: contractor_id } = contractor;
+
     const { data, status } = await strapiAuthHelper.me(token);
     if (status === 200) {
       const { id, username, email } = data;
-      return {
+      const user_data: UserDetails = {
         id,
         username,
         email,
         user_role,
         contractor_documentId,
-        contractor_id
+        contractor_id,
       };
+      useGetUserIdentity.getState().setUserState(user_data);
+      return user_data;
+    } else {
+      return null;
     }
-
-    return null;
   },
-
 };
