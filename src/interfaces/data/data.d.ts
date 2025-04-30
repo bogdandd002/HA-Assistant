@@ -6,7 +6,10 @@ export interface IContractor {
     address: string;
     activity: string;
     contact_person: IContactPerson[];
-    project: IProject[]
+    project: IProject[];
+    start_on_project: Date;
+    max_nr_users: number;
+    completed_project: boolean;
 }
 
 export interface IContactPerson {
@@ -25,6 +28,7 @@ export interface IProject {
     address: string;
     start_date: Date;
     end_date: Date;
+    duration: number;
     contractors: IContractor[];
     work_activity: IWorkActivity[];
     contact_person: IContactPerson[];
@@ -37,6 +41,7 @@ export interface IWorkActivity {
     title: string;
     description: string;
     start_date: Date;
+    end_date: Date;
     duration: number;
     approval_status: string;
     ra_title: string;
@@ -55,6 +60,9 @@ export interface IWorkActivity {
     ms_file_id: string;
     contractor: IContractor;
     project: IProject;
+    created_by_user: string;
+    
+
 }
 
 export interface ISignSheet {

@@ -4,7 +4,6 @@ import { Form, Input, Space, Table } from "antd";
 import { IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
-import { ContractorsUsersTable } from "./contractors_users_table";
 
 
 interface ISearch {
@@ -12,7 +11,7 @@ interface ISearch {
   }
 
 
-export const AddUserList = () => {
+export const ContractorsUsersTable = () => {
 
   const user = useGetUserIdentity(useShallow((state) => state?.user));
      const { tableProps, setFilters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
@@ -38,13 +37,13 @@ export const AddUserList = () => {
                filters: {
                 permanent: [
                   {
-                    field: "projects.documentId",
+                    field: "user.projects",
                     operator: "eq",
                     value: localStorage.getItem("selected_project_id"),
                   },
                   {
-                    field: "contractor.documentId",
-                    operator: "eq",
+                    field: "contractor_documentId",
+                    operator: "ne",
                     value: user?.contractor_documentId,
                   }
                 ],
@@ -105,8 +104,6 @@ export const AddUserList = () => {
                     )}
                 />
             </Table>
-            <ContractorsUsersTable/>
         </List>
-        
     );
 };

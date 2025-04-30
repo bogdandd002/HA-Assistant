@@ -1,4 +1,5 @@
 import {
+  DateField,
   DeleteButton,
   EditButton,
   getDefaultSortOrder,
@@ -14,6 +15,10 @@ import { useEffect } from "react";
 interface ISearch {
   title: string;
 }
+
+const wa_name = false;
+const wa_contractor = false;
+const wa_rev_exp = false;
   
 
 export const WorkActivityList = () => {
@@ -101,7 +106,13 @@ export const WorkActivityList = () => {
           size: "small",
         }}
       >
-        <Table.Column dataIndex={["contractor", "name"]} title={"Contractor"} />
+         <Table.Column dataIndex={"created_by_user"} title={"Created by"} hidden={wa_contractor}/>
+        <Table.Column dataIndex={["contractor", "name"]} title={"Contractor"} hidden={wa_contractor}/>
+        <Table.Column 
+        dataIndex={"updatedAt"} 
+        title={"Last updated"} 
+        hidden={wa_contractor}
+        render={(value) => <DateField value={value} format="DD-MM-YYYY" />}/>
         <Table.Column
           dataIndex="title"
           title={"Title"}
@@ -126,9 +137,18 @@ export const WorkActivityList = () => {
           title={"Start Date"}
           sorter={{ multiple: 1 }}
           defaultSortOrder={getDefaultSortOrder("start_date", sorters)}
+          render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
+        />
+        <Table.Column
+          dataIndex="end_date"
+          title={"End Date"}
+          sorter={{ multiple: 1 }}
+          defaultSortOrder={getDefaultSortOrder("start_date", sorters)}
+          render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
         />
         <Table.Column dataIndex="duration" title={"Duration"} />
         <Table.Column dataIndex="approval_status" title={"Status"} />
+        <Table.Column dataIndex="approval_status" title={"Require review"} hidden={wa_rev_exp}/>
         <Table.Column<{
           documentId: string;
           ra_file_id: string;
@@ -156,6 +176,7 @@ export const WorkActivityList = () => {
             </Space>
           )}
         />
+        <Table.Column dataIndex="approval_status" title={"History timeline"} />
       </Table>
     </List>
   );

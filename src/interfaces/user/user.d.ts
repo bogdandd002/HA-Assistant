@@ -14,6 +14,9 @@ export interface IUser{
     avatar?: string;
     user_role?: string;
     projects: string[] ;
+    is_superuser: boolean;
+    last_logged: Date;
+
 }
 
 export interface IRole{

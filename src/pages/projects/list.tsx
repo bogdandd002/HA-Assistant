@@ -16,6 +16,9 @@ interface ISearch {
   title: string;
 }
 
+const proj_nr_contractors = false;
+const proj_nr_users = false;
+
 function selectProject(project: ProjectDetails) {
   useProjectDetails.getState().setProjectState(project);
   localStorage.setItem("selected_project", JSON.stringify(project));
@@ -133,10 +136,13 @@ export const ProjectList = () => {
         <Table.Column dataIndex="address" title={"Address"} />
         <Table.Column dataIndex="start_date" title={"Start Date"} />
         <Table.Column dataIndex="end_date" title={"End Date"} />
+        <Table.Column dataIndex="duration" title={"Duration (days)"} />
+        <Table.Column dataIndex="" title={"Number of alocated users"} hidden={proj_nr_users}/>
         <Table.Column
           dataIndex="contractors"
           title={"Active Contractors"}
           render={(_, resource) => Object.keys(resource.contractors).length}
+          hidden={proj_nr_contractors}
         />
         <Table.Column<{ documentId: string }>
           title="Actions"
