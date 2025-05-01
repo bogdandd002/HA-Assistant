@@ -1,20 +1,18 @@
 import { DeleteButton, EditButton, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, HttpError } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
-import { IUser } from "../../interfaces";
-import useGetUserIdentity from "../../store/user_data";
+import { IUser } from "../../../interfaces";
+import useGetUserIdentity from "../../../store/user_data";
 import { useShallow } from "zustand/shallow";
 
 
-interface ISearch {
-    title: string;
-  }
 
 
-export const ContractorsUsersTable = () => {
+
+export const SelectProject = () => {
 
   const user = useGetUserIdentity(useShallow((state) => state?.user));
-     const { tableProps, setFilters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
+     const { tableProps, setFilters, searchFormProps } = useTable<IUser, HttpError>({
             resource: "Users",
                sorters: {
                  initial: [

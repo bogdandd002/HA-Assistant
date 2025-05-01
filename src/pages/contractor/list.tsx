@@ -1,8 +1,10 @@
 import {
+  DateField,
   DeleteButton,
   EditButton,
   List,
   ShowButton,
+  useModalForm,
   useTable,
 } from "@refinedev/antd";
 import {
@@ -12,30 +14,32 @@ import {
   useMany,
   type BaseRecord,
 } from "@refinedev/core";
-import { Space, Table } from "antd";
+import { Space, Table, theme } from "antd";
 import { IContractor } from "../../interfaces";
-const s = true;
+import  ContractorListDisplay  from "./list_of_contractors";
+import { ProjectList } from "../projects";
+const contractor_nr_users = false;
 export const ContractorList = () => {
   const selectedProject = localStorage.getItem("selected_project");
   const project = JSON.parse(selectedProject || "{}");
-  const { tableProps, tableQuery, filters, setFilters } = useTable<
-    IContractor,
-    HttpError
-  >({
-    meta: {
-      populate: "*",
-    },
-    filters: {
-      permanent: [
-        {
-          field: "projects.documentId",
-          operator: "eq",
-          value: project.project_id,
-        },
-      ],
-    },
-    syncWithLocation: true,
-  });
+  // const { tableProps, tableQuery, filters, setFilters } = useTable<
+  //   IContractor,
+  //   HttpError
+  // >({
+  //   meta: {
+  //     populate: "*",
+  //   },
+  //   filters: {
+  //     permanent: [
+  //       {
+  //         field: "projects.documentId",
+  //         operator: "eq",
+  //         value: project.project_id,
+  //       },
+  //     ],
+  //   },
+  //   syncWithLocation: true,
+  // });
 
   // const { data: categoryData, isLoading: categoryIsLoading } = useMany({
   //   resource: "contact-people",
@@ -47,42 +51,15 @@ export const ContractorList = () => {
   //     enabled: !!tableProps?.dataSource,
   //   },
   // });
+
+  let template;
+  if (selectedProject) {
+    template = < ContractorListDisplay />;
+    console.log(selectedProject)
+  } else {
+    template = <ProjectList />;
+  }
   return (
-    <List>
-      <Table {...tableProps} rowKey="documentId">
-        <Table.Column dataIndex="documentId" title={"ID"} hidden={s}/>
-        <Table.Column dataIndex="name" title={"Name"} />
-        <Table.Column dataIndex="address" title={"Address"} />
-        <Table.Column dataIndex="activity" title={"Activity"} />
-        {/* <Table.Column
-          dataIndex="contact_person"
-          title={"Contact Person"}
-          render={ (_, resource) => resource?.contact_person.map((item: any) => console.log(Object.keys(resource.contact_person).length))}
-        />  */}
-        <Table.Column<{ documentId: string }>
-          title="Actions"
-          dataIndex="actions"
-          render={(_, record) => (
-            <Space>
-              <EditButton
-                hideText
-                size="small"
-                recordItemId={record.documentId}
-              />
-              <ShowButton
-                hideText
-                size="small"
-                recordItemId={record.documentId}
-              />
-              <DeleteButton
-                hideText
-                size="small"
-                recordItemId={record.documentId}
-              />
-            </Space>
-          )}
-        />
-      </Table>
-    </List>
+   <>{theme}</>
   );
 };
