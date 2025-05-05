@@ -60,6 +60,9 @@ import {
   SignSheetShow,
 } from "./pages/sign_sheets";
 
+import { lazy, Suspense } from "react";
+
+
 
 function App() {
   return (
@@ -134,6 +137,9 @@ function App() {
                   edit: "/add-user/edit/:id",
                   show: "/add-user/show/:id",
                   icon: <Icons.TeamOutlined />,
+                  meta: {
+                    label: "Users",
+                  },
                 }, {
                   name: "sign-sheets",
                   list: "/sign-sheets",

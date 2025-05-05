@@ -80,7 +80,7 @@ export interface ISignSheet {
 }
 
 interface ProjectDetails {
-    project_id: string;
-    project_name: string;
-    project_number: number;
+    project_id?: string;
+    project_name?: string;
+    project_number?: number;
   }

@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL, TOKEN_KEY } from "./constants";
 import useGetUserIdentity from "./store/user_data";
 import { UserDetails } from "./interfaces";
+import { columnsControlSet } from "./tables_columns_selection";
 
 export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
@@ -112,6 +113,31 @@ export const authProvider: AuthProvider = {
         contractor_documentId,
         contractor_id,
       };
+
+      // set table columns display based on user roles
+      switch (user_role) {
+        case "Contractor": {
+          columnsControlSet.setC();
+          break;
+        }
+        case "Contractor_super": {
+          columnsControlSet.setCS();
+          break;
+        }
+        case "Main_contractor_super": {
+          columnsControlSet.setMCS();
+          break;
+        }
+        case "Main_contractor": {
+          columnsControlSet.setMC();
+          break;
+        }
+        default: {
+          columnsControlSet.setAdmin();
+          break;
+        }
+      }
+
       useGetUserIdentity.getState().setUserState(user_data);
       return user_data;
     } else {

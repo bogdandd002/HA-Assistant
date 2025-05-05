@@ -16,7 +16,8 @@ import {
 } from "@refinedev/core";
 import { Space, Table } from "antd";
 import { IContractor, IProject } from "../../interfaces";
-const contractor_nr_users = false;
+import { columnsControl } from "../../tables_columns_selection";
+
 export default function ContractorListDisplay (props: any) {
   const selectedProject = localStorage.getItem("selected_project");
   const project = JSON.parse(selectedProject || "{}");
@@ -65,8 +66,9 @@ export default function ContractorListDisplay (props: any) {
          <Table.Column
                   dataIndex="users"
                   title={"Number of alocated users"}
+                  hidden={columnsControl.contracor_nr_users}
                   render={(_, resource) => Object.keys(resource.users).length}
-                  hidden={contractor_nr_users}
+                  
                 />
           <Table.Column
                     dataIndex="start_on_project"
@@ -100,4 +102,4 @@ export default function ContractorListDisplay (props: any) {
       </Table>
     </List>  
   );
-};
+}
