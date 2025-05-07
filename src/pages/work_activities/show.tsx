@@ -15,7 +15,7 @@ import {
   TabsProps,
   Tag,
 } from "antd";
-import { API_URL } from "../../constants";
+import { API_URL } from "../../constants/constants";
 import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import { ISignSheet } from "../../interfaces";
 

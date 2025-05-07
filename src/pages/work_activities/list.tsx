@@ -3,7 +3,7 @@ import { SelectProjectComponent } from "../../components/pages/common_pages/sele
 import { useEffect, useState } from "react";
 import useProjectDetails from "../../store/app_data";
 import { WorkActivityListDisplay } from "./list_of_work_activities";
-import { columnsControl } from "../../tables_columns_selection";
+import { columnsControl } from "../../constants/tables_columns_selection";
 
 
 export const WorkActivityList = () => {

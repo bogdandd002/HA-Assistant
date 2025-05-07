@@ -16,7 +16,7 @@ import { Space, Table } from "antd";
 import { IContractor } from "../../interfaces";
 import { columnsControl } from "../../constants/tables_columns_selection";
 
-export default function ContractorListDisplay (props: any) {
+export default function AdminListDisplay (props: any) {
   const selectedProject = localStorage.getItem("selected_project");
   const project = JSON.parse(selectedProject || "{}");
   const { tableProps, tableQuery, filters, setFilters } = useTable<

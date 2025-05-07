@@ -22,9 +22,9 @@ import routerBindings, {
 import { DataProvider } from "@refinedev/strapi-v4";
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
-import { authProvider, axiosInstance } from "./authProvider";
+import { authProvider, axiosInstance } from "./providers/authProvider";
 import { Header } from "./components/header";
-import { API_URL } from "./constants";
+import { API_URL } from "./constants/constants";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 
 import {

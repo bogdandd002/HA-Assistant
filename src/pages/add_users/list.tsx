@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { columnsControl } from "../../tables_columns_selection";
+import { columnsControl } from "../../constants/tables_columns_selection";
 import { ContractorsUsersTable } from "./contractors_users_table";
 import { UsersTable } from "./users_table";
 import { Divider, Typography } from "antd";

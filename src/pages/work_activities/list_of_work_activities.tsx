@@ -11,7 +11,7 @@ import { IWorkActivity } from "../../interfaces";
 import { HttpError, Link } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
 import { useEffect } from "react";
-import { columnsControl } from "../../tables_columns_selection";
+import { columnsControl } from "../../constants/tables_columns_selection";
 
 interface ISearch {
   title: string;

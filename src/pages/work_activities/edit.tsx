@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Edit, useForm } from "@refinedev/antd";
 import { Form, Input, DatePicker, Descriptions, TabsProps, DescriptionsProps, Tag, Tabs, Divider, Upload } from "antd";
 import dayjs from "dayjs";
-import { API_URL, TOKEN_KEY } from "../../constants";
+import { API_URL, TOKEN_KEY } from "../../constants/constants";
 import { getValueProps } from "@refinedev/strapi-v4";
 import { InboxOutlined } from "@ant-design/icons";
 

@@ -4,7 +4,7 @@ import { Form, Input, Space, Table } from "antd";
 import { IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
-import { columnsControl } from "../../tables_columns_selection";
+import { columnsControl } from "../../constants/tables_columns_selection";
 
 
 interface ISearch {

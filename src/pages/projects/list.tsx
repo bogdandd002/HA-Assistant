@@ -11,7 +11,7 @@ import { Space, Table, Form, Input, Button } from "antd";
 import { IProject, ProjectDetails } from "../../interfaces/index";
 import useProjectDetails from "../../store/app_data";
 import useGetUserIdentity from "../../store/user_data";
-import { columnsControl } from "../../tables_columns_selection";
+import { columnsControl } from "../../constants/tables_columns_selection";
 
 interface ISearch {
   title: string;

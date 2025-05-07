@@ -1,10 +1,11 @@
 import type { AuthProvider } from "@refinedev/core";
 import { AuthHelper } from "@refinedev/strapi-v4";
 import axios from "axios";
-import { API_URL, TOKEN_KEY } from "./constants";
-import useGetUserIdentity from "./store/user_data";
-import { UserDetails } from "./interfaces";
-import { columnsControlSet } from "./tables_columns_selection";
+import { API_URL, TOKEN_KEY } from "../constants/constants";
+import useGetUserIdentity from "../store/user_data";
+import { UserDetails } from "../interfaces";
+import { columnsControlSet } from "../constants/tables_columns_selection";
+import { setUserSesion } from "../constants/login_sesion";
 
 export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
@@ -137,7 +138,7 @@ export const authProvider: AuthProvider = {
           break;
         }
       }
-
+      setUserSesion.setSesion(user_data);
       useGetUserIdentity.getState().setUserState(user_data);
       return user_data;
     } else {

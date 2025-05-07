@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { InboxOutlined } from "@ant-design/icons";
 import { IWorkActivity } from "../../interfaces";
 
-import { API_URL, TOKEN_KEY } from "../../constants";
+import { API_URL, TOKEN_KEY } from "../../constants/constants";
 import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
 
 const project = localStorage.getItem("selected_project_id");
