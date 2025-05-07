@@ -26,15 +26,6 @@ export default function AdminListDisplay (props: any) {
     meta: {
       populate: "*",
     },
-    filters: {
-      permanent: [
-        {
-          field: "projects.documentId",
-          operator: "eq",
-          value: project.project_id,
-        },
-      ],
-    },
     syncWithLocation: true,
   });
 

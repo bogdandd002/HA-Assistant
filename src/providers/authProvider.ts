@@ -5,7 +5,7 @@ import { API_URL, TOKEN_KEY } from "../constants/constants";
 import useGetUserIdentity from "../store/user_data";
 import { UserDetails } from "../interfaces";
 import { columnsControlSet } from "../constants/tables_columns_selection";
-import { setUserSesion } from "../constants/login_sesion";
+import { setUserSesion, userSesion } from "../constants/login_sesion";
 
 export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
@@ -139,6 +139,7 @@ export const authProvider: AuthProvider = {
         }
       }
       setUserSesion.setSesion(user_data);
+      console.log(userSesion);
       useGetUserIdentity.getState().setUserState(user_data);
       return user_data;
     } else {

@@ -1,7 +1,6 @@
 import { newEnforcer } from "casbin";
 import { CanParams, CanReturnType } from "@refinedev/core";
 import { adapter, model } from "../casbin/accessControl";
-import useGetUserIdentity from "../store/user_data";
 import { userSesion } from "../constants/login_sesion";
 
 export const accessControlProvider = {
