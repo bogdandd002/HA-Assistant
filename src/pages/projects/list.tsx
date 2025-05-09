@@ -9,9 +9,9 @@ import {
 import { HttpError } from "@refinedev/core";
 import { Space, Table, Form, Input, Button } from "antd";
 import { IProject, ProjectDetails } from "../../interfaces/index";
-import useProjectDetails from "../../store/app_data";
+import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import useGetUserIdentity from "../../store/user_data";
-import { columnsControl } from "../../constants/tables_columns_selection";
+
 
 interface ISearch {
   title: string;
@@ -19,11 +19,11 @@ interface ISearch {
 
 function selectProject(project: ProjectDetails) {
   useProjectDetails.getState().setProjectState(project);
-  localStorage.setItem("selected_project", JSON.stringify(project));
+  // localStorage.setItem("selected_project", JSON.stringify(project));
 }
 
 export const ProjectList = () => {
-  // const { data: user } = useGetIdentity<IUser>();
+  const colState = useSelectColumns.getState().columnsControl;
   const user = useGetUserIdentity((state) => state?.user);
   const { tableProps, setFilters, sorters, searchFormProps } = useTable<
     IProject,
@@ -64,17 +64,6 @@ export const ProjectList = () => {
 
     syncWithLocation: true,
   });
-
-  // const { data: categoryData, isLoading: categoryIsLoading } = useMany({
-  //   resource: "contact-people",
-  //   ids:
-  //     tableProps?.dataSource
-  //       ?.map((item) => item?.contact_people?.id)
-  //       .filter(Boolean) ?? [],
-  //   queryOptions: {
-  //     enabled: !!tableProps?.dataSource,
-  //   },
-  // });
 
   return (
     <List>
@@ -135,11 +124,11 @@ export const ProjectList = () => {
         <Table.Column dataIndex="start_date" title={"Start Date"} />
         <Table.Column dataIndex="end_date" title={"End Date"} />
         <Table.Column dataIndex="duration" title={"Duration (days)"} />
-        <Table.Column dataIndex="" title={"Number of alocated users"} hidden={columnsControl.proj_nr_users}/>
+        <Table.Column dataIndex="" title={"Number of alocated users"} hidden={colState.proj_nr_users}/>
         <Table.Column
           dataIndex="contractors"
           title={"Active Contractors"}
-          hidden={columnsControl.proj_nr_contractors}
+          hidden={colState.proj_nr_contractors}
           render={(_, resource) => Object.keys(resource.contractors).length}
           
         />

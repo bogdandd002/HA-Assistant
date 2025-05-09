@@ -33,4 +33,4 @@ interface UserDetails {
     user_role: string,
     contractor_documentId: string,
     contractor_id: number
-}
+};

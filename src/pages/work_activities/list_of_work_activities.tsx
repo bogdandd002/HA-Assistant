@@ -10,17 +10,17 @@ import {
 import { IWorkActivity } from "../../interfaces";
 import { HttpError, Link } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
-import { useEffect } from "react";
-import { columnsControl } from "../../constants/tables_columns_selection";
+import { useProjectDetails, useSelectColumns } from "../../store/app_data";
+
+
 
 interface ISearch {
   title: string;
 }
 
 export const WorkActivityListDisplay = () => {
-  const selectedProject = localStorage.getItem("selected_project");
-  const project = JSON.parse(selectedProject || "{}");
-
+  const selectedProject = useProjectDetails.getState().project
+  const colState = useSelectColumns.getState().columnsControl;
   const { tableProps, setFilters, sorters, searchFormProps } = useTable<
     IWorkActivity,
     HttpError,
@@ -49,7 +49,7 @@ export const WorkActivityListDisplay = () => {
         {
           field: "project.documentId",
           operator: "eq",
-          value: project.project_id,
+          value: selectedProject.project_id,
         },
       ],
     },
@@ -96,12 +96,12 @@ export const WorkActivityListDisplay = () => {
         <Table.Column
           dataIndex={"created_by_user"}
           title={"Created by"}
-          hidden={columnsControl.wa_name}
+          hidden={colState.wa_name}
         />
         <Table.Column
           dataIndex={["contractor", "name"]}
           title={"Contractor"}
-          hidden={columnsControl.wa_contractor}
+          hidden={colState.wa_contractor}
         />
         <Table.Column
           dataIndex={"updatedAt"}
@@ -146,7 +146,7 @@ export const WorkActivityListDisplay = () => {
         <Table.Column
           dataIndex="approval_status"
           title={"Require review"}
-          hidden={columnsControl.wa_rev_exp}
+          hidden={colState.wa_rev_exp}
         />
         <Table.Column<{
           documentId: string;

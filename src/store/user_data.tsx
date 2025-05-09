@@ -1,12 +1,15 @@
 import { create } from "zustand";
 import { UserDetails } from "../interfaces";
+import { persist } from 'zustand/middleware'
 
 interface UserState {
   user: UserDetails;
   setUserState: (user: UserDetails) => void;
 }
 
-const useGetUserIdentity = create<UserState>()((set) => ({
+const useGetUserIdentity = create<UserState>()(
+  persist(
+(set) => ({
   user: {
     id: "",
     username: "",
@@ -16,11 +19,17 @@ const useGetUserIdentity = create<UserState>()((set) => ({
     contractor_id: -1,
   },
 
-  setUserState: (logeduser: UserDetails) =>
+  setUserState: (logeduser: UserDetails) => 
     set(() => ({
       user: logeduser,
     })),
-}));
+}),
+{
+  name: 'user_state',
+}
+
+  )
+  );
 
 // const useAuth = () => {
 //   const { user, login, logout } = useAuthStore();

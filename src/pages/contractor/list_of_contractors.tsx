@@ -14,11 +14,11 @@ import {
 } from "@refinedev/core";
 import { Space, Table } from "antd";
 import { IContractor } from "../../interfaces";
-import { columnsControl } from "../../constants/tables_columns_selection";
+import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 
 export default function ContractorListDisplay (props: any) {
-  const selectedProject = localStorage.getItem("selected_project");
-  const project = JSON.parse(selectedProject || "{}");
+  const selectedProject = useProjectDetails((state) => state?.project);
+  const colState = useSelectColumns.getState().columnsControl;
   const { tableProps, tableQuery, filters, setFilters } = useTable<
     IContractor,
     HttpError
@@ -31,7 +31,7 @@ export default function ContractorListDisplay (props: any) {
         {
           field: "projects.documentId",
           operator: "eq",
-          value: project.project_id,
+          value: selectedProject.project_id,
         },
       ],
     },
@@ -54,7 +54,7 @@ export default function ContractorListDisplay (props: any) {
          <Table.Column
                   dataIndex="users"
                   title={"Number of alocated users"}
-                  hidden={columnsControl.contracor_nr_users}
+                  hidden={colState.contracor_nr_users}
                   render={(_, resource) => Object.keys(resource.users).length}
                   
                 />

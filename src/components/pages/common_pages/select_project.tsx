@@ -20,7 +20,7 @@ import {
 import { IProject, IUser, ProjectDetails } from "../../../interfaces";
 import useGetUserIdentity from "../../../store/user_data";
 import { useShallow } from "zustand/shallow";
-import useProjectDetails from "../../../store/app_data";
+import  { useProjectDetails } from "../../../store/app_data";
 
 const { Title } = Typography;
 
@@ -53,7 +53,7 @@ export const SelectProjectComponent = () => {
         project_number: project?.project_nr,
       };
       useProjectDetails.getState().setProjectState(selectProject);
-      localStorage.setItem("selected_project", JSON.stringify(selectProject));
+      // localStorage.setItem("selected_project", JSON.stringify(selectProject));
     }
     
   }

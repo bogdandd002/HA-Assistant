@@ -4,8 +4,7 @@ import { Form, Input, Space, Table } from "antd";
 import { IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
-import { columnsControl } from "../../constants/tables_columns_selection";
-
+import { useSelectColumns } from "../../store/app_data";
 
 interface ISearch {
     title: string;
@@ -13,7 +12,7 @@ interface ISearch {
 
 
 export const ContractorsUsersTable = () => {
-
+  const colState = useSelectColumns.getState().columnsControl;
   const user = useGetUserIdentity(useShallow((state) => state?.user));
      const { tableProps, setFilters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
             resource: "Users",
@@ -80,7 +79,7 @@ export const ContractorsUsersTable = () => {
                 <Table.Column dataIndex={"surname"} title={"Surname"} />
                 <Table.Column dataIndex="email" title={"Email"} />
                 <Table.Column dataIndex="position" title={"Position"} />
-                <Table.Column dataIndex="is_superuser" title={"Super user"} hidden={columnsControl.user_super}/>
+                <Table.Column dataIndex="is_superuser" title={"Super user"} hidden={colState.user_super}/>
                 <Table.Column
                     title="Actions"
                     dataIndex="actions"

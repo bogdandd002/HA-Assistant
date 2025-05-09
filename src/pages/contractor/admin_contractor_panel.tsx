@@ -14,11 +14,11 @@ import {
 } from "@refinedev/core";
 import { Space, Table } from "antd";
 import { IContractor } from "../../interfaces";
-import { columnsControl } from "../../constants/tables_columns_selection";
+import { useProjectDetails } from "../../store/app_data";
+
 
 export default function AdminListDisplay (props: any) {
-  const selectedProject = localStorage.getItem("selected_project");
-  const project = JSON.parse(selectedProject || "{}");
+
   const { tableProps, tableQuery, filters, setFilters } = useTable<
     IContractor,
     HttpError
@@ -45,7 +45,7 @@ export default function AdminListDisplay (props: any) {
          <Table.Column
                   dataIndex="users"
                   title={"Number of alocated users"}
-                  hidden={columnsControl.contracor_nr_users}
+                  hidden={false}
                   render={(_, resource) => Object.keys(resource.users).length}
                   
                 />

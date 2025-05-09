@@ -1,17 +1,15 @@
 import { useEffect, useMemo, useRef } from "react";
-import { columnsControl } from "../../constants/tables_columns_selection";
 import { ContractorsUsersTable } from "./contractors_users_table";
 import { UsersTable } from "./users_table";
 import { Divider, Typography } from "antd";
+import { useSelectColumns } from "../../store/app_data";
 
 const { Title } = Typography;
 
 export const AddUserList = () => {
-  const showContractorTable = useRef(columnsControl.wa_contractor);
-
-  // useEffect(() => {
-  //   showContractorTable.current = columnsControl.wa_contractor;
-  // })
+  const colState = useSelectColumns.getState().columnsControl;
+  // show additional contractor table only for MC and MCS where wa-contractor not hiden
+  const showContractorTable = useRef(colState.wa_contractor);
 
   return (
     <>

@@ -1,12 +1,15 @@
 import { create } from "zustand";
-import { ProjectDetails } from "../interfaces";
+import { ColumnsControl, ProjectDetails } from "../interfaces";
+import { persist } from "zustand/middleware";
 
 interface ProjectState {
   project: ProjectDetails;
   setProjectState: (project: ProjectDetails) => void;
 }
 
-const useProjectDetails = create<ProjectState>()((set) => ({
+export const useProjectDetails = create<ProjectState>()(
+  persist(
+      (set) => ({
   project: {
     project_id: "",
     project_name: "",
@@ -16,6 +19,40 @@ const useProjectDetails = create<ProjectState>()((set) => ({
     set(() => ({
       project: project,
     })),
-}));
+}),
+{
+  name: 'projState'
+}
+  )
+);
 
-export default useProjectDetails;
+interface ColumnsState {
+  columnsControl : ColumnsControl;
+  setColumnsState: (columnsControl: ColumnsControl) => void;
+}
+
+export const useSelectColumns = create<ColumnsState>()(
+  persist(
+      (set) => ({
+        columnsControl : {
+          proj_nr_users: false,
+          proj_nr_contractors: false,
+          wa_name: false,
+          wa_contractor: false,
+          wa_rev_exp: false,
+          user_super: false,
+          contracor_nr_users: false,
+        },
+  setColumnsState: (columnsControl: ColumnsControl) =>
+    set(() => ({
+  columnsControl: columnsControl
+    })),
+}),
+{
+  name: 'columnsControl'
+}
+  )
+);
+
+
+

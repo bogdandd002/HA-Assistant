@@ -1,21 +1,23 @@
-import type { AuthProvider } from "@refinedev/core";
+import type { AuthProvider, IdentityResponse } from "@refinedev/core";
 import { AuthHelper } from "@refinedev/strapi-v4";
 import axios from "axios";
 import { API_URL, TOKEN_KEY } from "../constants/constants";
 import useGetUserIdentity from "../store/user_data";
 import { UserDetails } from "../interfaces";
-import { columnsControlSet } from "../constants/tables_columns_selection";
+import * as setColumns from "../constants/tables_columns_selection";
 import { setUserSesion, userSesion } from "../constants/login_sesion";
+import { useSelectColumns } from "../store/app_data";
 
 export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
+const null_data: UserDetails = userSesion;
 
 export const authProvider: AuthProvider = {
   login: async ({ email, password }) => {
     const { data, status } = await strapiAuthHelper.login(email, password);
     if (status === 200) {
       localStorage.setItem(TOKEN_KEY, data.jwt);
-
+       authProvider.getIdentity?.();
       // set header axios instance
       axiosInstance.defaults.headers.common[
         "Authorization"
@@ -70,7 +72,7 @@ export const authProvider: AuthProvider = {
     if (!token) {
       return "Noroleandnotlogin";
     }
-    // fetching user role from strapi by making an extra call - explore for aternative in the future
+    // fetching user role from strapi by making an extra call 
     const response = await fetch(
       "http://localhost:1337/api/users/me?populate=role",
       {
@@ -88,7 +90,7 @@ export const authProvider: AuthProvider = {
   getIdentity: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {
-      return null;
+      return null_data;
     }
     // fetching user role from strapi by making an extra call - explore for aternative in the future
     const response = await fetch(
@@ -116,34 +118,33 @@ export const authProvider: AuthProvider = {
       };
 
       // set table columns display based on user roles
-      switch (user_role) {
+        switch (user_role) {
         case "Contractor": {
-          columnsControlSet.setC();
+          useSelectColumns.getState().setColumnsState(setColumns.setC)
           break;
         }
         case "Contractor_super": {
-          columnsControlSet.setCS();
+          useSelectColumns.getState().setColumnsState(setColumns.setCS)
           break;
         }
         case "Main_contractor_super": {
-          columnsControlSet.setMCS();
+          useSelectColumns.getState().setColumnsState(setColumns.setMCS)
           break;
         }
         case "Main_contractor": {
-          columnsControlSet.setMC();
+          useSelectColumns.getState().setColumnsState(setColumns.setMC)
           break;
         }
         default: {
-          columnsControlSet.setAdmin();
+          useSelectColumns.getState().setColumnsState(setColumns.setAdmin)
           break;
         }
       }
       setUserSesion.setSesion(user_data);
-      console.log(userSesion);
       useGetUserIdentity.getState().setUserState(user_data);
       return user_data;
     } else {
-      return null;
+      return null_data;
     }
   },
 };
