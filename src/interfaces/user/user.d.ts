@@ -1,3 +1,4 @@
+import { I } from "react-router/dist/development/route-data-OcOrqK13";
 import { IProject } from "../data/data";
 
 
@@ -13,7 +14,7 @@ export interface IUser{
     contractor_id: number;
     avatar?: string;
     user_role?: string;
-    projects: string[] ;
+    projects: IProject[] ;
     is_superuser: boolean;
     last_logged: Date;
 
@@ -25,12 +26,3 @@ export interface IRole{
     name: string;
     description: string;
 }
-
-interface UserDetails {
-    id: string | number,
-    username: string,
-    email: string,
-    user_role: string,
-    contractor_documentId: string,
-    contractor_id: number
-};

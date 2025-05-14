@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserDetails } from "../interfaces";
+import { UserDetails } from "../interfaces/cutom_types/custom_types";
 import { persist } from 'zustand/middleware'
 
 interface UserState {
@@ -12,7 +12,7 @@ const useGetUserIdentity = create<UserState>()(
 (set) => ({
   user: {
     id: "",
-    username: "",
+    projects: [],
     email: "",
     user_role: "",
     contractor_documentId: "",

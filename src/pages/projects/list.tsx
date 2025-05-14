@@ -8,9 +8,10 @@ import {
 } from "@refinedev/antd";
 import { HttpError } from "@refinedev/core";
 import { Space, Table, Form, Input, Button } from "antd";
-import { IProject, ProjectDetails } from "../../interfaces/index";
+import { IProject } from "../../interfaces/index";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import useGetUserIdentity from "../../store/user_data";
+import { ProjectDetails } from "../../interfaces/cutom_types/custom_types";
 
 
 interface ISearch {

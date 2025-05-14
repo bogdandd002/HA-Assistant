@@ -1,10 +1,11 @@
 import { DeleteButton, EditButton, List, ShowButton, useTable } from "@refinedev/antd";
-import { BaseRecord, HttpError } from "@refinedev/core";
+import { BaseRecord, CrudFilter, HttpError } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
-import { IUser } from "../../interfaces";
+import { IProject, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
-import { useSelectColumns } from "../../store/app_data";
+import { useProjectDetails, useSelectColumns } from "../../store/app_data";
+import { useEffect, useRef, useState } from "react";
 
 interface ISearch {
     title: string;
@@ -12,10 +13,35 @@ interface ISearch {
 
 
 export const ContractorsUsersTable = () => {
+  
   const colState = useSelectColumns.getState().columnsControl;
+  const selectedProject = useProjectDetails((state) => state?.project);
   const user = useGetUserIdentity(useShallow((state) => state?.user));
+  const userProjects: string[] = user.projects.map((element: IProject) => element.documentId)
+  let permanent: CrudFilter[];
+  let initial: CrudFilter[];
+
+
+  if(user.user_role === "Admin") // Admin can see all users
+  {
+    permanent= []
+  } else {
+    permanent= [
+      // {
+      //   field: "projects.documentId",
+      //   operator: "in",
+      //   value: userProjects,
+      // },
+      {
+        field: "contractor.work_for.documentId",
+        operator: "containss",
+        value: user.contractor_documentId,
+      }
+    ]
+  }
+
      const { tableProps, setFilters, searchFormProps } = useTable<IUser, HttpError, ISearch>({
-            resource: "Users",
+            resource: "users",
                sorters: {
                  initial: [
                    {
@@ -35,18 +61,7 @@ export const ContractorsUsersTable = () => {
                  ];
                },
                filters: {
-                permanent: [
-                  {
-                    field: "user.projects",
-                    operator: "eq",
-                    value: localStorage.getItem("selected_project_id"),
-                  },
-                  {
-                    field: "contractor.documentId",
-                    operator: "ne",
-                    value: user?.contractor_documentId,
-                  }
-                ],
+                permanent: permanent,
                },
                liveMode: "auto",
                meta: { 
@@ -57,7 +72,7 @@ export const ContractorsUsersTable = () => {
              });
 
     return (
-        <List>
+        <List title="Contractor's users">
                <Form {...searchFormProps} layout="inline">
         <Form.Item name="name">
           <Input placeholder="Search by name" onChange={(e) => {
@@ -75,6 +90,7 @@ export const ContractorsUsersTable = () => {
       </Form>
             <Table {...tableProps} rowKey="id">
                 <Table.Column dataIndex="id" title={"ID"} />
+                <Table.Column dataIndex={["contractor", "name"]} title={"Contractor"} />
                 <Table.Column dataIndex={"name"} title={"Name"} />
                 <Table.Column dataIndex={"surname"} title={"Surname"} />
                 <Table.Column dataIndex="email" title={"Email"} />

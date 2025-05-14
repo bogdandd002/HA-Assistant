@@ -3,10 +3,10 @@ import { AuthHelper } from "@refinedev/strapi-v4";
 import axios from "axios";
 import { API_URL, TOKEN_KEY } from "../constants/constants";
 import useGetUserIdentity from "../store/user_data";
-import { UserDetails } from "../interfaces";
+import { UserDetails } from "../interfaces/cutom_types/custom_types";
 import * as setColumns from "../constants/tables_columns_selection";
 import { setUserSesion, userSesion } from "../constants/login_sesion";
-import { useSelectColumns } from "../store/app_data";
+import { useProjectDetails, useSelectColumns } from "../store/app_data";
 
 export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
@@ -37,6 +37,8 @@ export const authProvider: AuthProvider = {
   },
   logout: async () => {
     localStorage.clear();
+    useSelectColumns.getInitialState;
+    useProjectDetails.getInitialState;
     return {
       success: true,
       redirectTo: "/login",
@@ -94,23 +96,23 @@ export const authProvider: AuthProvider = {
     }
     // fetching user role from strapi by making an extra call - explore for aternative in the future
     const response = await fetch(
-      "http://localhost:1337/api/users/me?populate[0]=role&populate[1]=contractor",
+      "http://localhost:1337/api/users/me?populate[0]=role&populate[1]=contractor&populate[2]=projects",
       {
         headers: {
           authorization: `Bearer ${token}`,
         },
       }
     );
-    const { role: role, contractor: contractor } = await response.json();
+    const { role: role, contractor: contractor, projects: projects } = await response.json();
     const { name: user_role } = role;
     const { documentId: contractor_documentId, id: contractor_id } = contractor;
 
     const { data, status } = await strapiAuthHelper.me(token);
     if (status === 200) {
-      const { id, username, email } = data;
+      const { id, email } = data;
       const user_data: UserDetails = {
         id,
-        username,
+        projects,
         email,
         user_role,
         contractor_documentId,

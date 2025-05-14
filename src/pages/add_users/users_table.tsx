@@ -1,21 +1,26 @@
 import {
+  CreateButton,
   DeleteButton,
   EditButton,
   List,
   ShowButton,
   useTable,
 } from "@refinedev/antd";
-import { BaseRecord, HttpError } from "@refinedev/core";
-import { Form, Input, Space, Table } from "antd";
+import { BaseRecord, CrudFilter, HttpError, useGo } from "@refinedev/core";
+import { Button, Form, Input, Space, Table } from "antd";
 import { IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
+import { useProjectDetails } from "../../store/app_data";
+import { useNavigate } from "react-router";
 
 interface ISearch {
   title: string;
 }
 
 export const UsersTable = () => {
+
+  const navigate = useNavigate();
   const user = useGetUserIdentity(useShallow((state) => state?.user));
   const { tableProps, setFilters, searchFormProps } = useTable<
     IUser,
@@ -44,11 +49,6 @@ export const UsersTable = () => {
     filters: {
       permanent: [
         {
-          field: "projects.documentId",
-          operator: "eq",
-          value: localStorage.getItem("selected_project_id"),
-        },
-        {
           field: "contractor.documentId",
           operator: "eq",
           value: user?.contractor_documentId,
@@ -64,7 +64,11 @@ export const UsersTable = () => {
   });
 
   return (
-    <List>
+    <List title = "Internal users"
+    headerButtons={
+        <Button type="primary" 
+        onClick={() => navigate("create", {state:{tab:1}})}>Add new internal user</Button>
+    }>
       <Form {...searchFormProps} layout="inline">
         <Form.Item name="name">
           <Input

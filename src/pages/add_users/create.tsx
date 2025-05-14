@@ -1,12 +1,15 @@
 import { Create, useForm, useSelect } from "@refinedev/antd";
 import { Form, Input, Checkbox, Select } from "antd";
-import { IProject } from "../../interfaces";
+import { IProject, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
+import { useLocation } from "react-router";
 
 export const UserCreate = () => {
+  const location = useLocation();
+  let role: number;
   const user = useGetUserIdentity(useShallow((state) => state?.user));
-  const { formProps, saveButtonProps, form } = useForm();
+  const { formProps, saveButtonProps, form } = useForm<IUser>();
   const { selectProps } = useSelect<IProject>({
     resource: "projects",
     optionLabel: "name",
@@ -21,11 +24,19 @@ export const UserCreate = () => {
     ],
   });
 
-  form.setFieldValue("contractor", user?.contractor_id);
+  if(user.user_role === "Admin")
+  {
+    role = 1;
+  }
+
+
 
   return (
     <Create saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical" form={form}>
+      <Form {...formProps} layout="vertical" form={form}
+      onFinish={() => {form.setFieldValue("contractor", user?.contractor_id),
+                        form.setFieldValue("role", role)
+      }}>
         <Form.Item
           label="Name"
           name={["name"]}
@@ -40,39 +51,6 @@ export const UserCreate = () => {
         <Form.Item
           label="Surname"
           name={["surname"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Position"
-          name={["position"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Username"
-          name={["username"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Password"
-          name={["password"]}
           rules={[
             {
               required: true,
@@ -97,6 +75,28 @@ export const UserCreate = () => {
                 return Promise.resolve();
               },
             }),
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Position"
+          name={["position"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Password"
+          name={["password"]}
+          rules={[
+            {
+              required: true,
+            },
           ]}
         >
           <Input />
@@ -148,7 +148,7 @@ export const UserCreate = () => {
             ]}
           />
         </Form.Item>
-        <Form.Item name={["contractor"]} noStyle></Form.Item>
+        <Form.Item name={["contractor"]} noStyle={true}></Form.Item>
       </Form>
     </Create>
   );

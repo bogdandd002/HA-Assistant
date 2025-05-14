@@ -1,5 +1,4 @@
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
-import { useGetIdentity } from "@refinedev/core";
 import {
   Layout as AntdLayout,
   Avatar,
@@ -9,13 +8,12 @@ import {
   theme,
   Typography,
 } from "antd";
-import React, { useContext, useEffect} from "react";
+import React, { useContext } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
 import useGetUserIdentity from "../../store/user_data";
 import {  useShallow } from "zustand/shallow";
 
 import { useProjectDetails } from "../../store/app_data";
-import { UserDetails } from "../../interfaces";
 import { useNavigate } from "react-router";
 
 const { Text } = Typography;
@@ -85,7 +83,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           defaultChecked={mode === "dark"}
         />
         <Space style={{ marginLeft: "8px" }} size="middle">
-          {user?.username && <Text strong>{user.username}</Text>}
+          {user?.id && <Text strong>{user.id}</Text>}
           {user?.user_role && <Text strong>{user.user_role}</Text>}
           {/* {user?.avatar && <Avatar src={user?.avatar} alt={user?.username} />} */}
         </Space>
