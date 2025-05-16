@@ -1,11 +1,12 @@
 import { DeleteButton, EditButton, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, CrudFilter, HttpError } from "@refinedev/core";
-import { Form, Input, Space, Table } from "antd";
+import { Button, Form, Input, Space, Table } from "antd";
 import { IProject, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
 interface ISearch {
     title: string;
@@ -14,10 +15,11 @@ interface ISearch {
 
 export const ContractorsUsersTable = () => {
   
+  const navigate = useNavigate();
   const colState = useSelectColumns.getState().columnsControl;
   const selectedProject = useProjectDetails((state) => state?.project);
   const user = useGetUserIdentity(useShallow((state) => state?.user));
-  const userProjects: string[] = user.projects.map((element: IProject) => element.documentId)
+  const userProjects: string[] = user.projects?.map((element: IProject) => element.documentId)
   let permanent: CrudFilter[];
   let initial: CrudFilter[];
 
@@ -27,11 +29,6 @@ export const ContractorsUsersTable = () => {
     permanent= []
   } else {
     permanent= [
-      // {
-      //   field: "projects.documentId",
-      //   operator: "in",
-      //   value: userProjects,
-      // },
       {
         field: "contractor.work_for.documentId",
         operator: "containss",
@@ -72,7 +69,11 @@ export const ContractorsUsersTable = () => {
              });
 
     return (
-        <List title="Contractor's users">
+        <List title="Contractor's users"
+        headerButtons={
+        <Button type="primary" 
+        onClick={() => navigate("create", {state:{tab:"2"}})}>Add new contractor user</Button>
+    }>
                <Form {...searchFormProps} layout="inline">
         <Form.Item name="name">
           <Input placeholder="Search by name" onChange={(e) => {

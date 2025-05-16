@@ -67,7 +67,7 @@ export const UsersTable = () => {
     <List title = "Internal users"
     headerButtons={
         <Button type="primary" 
-        onClick={() => navigate("create", {state:{tab:1}})}>Add new internal user</Button>
+        onClick={() => navigate("create", {state:{tab:"1"}})}>Add new internal user</Button>
     }>
       <Form {...searchFormProps} layout="inline">
         <Form.Item name="name">

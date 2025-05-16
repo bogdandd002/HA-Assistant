@@ -1,14 +1,16 @@
 import { Create, useForm, useSelect } from "@refinedev/antd";
-import { Form, Input, Checkbox, Select } from "antd";
+import { Form, Input, Checkbox, Select, Radio, RadioChangeEvent } from "antd";
 import { IProject, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import { useLocation } from "react-router";
+import { useState } from "react";
 
 export const UserCreate = () => {
-  const location = useLocation();
-  let role: number;
+  const location = useLocation().state;
+  let role: number, manualySelect: boolean = false;
   const user = useGetUserIdentity(useShallow((state) => state?.user));
+  const [value, setValue] = useState(1);
   const { formProps, saveButtonProps, form } = useForm<IUser>();
   const { selectProps } = useSelect<IProject>({
     resource: "projects",
@@ -23,14 +25,23 @@ export const UserCreate = () => {
       },
     ],
   });
-
-  if(user.user_role === "Admin")
+  
+  // Set role admin for new internal user
+  // Allow admin to select role manualy when adding new contractor user
+  if( user.user_role === "Admin" )
   {
-    role = 1;
+    if( location.tab === "1" ){
+      role = 1;
+      manualySelect = true; //hide role selection field
+    } else { 
+      manualySelect = false; // display manualy secection field
+    }
   }
-
-
-
+console.log("select" + manualySelect)
+   const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value);
+  };
+  
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical" form={form}
@@ -101,7 +112,20 @@ export const UserCreate = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item name={["role"]} noStyle></Form.Item>
+        <Form.Item name={["role"]} hidden = {true}>
+<Radio.Group
+      style={{ width: 200 }}
+      onChange={onChange}
+      value={value}
+      options={[
+        { value: 1, label: 'Contractor Super' },
+        { value: 2, label: 'Contractor' },
+        { value: 3, label: 'Main Contractor Super' },
+        { value: 4, label: 'Main Contractor' },
+      ]}
+      disabled = {true}
+    />
+</Form.Item>
         <Form.Item
           label="Confirmed"
           valuePropName="checked"
@@ -148,7 +172,7 @@ export const UserCreate = () => {
             ]}
           />
         </Form.Item>
-        <Form.Item name={["contractor"]} noStyle={true}></Form.Item>
+        <Form.Item name={["contractor"]} ></Form.Item>
       </Form>
     </Create>
   );
