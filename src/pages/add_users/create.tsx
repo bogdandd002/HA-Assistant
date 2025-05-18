@@ -4,14 +4,18 @@ import { IProject, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import { useLocation } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const UserCreate = () => {
   const location = useLocation().state;
-  let role: number, manualySelect: boolean = false;
+  let role = 1,
+    manualySelect = false,
+    projectSelection = false,
+    adminRadio = false,
+    CsRadio = false,
+    McsRadio = false;
   const user = useGetUserIdentity(useShallow((state) => state?.user));
-  const [value, setValue] = useState(1);
-  const { formProps, saveButtonProps, form } = useForm<IUser>();
+  const { formProps, saveButtonProps, form, onFinish } = useForm<IUser>();
   const { selectProps } = useSelect<IProject>({
     resource: "projects",
     optionLabel: "name",
@@ -25,29 +29,68 @@ export const UserCreate = () => {
       },
     ],
   });
-  
+
   // Set role admin for new internal user
   // Allow admin to select role manualy when adding new contractor user
-  if( user.user_role === "Admin" )
-  {
-    if( location.tab === "1" ){
+  if (user.user_role === "Admin") {
+    if (location.tab === "1") {
       role = 1;
       manualySelect = true; //hide role selection field
-    } else { 
+      projectSelection = true;
+    } else {
       manualySelect = false; // display manualy secection field
+      projectSelection = true; // hide project selection
+      adminRadio = true; //display admin role selection
     }
   }
-console.log("select" + manualySelect)
-   const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
+  // Set display conditions for Contractor_super role
+  if (user.user_role === "Contractor_super" && location.tab === "1") {
+    manualySelect = false;
+    projectSelection = false;
+    CsRadio = true;
+  }
+  if (user.user_role === "Main_contractor_super") {
+    if (location.tab === "1") {
+      manualySelect = false; //hide role selection field
+      projectSelection = false; //display project selection
+      McsRadio = true; //show Main contracto super radio options
+    } else {
+      manualySelect = true; // hide manualy secection field
+      projectSelection = false; // display project selection
+      role = 4; // set role contractor for external users
+    }
+  }
+  if (user.user_role === "Main_contractor" && location.tab === "2") {
+    manualySelect = true; // hide manualy secection field
+    projectSelection = false; // display project selection
+    role = 4; // set role contractor for external users
+  }
+  const onChange = (e: RadioChangeEvent) => {
+    role = e.target.value;
   };
-  
+
+  const handleOnFinish = () => {
+    const username = form.getFieldValue("name");
+    form.setFieldsValue({
+      username: username, // harcodding username as first name
+      role: role, // set role based on logic
+      contractor: user?.contractor_id, //set contractor id same as the user crating
+    });
+
+    return form.getFieldsValue(true);
+  };
+
+  // useEffect(()=> {
+  //   role = value;
+  // },[value])
   return (
     <Create saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical" form={form}
-      onFinish={() => {form.setFieldValue("contractor", user?.contractor_id),
-                        form.setFieldValue("role", role)
-      }}>
+      <Form
+        {...formProps}
+        layout="vertical"
+        form={form}
+        onFinish={() => onFinish?.(handleOnFinish())}
+      >
         <Form.Item
           label="Name"
           name={["name"]}
@@ -112,40 +155,51 @@ console.log("select" + manualySelect)
         >
           <Input />
         </Form.Item>
-        <Form.Item name={["role"]} hidden = {true}>
-<Radio.Group
-      style={{ width: 200 }}
-      onChange={onChange}
-      value={value}
-      options={[
-        { value: 1, label: 'Contractor Super' },
-        { value: 2, label: 'Contractor' },
-        { value: 3, label: 'Main Contractor Super' },
-        { value: 4, label: 'Main Contractor' },
-      ]}
-      disabled = {true}
-    />
-</Form.Item>
-        <Form.Item
-          label="Confirmed"
-          valuePropName="checked"
-          name={["confirmed"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Checkbox>Confirmed</Checkbox>
+        <Form.Item name={["role"]} hidden={manualySelect}>
+          <>
+            {adminRadio && (
+              <Radio.Group
+                style={{ width: 200 }}
+                onChange={onChange}
+                options={[
+                  { value: 3, label: "Contractor Super" },
+                  { value: 4, label: "Contractor" },
+                  { value: 5, label: "Main Contractor Super" },
+                  { value: 6, label: "Main Contractor" },
+                ]}
+              />
+            )}
+            {CsRadio && (
+              <Radio.Group
+                style={{ width: 200 }}
+                onChange={onChange}
+                options={[
+                  { value: 3, label: "Contractor Super" },
+                  { value: 4, label: "Contractor" },
+                ]}
+              />
+            )}
+            {McsRadio && (
+              <Radio.Group
+                style={{ width: 200 }}
+                onChange={onChange}
+                options={[
+                  { value: 5, label: "Main Contractor Super" },
+                  { value: 6, label: "Main Contractor" },
+                ]}
+              />
+            )}
+          </>
         </Form.Item>
         <Form.Item
           label="Select projects asociated with this user"
           name={["project"]}
           rules={[
             {
-              required: true,
+              required: false,
             },
           ]}
+          hidden={projectSelection}
         >
           <Select
             placeholder="Select projects access for this user"
@@ -155,24 +209,8 @@ console.log("select" + manualySelect)
             {...selectProps}
           />
         </Form.Item>
-        <Form.Item
-          label="Select user account type"
-          name={["role"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            placeholder="Account type"
-            options={[
-              { value: 4, label: "Normal user" },
-              { value: 3, label: "Super user" },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item name={["contractor"]} ></Form.Item>
+        <Form.Item name={["contractor"]}></Form.Item>
+        <Form.Item name={["username"]}></Form.Item>
       </Form>
     </Create>
   );

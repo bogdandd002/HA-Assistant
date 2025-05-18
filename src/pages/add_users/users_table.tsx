@@ -19,7 +19,6 @@ interface ISearch {
 }
 
 export const UsersTable = () => {
-
   const navigate = useNavigate();
   const user = useGetUserIdentity(useShallow((state) => state?.user));
   const { tableProps, setFilters, searchFormProps } = useTable<
@@ -63,12 +62,25 @@ export const UsersTable = () => {
     syncWithLocation: true,
   });
 
+  let allowCreateUser = false;
+
+  if (user.user_role === "Main_contractor") {
+    allowCreateUser = true;
+  }
+
   return (
-    <List title = "Internal users"
-    headerButtons={
-        <Button type="primary" 
-        onClick={() => navigate("create", {state:{tab:"1"}})}>Add new internal user</Button>
-    }>
+    <List
+      title="Internal users"
+      headerButtons={
+        <Button
+          type="primary"
+          onClick={() => navigate("create", { state: { tab: "1" } })}
+          disabled={allowCreateUser}
+        >
+          Add new internal user
+        </Button>
+      }
+    >
       <Form {...searchFormProps} layout="inline">
         <Form.Item name="name">
           <Input
@@ -99,9 +111,9 @@ export const UsersTable = () => {
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>
-              <EditButton hideText size="small" recordItemId={record.id} />
+              <EditButton hideText size="small" recordItemId={record.id} disabled={allowCreateUser}/>
               <ShowButton hideText size="small" recordItemId={record.id} />
-              <DeleteButton hideText size="small" recordItemId={record.id} />
+              <DeleteButton hideText size="small" recordItemId={record.id} disabled={allowCreateUser}/>
             </Space>
           )}
         />
