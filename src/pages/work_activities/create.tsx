@@ -1,6 +1,6 @@
 import React from "react";
 import { Create, useForm } from "@refinedev/antd";
-import { Form, Input, DatePicker, Upload, Divider } from "antd";
+import { Form, Input, DatePicker, Upload, Divider, InputNumber } from "antd";
 import dayjs from "dayjs";
 import { InboxOutlined } from "@ant-design/icons";
 import { IWorkActivity } from "../../interfaces";
@@ -117,7 +117,7 @@ export const WorkActivityCreate = () => {
             },
           ]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
         <Form.Item
           label="Revision date"
@@ -208,7 +208,7 @@ export const WorkActivityCreate = () => {
             },
           ]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
         <Form.Item
           label="Revision date"

@@ -1,6 +1,6 @@
 import { Create, useForm, useSelect } from "@refinedev/antd";
 import { Form, Input, Checkbox, Select, Radio, RadioChangeEvent } from "antd";
-import { IProject, IUser } from "../../interfaces";
+import { IContractor, IProject, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import { useLocation } from "react-router";
@@ -8,15 +8,17 @@ import { useEffect, useState } from "react";
 
 export const UserCreate = () => {
   const location = useLocation().state;
+  const user = useGetUserIdentity(useShallow((state) => state?.user));
   let role = 1,
     manualySelect = false,
     projectSelection = false,
     adminRadio = false,
     CsRadio = false,
     McsRadio = false;
-  const user = useGetUserIdentity(useShallow((state) => state?.user));
+
+  
   const { formProps, saveButtonProps, form, onFinish } = useForm<IUser>();
-  const { selectProps } = useSelect<IProject>({
+  const { selectProps: projects } = useSelect<IProject>({
     resource: "projects",
     optionLabel: "name",
     optionValue: "id",
@@ -30,6 +32,20 @@ export const UserCreate = () => {
     ],
   });
 
+  const { selectProps: contractors } = useSelect<IContractor>({
+    resource: "contractors",
+    optionLabel: "name",
+    optionValue: "id",
+
+    filters: [
+      {
+        field: "documentId",
+        operator: "ne",
+        value: user?.contractor_documentId,
+      },
+    ],
+  });
+
   // Set role admin for new internal user
   // Allow admin to select role manualy when adding new contractor user
   if (user.user_role === "Admin") {
@@ -37,6 +53,7 @@ export const UserCreate = () => {
       role = 1;
       manualySelect = true; //hide role selection field
       projectSelection = true;
+      form.setFieldValue("contractor", user?.contractor_documentId)
     } else {
       manualySelect = false; // display manualy secection field
       projectSelection = true; // hide project selection
@@ -74,11 +91,12 @@ export const UserCreate = () => {
     form.setFieldsValue({
       username: username, // harcodding username as first name
       role: role, // set role based on logic
-      contractor: user?.contractor_id, //set contractor id same as the user crating
+      // contractor: contractor, //set contractor id same as the user crating
     });
 
     return form.getFieldsValue(true);
   };
+
 
   // useEffect(()=> {
   //   role = value;
@@ -206,10 +224,20 @@ export const UserCreate = () => {
             style={{ width: 300 }}
             mode="multiple"
             allowClear
-            {...selectProps}
+            {...projects}
           />
         </Form.Item>
-        <Form.Item name={["contractor"]}></Form.Item>
+        <Form.Item
+        label="Contractor associated with this user" 
+        name={["contractor"]}
+        rules={[{ required: true, message: 'Please select contractor associated with this user!' }]}
+        hidden={manualySelect}>
+          <Select
+            placeholder="Asociate user with contractor"
+            style={{ width: 300 }}
+            {...contractors}
+          />
+        </Form.Item>
         <Form.Item name={["username"]}></Form.Item>
       </Form>
     </Create>
