@@ -1,0 +1,10 @@
+1. Things to improve in future  
+
+    - project word may not be relevant for CS type of users - may need replacing with job, or location or branch, etc. possible to create a customised selection available to admin when the 
+    customer account is created 
+
+2. Daily loog 
+    - 22.05.25 
+
+3. Current issues 
+    - 
