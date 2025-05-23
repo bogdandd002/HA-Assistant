@@ -7,6 +7,7 @@ import {
 } from "@refinedev/antd";
 import { BaseRecord, HttpError, useGo, useSelect } from "@refinedev/core";
 import {
+  Button,
   Col,
   Divider,
   Form,
@@ -17,10 +18,11 @@ import {
   Table,
   Typography,
 } from "antd";
-import { IProject, IUser, ProjectDetails } from "../../../interfaces";
+import { IProject, IUser } from "../../../interfaces";
 import useGetUserIdentity from "../../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import  { useProjectDetails } from "../../../store/app_data";
+import { ProjectDetails } from "../../../interfaces/cutom_types/custom_types";
 
 const { Title } = Typography;
 
@@ -82,6 +84,10 @@ export const SelectProjectComponent = () => {
           />
         </Col>
         <Col span={5}></Col>
+      </Row>
+      <Row>
+        <Col span={10}></Col>
+        <Col span={4}><Button>Show all contractors</Button></Col>
       </Row>
     </>
   );
