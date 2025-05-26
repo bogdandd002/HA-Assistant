@@ -30,7 +30,13 @@ export const ContractorsUsersTable = () => {
 
   if (user.user_role === "Admin") {
     // Admin can see all users
-    permanent = [];
+    permanent = [
+      {
+        field: "contractor.name",
+        operator: "ne",
+        value: "admin",
+      },
+    ];
   } else {
     permanent = [
       {

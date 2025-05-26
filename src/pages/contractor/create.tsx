@@ -4,7 +4,7 @@ import { IContractor } from "../../interfaces/data/data";
 import useGetUserIdentity from "../../store/user_data";
 
 export const ContractorCreate = () => {
-  const { formProps, saveButtonProps } = useForm<IContractor>({});
+  const { formProps, saveButtonProps, form, onFinish } = useForm<IContractor>({});
   const user = useGetUserIdentity.getState().user;
   let admin = true;
 
@@ -12,25 +12,34 @@ export const ContractorCreate = () => {
     admin = false; //only admin can set max nr of users
   }
 
-  const { selectProps: contractors } = useSelect<IContractor>({
-      resource: "contractors",
-      optionLabel: "name",
-      optionValue: "id",
+  // const { selectProps: contractors } = useSelect<IContractor>({
+  //     resource: "contractors",
+  //     optionLabel: "name",
+  //     optionValue: "id",
   
-      filters: [
-        {
-          field: "documentId",
-          operator: "ne",
-          value: user?.contractor_documentId,
-        },
-      ],
-    });
+  //     filters: [
+  //       {
+  //         field: "documentId",
+  //         operator: "ne",
+  //         value: user?.contractor_documentId,
+  //       },
+  //     ],
+  //   });
+
+  const handleOnFinish = () => {
+    form.setFieldsValue({"work_for": user?.contractor_documentId});
+
+    return form.getFieldsValue(true);
+  };
 
   return (
     <Create
     title="Add Contractor"
     saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical">
+      <Form {...formProps}
+        layout="vertical"
+        form={form}
+        onFinish={() => onFinish?.(handleOnFinish())}>
         <Form.Item
           label={"Name"}
           name={["name"]}
@@ -76,13 +85,7 @@ export const ContractorCreate = () => {
           <InputNumber min={1} defaultValue={1} />
         </Form.Item>
         <Form.Item
-          label={"NWorkfor"}
           name={["work_for"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
         ></Form.Item>
       </Form>
     </Create>

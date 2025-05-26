@@ -1,4 +1,5 @@
 import {
+  DateField,
   DeleteButton,
   EditButton,
   getDefaultSortOrder,
@@ -12,7 +13,6 @@ import { IProject } from "../../interfaces/index";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import useGetUserIdentity from "../../store/user_data";
 import { ProjectDetails } from "../../interfaces/cutom_types/custom_types";
-
 
 interface ISearch {
   title: string;
@@ -122,16 +122,25 @@ export const ProjectList = () => {
           )}
         />
         <Table.Column dataIndex="address" title={"Address"} />
-        <Table.Column dataIndex="start_date" title={"Start Date"} />
-        <Table.Column dataIndex="end_date" title={"End Date"} />
-        <Table.Column dataIndex="duration" title={"Duration (days)"} />
-        <Table.Column dataIndex="" title={"Number of alocated users"} hidden={colState.proj_nr_users}/>
+        <Table.Column dataIndex="start_date" title={"Start Date"} 
+        render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
+        />
+        <Table.Column
+          dataIndex="end_date"
+          title={"End Date"}
+          render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
+        />
+        <Table.Column dataIndex="duration" title={"Duration (weeks)"} />
+        <Table.Column
+          dataIndex=""
+          title={"Number of alocated users"}
+          hidden={colState.proj_nr_users}
+        />
         <Table.Column
           dataIndex="contractors"
           title={"Active Contractors"}
           hidden={colState.proj_nr_contractors}
-          render={(_, resource) => Object.keys(resource.contractors).length}
-          
+          render={(_, resource) => (Object.keys(resource.contractors).length)-1}
         />
         <Table.Column<{ documentId: string }>
           title="Actions"

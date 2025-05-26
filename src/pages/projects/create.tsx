@@ -4,28 +4,33 @@ import { DatePicker, Form, Input, Select } from "antd";
 import { IContractor, IProject } from "../../interfaces/data/data";
 import dayjs from "dayjs";
 import useGetUserIdentity from "../../store/user_data";
+import moment from "moment";
 
 export const ProjectCreate = () => {
   const user = useGetUserIdentity.getState().user;
   const { formProps, saveButtonProps, form, onFinish } = useForm<IProject>({});
-
-   const handleOnFinish = () => {
-    
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let s_date: any, e_date: any;
+  const handleOnFinish = () => {
+    const daysDiference = e_date.diff(s_date, "weeks");
     form.setFieldsValue({
-      "contractors": user?.contractor_documentId
+      contractors: user?.contractor_documentId,
+      users: user?.id,
+      duration: daysDiference,
       // contractor: contractor, //set contractor id same as the user crating
     });
-
+    console.log(typeof(e_date))
     return form.getFieldsValue(true);
   };
 
   return (
-    <Create
-    title="Add Project"
-    saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical"
-      form={form}
-      onFinish={() => onFinish?.(handleOnFinish())}>
+    <Create title="Add Project" saveButtonProps={saveButtonProps}>
+      <Form
+        {...formProps}
+        layout="vertical"
+        form={form}
+        onFinish={() => onFinish?.(handleOnFinish())}
+      >
         <Form.Item
           label={"Proj. Number"}
           name={["project_nr"]}
@@ -35,9 +40,9 @@ export const ProjectCreate = () => {
             },
           ]}
         >
-          <Input/>
-          </Form.Item>
-              <Form.Item
+          <Input />
+        </Form.Item>
+        <Form.Item
           label={"Name"}
           name={["name"]}
           rules={[
@@ -71,7 +76,10 @@ export const ProjectCreate = () => {
             value: value ? dayjs(value) : undefined,
           })}
         >
-          <DatePicker format={"DD-MM-YYYY"} />
+          <DatePicker
+            format={"DD-MM-YYYY"}
+            onChange={(date) => (s_date = date)}
+          />
         </Form.Item>
         <Form.Item
           label="End date"
@@ -85,10 +93,14 @@ export const ProjectCreate = () => {
             value: value ? dayjs(value) : undefined,
           })}
         >
-          <DatePicker format={"DD-MM-YYYY"} />
+          <DatePicker
+            format={"DD-MM-YYYY"}
+            onChange={(date) => (e_date = date)}
+          />
         </Form.Item>
-        <Form.Item
-        name={["contractors"]}></Form.Item>
+        <Form.Item name={["contractors"]}></Form.Item>
+        <Form.Item name={["users"]}></Form.Item>
+        <Form.Item name={["duration"]}></Form.Item>
       </Form>
     </Create>
   );

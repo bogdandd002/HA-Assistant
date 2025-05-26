@@ -14,7 +14,9 @@ export const UserCreate = () => {
     projectSelection = false,
     adminRadio = false,
     CsRadio = false,
-    McsRadio = false;
+    McsRadio = false,
+    roleSelection = false,
+    selectContractor = false;
 
   
   const { formProps, saveButtonProps, form, onFinish } = useForm<IUser>();
@@ -39,8 +41,8 @@ export const UserCreate = () => {
 
     filters: [
       {
-        field: "documentId",
-        operator: "ne",
+        field: "work_for.documentId",
+        operator: "eq",
         value: user?.contractor_documentId,
       },
     ],
@@ -53,11 +55,12 @@ export const UserCreate = () => {
       role = 1;
       manualySelect = true; //hide role selection field
       projectSelection = true;
-      form.setFieldValue("contractor", user?.contractor_documentId)
+      form.setFieldValue("contractor", user?.contractor_id)
     } else {
       manualySelect = false; // display manualy secection field
       projectSelection = true; // hide project selection
       adminRadio = true; //display admin role selection
+      roleSelection = true;
     }
   }
   // Set display conditions for Contractor_super role
@@ -68,19 +71,22 @@ export const UserCreate = () => {
   }
   if (user.user_role === "Main_contractor_super") {
     if (location.tab === "1") {
-      manualySelect = false; //hide role selection field
+      manualySelect = false; //role selection field 
+      roleSelection = true; // make role field selection required
       projectSelection = false; //display project selection
       McsRadio = true; //show Main contracto super radio options
+      selectContractor = false;
+      form.setFieldValue("contractor", user?.contractor_id)
     } else {
-      manualySelect = true; // hide manualy secection field
       projectSelection = false; // display project selection
-      role = 4; // set role contractor for external users
+      role = 4; // set role as contractor for external users
     }
   }
   if (user.user_role === "Main_contractor" && location.tab === "2") {
     manualySelect = true; // hide manualy secection field
     projectSelection = false; // display project selection
     role = 4; // set role contractor for external users
+    selectContractor = true; // select contractor
   }
   const onChange = (e: RadioChangeEvent) => {
     role = e.target.value;
@@ -173,7 +179,13 @@ export const UserCreate = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item name={["role"]} hidden={manualySelect}>
+        <Form.Item name={["role"]} hidden={manualySelect}
+        rules={[
+            {
+              required: roleSelection,
+            },
+          ]}
+          >
           <>
             {adminRadio && (
               <Radio.Group
@@ -230,8 +242,8 @@ export const UserCreate = () => {
         <Form.Item
         label="Contractor associated with this user" 
         name={["contractor"]}
-        rules={[{ required: true, message: 'Please select contractor associated with this user!' }]}
-        hidden={manualySelect}>
+        rules={[{ required: selectContractor, message: 'Please select contractor associated with this user!' }]}
+        hidden={!selectContractor}>
           <Select
             placeholder="Asociate user with contractor"
             style={{ width: 300 }}
