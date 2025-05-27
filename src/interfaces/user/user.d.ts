@@ -1,5 +1,5 @@
-import { I } from "react-router/dist/development/route-data-OcOrqK13";
-import { IProject } from "../data/data";
+
+import { IProject, IContractor } from "../data/data";
 
 
 export interface IUser{
@@ -14,6 +14,7 @@ export interface IUser{
     contractor_id: number;
     avatar?: string;
     user_role?: string;
+    contractor: IContractor;
     projects: IProject[] ;
     is_superuser: boolean;
     last_logged: Date;

@@ -107,8 +107,8 @@ function App() {
                   name: "contractors",
                   list: "/contractors",
                   create: "/contractors/create",
-                  edit: "/contractors/edit/:id",
-                  show: "/contractors/show/:id",
+                  edit: "/contractors/edit/:documentId",
+                  show: "/contractors/show/:documentId",
                   icon: <Icons.UsergroupAddOutlined />,
                   meta: {
                     label: "Contractors",
@@ -134,8 +134,8 @@ function App() {
                   name: "users",
                   list: "/add-user",
                   create: "/add-user/create",
-                  edit: "/add-user/edit/:id",
-                  show: "/add-user/show/:id",
+                  edit: "/add-user/edit/:documentId",
+                  show: "/add-user/show/:documentId",
                   icon: <Icons.TeamOutlined />,
                   meta: {
                     label: "Users",

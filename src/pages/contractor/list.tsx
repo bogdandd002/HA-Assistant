@@ -32,7 +32,7 @@ export const ContractorList = () => {
     permanent = [
       {
         field: "work_for.documentId",
-        operator: "ne",
+        operator: "eq",
         value: user?.contractor_documentId,
       },
     ];

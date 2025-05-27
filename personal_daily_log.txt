@@ -13,4 +13,4 @@
 
 3. Current issues 
     - 23.05.25 - bug in clearing project state when user log out not clearing the state. The project remain if another user log until refresh the page. 
-    - 23.05.25 - make contractor field in user required in strapi otherwhise can lead to bugs if contractor is not set. 
+    - 23.05.25 - make contractor field in user required in strapi otherwhise can lead to bugs if contractor is not set. - sorted (need testing)

@@ -72,9 +72,9 @@ export const ProjectCreate = () => {
               required: false,
             },
           ]}
-          getValueProps={(value) => ({
-            value: value ? dayjs(value) : undefined,
-          })}
+          // getValueProps={(value) => ({
+          //   value: value ? dayjs(value) : undefined,
+          // })}
         >
           <DatePicker
             format={"DD-MM-YYYY"}
@@ -89,9 +89,9 @@ export const ProjectCreate = () => {
               required: false,
             },
           ]}
-          getValueProps={(value) => ({
-            value: value ? dayjs(value) : undefined,
-          })}
+          // getValueProps={(value) => ({
+          //   value: value ? dayjs(value) : undefined,
+          // })}
         >
           <DatePicker
             format={"DD-MM-YYYY"}

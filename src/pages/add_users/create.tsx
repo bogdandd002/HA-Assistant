@@ -37,7 +37,7 @@ export const UserCreate = () => {
   const { selectProps: contractors } = useSelect<IContractor>({
     resource: "contractors",
     optionLabel: "name",
-    optionValue: "id",
+    optionValue: "documentId",
 
     filters: [
       {
@@ -61,6 +61,7 @@ export const UserCreate = () => {
       projectSelection = true; // hide project selection
       adminRadio = true; //display admin role selection
       roleSelection = true;
+      selectContractor = true;
     }
   }
   // Set display conditions for Contractor_super role
@@ -78,6 +79,7 @@ export const UserCreate = () => {
       selectContractor = false;
       form.setFieldValue("contractor", user?.contractor_id)
     } else {
+      selectContractor = true;
       projectSelection = false; // display project selection
       role = 4; // set role as contractor for external users
     }
@@ -103,7 +105,7 @@ export const UserCreate = () => {
     return form.getFieldsValue(true);
   };
 
-
+console.log(form.getFieldValue("contractor"))
   // useEffect(()=> {
   //   role = value;
   // },[value])

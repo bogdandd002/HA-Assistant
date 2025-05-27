@@ -26,7 +26,7 @@ export const UsersTable = () => {
     HttpError,
     ISearch
   >({
-    resource: "Users",
+    resource: "users",
     sorters: {
       initial: [
         {
@@ -51,6 +51,11 @@ export const UsersTable = () => {
           field: "contractor.documentId",
           operator: "eq",
           value: user?.contractor_documentId,
+        },
+        {
+          field: "email",
+          operator: "ne",
+          value: user?.email,
         },
       ],
     },
