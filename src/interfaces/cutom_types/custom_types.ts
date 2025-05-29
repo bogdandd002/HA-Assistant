@@ -19,6 +19,7 @@ export type ProjectDetails = {
 
 export type UserDetails = {
   id: string | number,
+  documentId: string,
   projects: IProject[],
   email: string,
   user_role: string,

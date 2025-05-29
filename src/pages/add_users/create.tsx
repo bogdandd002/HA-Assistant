@@ -37,7 +37,7 @@ export const UserCreate = () => {
   const { selectProps: contractors } = useSelect<IContractor>({
     resource: "contractors",
     optionLabel: "name",
-    optionValue: "documentId",
+    optionValue: "id",
 
     filters: [
       {

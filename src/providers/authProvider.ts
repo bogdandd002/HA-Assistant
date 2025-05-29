@@ -103,15 +103,16 @@ export const authProvider: AuthProvider = {
         },
       }
     );
-    const { role: role, contractor: contractor, projects: projects } = await response.json();
+    const { role: role, contractor: contractor, projects: projects, documentId, email } = await response.json();
     const { name: user_role } = role;
     const { documentId: contractor_documentId, id: contractor_id } = contractor;
 
     const { data, status } = await strapiAuthHelper.me(token);
     if (status === 200) {
-      const { id, email } = data;
+      const {id, email } = data;
       const user_data: UserDetails = {
         id,
+        documentId,
         projects,
         email,
         user_role,
