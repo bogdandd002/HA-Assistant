@@ -18,7 +18,6 @@ export const UserCreate = () => {
     roleSelection = false,
     selectContractor = false;
 
-  
   const { formProps, saveButtonProps, form, onFinish } = useForm<IUser>();
   const { selectProps: projects } = useSelect<IProject>({
     resource: "projects",
@@ -55,7 +54,7 @@ export const UserCreate = () => {
       role = 1;
       manualySelect = true; //hide role selection field
       projectSelection = true;
-      form.setFieldValue("contractor", user?.contractor_id)
+      form.setFieldValue("contractor", user?.contractor_id);
     } else {
       manualySelect = false; // display manualy secection field
       projectSelection = true; // hide project selection
@@ -72,12 +71,12 @@ export const UserCreate = () => {
   }
   if (user.user_role === "Main_contractor_super") {
     if (location.tab === "1") {
-      manualySelect = false; //role selection field 
+      manualySelect = false; //role selection field
       roleSelection = true; // make role field selection required
       projectSelection = false; //display project selection
       McsRadio = true; //show Main contracto super radio options
       selectContractor = false;
-      form.setFieldValue("contractor", user?.contractor_id)
+      form.setFieldValue("contractor", user?.contractor_id);
     } else {
       selectContractor = true;
       projectSelection = false; // display project selection
@@ -99,13 +98,13 @@ export const UserCreate = () => {
     form.setFieldsValue({
       username: username, // harcodding username as first name
       role: role, // set role based on logic
-      // contractor: contractor, //set contractor id same as the user crating
+      parentUserContractorId: user.contractor_documentId, //pass over the contractor id for the user whi is creating new user. Used in scope of controlling number of users.
     });
 
     return form.getFieldsValue(true);
   };
 
-console.log(form.getFieldValue("contractor"))
+  console.log(form.getFieldValue("contractor"));
   // useEffect(()=> {
   //   role = value;
   // },[value])
@@ -181,13 +180,15 @@ console.log(form.getFieldValue("contractor"))
         >
           <Input />
         </Form.Item>
-        <Form.Item name={["role"]} hidden={manualySelect}
-        rules={[
+        <Form.Item
+          name={["role"]}
+          hidden={manualySelect}
+          rules={[
             {
               required: roleSelection,
             },
           ]}
-          >
+        >
           <>
             {adminRadio && (
               <Radio.Group
@@ -242,10 +243,16 @@ console.log(form.getFieldValue("contractor"))
           />
         </Form.Item>
         <Form.Item
-        label="Contractor associated with this user" 
-        name={["contractor"]}
-        rules={[{ required: selectContractor, message: 'Please select contractor associated with this user!' }]}
-        hidden={!selectContractor}>
+          label="Contractor associated with this user"
+          name={["contractor"]}
+          rules={[
+            {
+              required: selectContractor,
+              message: "Please select contractor associated with this user!",
+            },
+          ]}
+          hidden={!selectContractor}
+        >
           <Select
             placeholder="Asociate user with contractor"
             style={{ width: 300 }}
@@ -253,6 +260,7 @@ console.log(form.getFieldValue("contractor"))
           />
         </Form.Item>
         <Form.Item name={["username"]}></Form.Item>
+        <Form.Item name={["parentUserContractorId"]}></Form.Item>
       </Form>
     </Create>
   );

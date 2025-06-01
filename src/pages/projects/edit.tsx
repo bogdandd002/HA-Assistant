@@ -14,8 +14,6 @@ export const ProjectEdit = () => {
 let s_date: any, e_date: any;
 s_date = moment(projectData?.start_date, "YYYY-MM-DD")
 e_date = moment(projectData?.end_date, "YYYY-MM-DD")
-console.log(s_date)
-console.log(projectData?.end_date)
   const handleOnFinish = () => {
     const daysDiference = e_date.diff(s_date, "weeks");
     form.setFieldsValue({

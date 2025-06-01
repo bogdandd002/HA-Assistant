@@ -130,8 +130,7 @@ export const adapter = new StringAdapter(`
 
     p, Main_contractor, contractors, show
     p, Main_contractor, contractors, list
-    p, Main_contractor, contractors, create
-    p, Main_contractor, contractors, (list)|(edit)|(delete)
+    p, Main_contractor, contractors, (list)
 
     p, Main_contractor, dashboard, show
     p, Main_contractor, dashboard, list

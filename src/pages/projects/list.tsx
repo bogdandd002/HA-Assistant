@@ -88,7 +88,7 @@ export const ProjectList = () => {
       </Form>
       <Table
         {...tableProps}
-        rowKey="documentId"
+        rowKey="id"
         pagination={{
           ...tableProps.pagination,
           position: ["bottomCenter"],

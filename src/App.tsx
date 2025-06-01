@@ -107,8 +107,8 @@ function App() {
                   name: "contractors",
                   list: "/contractors",
                   create: "/contractors/create",
-                  edit: "/contractors/edit/:documentId",
-                  show: "/contractors/show/:documentId",
+                  edit: "/contractors/edit/:id",
+                  show: "/contractors/show/:id",
                   icon: <Icons.UsergroupAddOutlined />,
                   meta: {
                     label: "Contractors",
