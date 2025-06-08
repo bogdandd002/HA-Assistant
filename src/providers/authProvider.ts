@@ -103,9 +103,9 @@ export const authProvider: AuthProvider = {
         },
       }
     );
-    const { role: role, contractor: contractor, projects: projects, documentId, email } = await response.json();
+    const { role: role, contractor: contractor, projects: projects, documentId, email, name, surname } = await response.json();
     const { name: user_role } = role;
-    const { documentId: contractor_documentId, id: contractor_id } = contractor;
+    const { documentId: contractor_documentId, id: contractor_id, max_nr_users} = contractor;
 
     const { data, status } = await strapiAuthHelper.me(token);
     if (status === 200) {
@@ -113,11 +113,14 @@ export const authProvider: AuthProvider = {
       const user_data: UserDetails = {
         id,
         documentId,
+        name, 
+        surname,
         projects,
         email,
         user_role,
         contractor_documentId,
         contractor_id,
+        
       };
 
       // set table columns display based on user roles

@@ -61,6 +61,7 @@ import {
 } from "./pages/sign_sheets";
 
 import { lazy, Suspense } from "react";
+import { customDataProvider } from "./providers/dataProvider";
 
 
 
@@ -74,7 +75,7 @@ function App() {
               <Refine
                 authProvider={authProvider}
                 accessControlProvider={accessControlProvider}
-                dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
+                dataProvider={customDataProvider(API_URL + `/api`, axiosInstance)}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
                 resources={[// {
@@ -134,8 +135,8 @@ function App() {
                   name: "users",
                   list: "/add-user",
                   create: "/add-user/create",
-                  edit: "/add-user/edit/:documentId",
-                  show: "/add-user/show/:documentId",
+                  edit: "/add-user/edit/:id",
+                  show: "/add-user/show/:id",
                   icon: <Icons.TeamOutlined />,
                   meta: {
                     label: "Users",

@@ -52,9 +52,9 @@ export const ProjectList = () => {
     filters: {
       permanent: [
         {
-          field: "contractors.documentId",
-          operator: "eq",
-          value: user?.contractor_documentId,
+          field: "users.id",
+          operator: "contains",
+          value: user?.id,
         },
       ],
     },

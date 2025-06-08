@@ -8,19 +8,60 @@ import {
   useTable,
 } from "@refinedev/antd";
 import { IWorkActivity } from "../../interfaces";
-import { HttpError, Link } from "@refinedev/core";
+import { CrudFilter, HttpError, Link } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
-
-
+import useGetUserIdentity from "../../store/user_data";
+import { useShallow } from "zustand/shallow";
 
 interface ISearch {
   title: string;
 }
 
+
 export const WorkActivityListDisplay = () => {
   const selectedProject = useProjectDetails.getState().project
   const colState = useSelectColumns.getState().columnsControl;
+  const user = useGetUserIdentity(useShallow((state) => state?.user));
+
+  let permanent: CrudFilter[] = [];
+  let field = "contractor.documentId";
+
+  // Admin can see all work activities
+    if (user.user_role === "Admin") {
+      
+      permanent = [];
+    } 
+
+    // MCS and MC can see WA for all contractors that work for them 
+    if(user.user_role === "Main_contractor_super" || user.user_role === "Main_contractor") {
+
+      field = "contractor.work_for.documentId"
+    }
+    // If a project is selected filter by contractor and project else just by contractor
+      if(selectedProject.project_id){
+        permanent = [
+        {
+          field: field,
+          operator: "eq",
+          value: user.contractor_documentId,
+        },
+        {
+          field: "project.documentId",
+          operator: "eq",
+          value: selectedProject.project_id,
+        }
+      ];
+      } else {
+        permanent = [
+        {
+          field: field,
+          operator: "eq",
+          value: user.contractor_documentId,
+        },
+      ];
+      } 
+      
   const { tableProps, setFilters, sorters, searchFormProps } = useTable<
     IWorkActivity,
     HttpError,
@@ -45,13 +86,7 @@ export const WorkActivityListDisplay = () => {
       ];
     },
     filters: {
-      permanent: [
-        {
-          field: "project.documentId",
-          operator: "eq",
-          value: selectedProject.project_id,
-        },
-      ],
+      permanent: permanent,
     },
     liveMode: "auto",
     meta: {
@@ -60,8 +95,6 @@ export const WorkActivityListDisplay = () => {
 
     syncWithLocation: true,
   });
-
-
 
   return (
     <List>

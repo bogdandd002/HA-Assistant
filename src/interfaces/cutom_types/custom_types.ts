@@ -20,9 +20,11 @@ export type ProjectDetails = {
 export type UserDetails = {
   id: string | number,
   documentId: string,
+  name: string,
+  surname: string,
   projects: IProject[],
   email: string,
   user_role: string,
   contractor_documentId: string,
-  contractor_id: number
+  contractor_id: number,
 }

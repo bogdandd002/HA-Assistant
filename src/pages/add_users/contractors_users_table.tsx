@@ -5,13 +5,12 @@ import {
   ShowButton,
   useTable,
 } from "@refinedev/antd";
-import { BaseRecord, CanAccess, CrudFilter, HttpError } from "@refinedev/core";
-import { Button, Form, Input, Space, Table } from "antd";
-import { IProject, IUser } from "../../interfaces";
+import {  CrudFilter, HttpError, useOne, useUpdate } from "@refinedev/core";
+import { Button, Form, Input, Modal, Space, Table } from "antd";
+import { IContractor, IProject, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
-import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 interface ISearch {
@@ -20,9 +19,17 @@ interface ISearch {
 
 export const ContractorsUsersTable = () => {
   const navigate = useNavigate();
+  const { mutate } = useUpdate({
+      resource: "contractors"
+    });
   const colState = useSelectColumns.getState().columnsControl;
   const selectedProject = useProjectDetails((state) => state?.project);
   const user = useGetUserIdentity(useShallow((state) => state?.user));
+   const { data } = useOne<IContractor, HttpError>({
+      resource: "contractors",
+      id: user.contractor_documentId,
+    });
+
   const userProjects: string[] = user.projects?.map(
     (element: IProject) => element.documentId
   );
@@ -82,13 +89,46 @@ export const ContractorsUsersTable = () => {
     syncWithLocation: true,
   });
 
+   const addUser = () => {
+        navigate("create", { state: { tab: "2" } });
+  };
+let curentNrUsers= 0 ;
+  if(data?.data){
+    curentNrUsers = data?.data.max_nr_users
+  }
+
+   const increaseNrContractors = () => {
+    if(data?.data){
+    mutate({
+      id: user.contractor_documentId,
+      values: {
+        max_nr_users : curentNrUsers + 1,
+      }
+    })
+  }
+}
+
+const show = () => {
+            Modal.confirm({
+              title: 'Can not add any more new users',
+              content: 'You have reached the maximum number of allowed users. Please contact us to increase number or delete existing user.',
+              footer: (_, { OkBtn }) => (
+                <>
+                  <Button>Contact us</Button>
+                  <OkBtn />
+                </>
+              ),
+            });      
+ }
+
+
   return (
     <List
       title="Contractor's users"
       headerButtons={
         <Button
           type="primary"
-          onClick={() => navigate("create", { state: { tab: "2" } })}
+          onClick={(curentNrUsers > 0) ? addUser : show }
         >
           Add new contractor user
         </Button>
@@ -127,11 +167,13 @@ export const ContractorsUsersTable = () => {
         <Table.Column
           title="Actions"
           dataIndex="actions"
-          render={(_, record: BaseRecord) => (
+          render={(_, record) => (
             <Space>
               <EditButton hideText size="small" recordItemId={record.id} />
               <ShowButton hideText size="small" recordItemId={record.id} />
-              <DeleteButton hideText size="small" recordItemId={record.id} />
+              <DeleteButton hideText size="small" recordItemId={record.id}
+              meta={{ mainUserId : user.contractor_documentId }} 
+             onSuccess={increaseNrContractors}/>
             </Space>
           )}
         />

@@ -7,17 +7,29 @@ import { IWorkActivity } from "../../interfaces";
 
 import { API_URL, TOKEN_KEY } from "../../constants/constants";
 import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
+import useGetUserIdentity from "../../store/user_data";
+import { useShallow } from "zustand/shallow";
 
 const project = localStorage.getItem("selected_project_id");
 
 export const WorkActivityCreate = () => {
-  const { form, formProps, saveButtonProps } = useForm<IWorkActivity>();
+  const { form, formProps, saveButtonProps, onFinish } = useForm<IWorkActivity>();
+  const user = useGetUserIdentity(useShallow((state) => state?.user));
 
-  form.setFieldValue("approval_status", "pending review");
-  form.setFieldValue("ra_approval_status", "pending review");
-  form.setFieldValue("ms_approval_status", "pending review");
-  form.setFieldValue("project", project);
-  form.setFieldValue("contractor", localStorage.getItem("user_contractor_id"));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleOnFinish = (values: any) => {
+    mediaUploadMapper(values)
+    form.setFieldsValue({
+      approval_status: "pending review", 
+      ra_approval_status: "pending review", 
+      ms_approval_status: "pending review",
+      project: project,
+      contractor: user?.contractor_id,
+      created_by_user: user?.name + user?.surname
+    });
+    
+    return form.getFieldsValue(true);
+  };
 
   return (
     <Create saveButtonProps={saveButtonProps}>
@@ -25,9 +37,7 @@ export const WorkActivityCreate = () => {
         {...formProps}
         form={form}
         layout="vertical"
-        onFinish={(values) => {
-          formProps.onFinish?.(mediaUploadMapper(values));
-        }}
+        onFinish={(values) => onFinish?.(handleOnFinish(values))}
       >
         <Divider style={{ borderColor: "#7cb305" }}>
           Work activity details
@@ -270,9 +280,8 @@ export const WorkActivityCreate = () => {
         <Form.Item noStyle name={["ms_file_url"]}></Form.Item>
         <Form.Item noStyle name={["ms_file_id"]}></Form.Item>
         <Form.Item noStyle name={["project"]}></Form.Item>
-        {/*automaticaly set based on the selected project*/}
         <Form.Item noStyle name={["contractor"]}></Form.Item>
-        {/*automaticaly set based on the user*/}
+        <Form.Item noStyle name={["created_by_user"]}></Form.Item>
       </Form>
     </Create>
   );

@@ -5,10 +5,18 @@ import {
   List,
   ShowButton,
   useTable,
+  useModal,
 } from "@refinedev/antd";
-import { BaseRecord, CrudFilter, HttpError, useGo } from "@refinedev/core";
-import { Button, Form, Input, Space, Table } from "antd";
-import { IUser } from "../../interfaces";
+import {
+  BaseRecord,
+  CrudFilter,
+  HttpError,
+  useGo,
+  useOne,
+  useUpdate,
+} from "@refinedev/core";
+import { Button, Form, Input, Modal, Space, Table } from "antd";
+import { IContractor, IUser } from "../../interfaces";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import { useProjectDetails } from "../../store/app_data";
@@ -20,7 +28,14 @@ interface ISearch {
 
 export const UsersTable = () => {
   const navigate = useNavigate();
+  const { mutate } = useUpdate({
+    resource: "contractors",
+  });
   const user = useGetUserIdentity(useShallow((state) => state?.user));
+  const { data } = useOne<IContractor, HttpError>({
+    resource: "contractors",
+    id: user.contractor_documentId,
+  });
   const { tableProps, setFilters, searchFormProps } = useTable<
     IUser,
     HttpError,
@@ -73,15 +88,46 @@ export const UsersTable = () => {
     allowCreateUser = true;
   }
 
+  let curentNrUsers= 0 ;
+  if(data?.data){
+    curentNrUsers = data?.data.max_nr_users
+  }
+
+  const increaseNrContractors = () => {
+    if (data?.data) {
+      mutate({
+        id: user.contractor_documentId,
+        values: {
+          max_nr_users: curentNrUsers + 1,
+        },
+      });
+    }
+  };
+
+  const addUser = () => {
+        navigate("create", { state: { tab: "1" } });
+ };
+
+ const show = () => {
+            Modal.confirm({
+              title: 'Can not add any more new users',
+              content: 'You have reached the maximum number of allowed users. Please contact us to increase number or delete existing user.',
+              footer: (_, { OkBtn }) => (
+                <>
+                  <Button>Contact us</Button>
+                  <OkBtn />
+                </>
+              ),
+            });      
+ }
+
   return (
     <List
       title="Internal users"
       headerButtons={
-        <Button
-          type="primary"
-          onClick={() => navigate("create", { state: { tab: "1" } })}
-          disabled={allowCreateUser}
-        >
+        <Button type="primary" 
+        onClick={(curentNrUsers > 0) ? addUser : show } 
+        disabled={allowCreateUser}>
           Add new internal user
         </Button>
       }
@@ -114,11 +160,23 @@ export const UsersTable = () => {
         <Table.Column
           title="Actions"
           dataIndex="actions"
-          render={(_, record: BaseRecord) => (
+          render={(_, record) => (
             <Space>
-              <EditButton hideText size="small" recordItemId={record.id} disabled={allowCreateUser}/>
+              <EditButton
+                hideText
+                size="small"
+                recordItemId={record.id}
+                disabled={allowCreateUser}
+              />
               <ShowButton hideText size="small" recordItemId={record.id} />
-              <DeleteButton hideText size="small" recordItemId={record.id} disabled={allowCreateUser}/>
+              <DeleteButton
+                hideText
+                size="small"
+                recordItemId={record.documentId}
+                disabled={allowCreateUser}
+                meta={{ mainUserId: user.contractor_id }}
+                onSuccess={increaseNrContractors}
+              />
             </Space>
           )}
         />

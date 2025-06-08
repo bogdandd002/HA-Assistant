@@ -104,10 +104,6 @@ export const UserCreate = () => {
     return form.getFieldsValue(true);
   };
 
-  console.log(form.getFieldValue("contractor"));
-  // useEffect(()=> {
-  //   role = value;
-  // },[value])
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form
