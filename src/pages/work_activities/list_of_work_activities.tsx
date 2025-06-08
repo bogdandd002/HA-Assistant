@@ -13,6 +13,7 @@ import { Form, Input, Space, Table } from "antd";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
+import moment, { now } from "moment";
 
 interface ISearch {
   title: string;
@@ -96,6 +97,12 @@ export const WorkActivityListDisplay = () => {
     syncWithLocation: true,
   });
 
+  const duration = (start_date: Date) => {
+    const today = moment();
+    const daysDiference = today.diff(start_date, "days");
+return daysDiference + " days"
+  }
+
   return (
     <List>
       <Form {...searchFormProps} layout="inline">
@@ -174,7 +181,11 @@ export const WorkActivityListDisplay = () => {
           defaultSortOrder={getDefaultSortOrder("start_date", sorters)}
           render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
         />
-        <Table.Column dataIndex="duration" title={"Duration"} />
+        <Table.Column 
+        dataIndex="duration" 
+        title={"Time lapsed"}
+        render={(_, resource) => <>{duration(resource.start_date)}</>}
+         />
         <Table.Column dataIndex="approval_status" title={"Status"} />
         <Table.Column
           dataIndex="approval_status"
