@@ -9,7 +9,7 @@ import {
 } from "@refinedev/antd";
 import { IWorkActivity } from "../../interfaces";
 import { CrudFilter, HttpError, Link } from "@refinedev/core";
-import { Form, Input, Space, Table } from "antd";
+import { Form, Input, Space, Table, Tag } from "antd";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
@@ -98,9 +98,16 @@ export const WorkActivityListDisplay = () => {
   });
 
   const duration = (start_date: Date) => {
+    let color = "green"
     const today = moment();
     const daysDiference = today.diff(start_date, "days");
-return daysDiference + " days"
+    if ( daysDiference > 60 && daysDiference < 90 ){
+    color = "yellow" 
+    }
+    if ( daysDiference > 90) {
+    color = "volcano"
+    }
+return <Tag color={color}> {daysDiference + " days ago"} </Tag>
   }
 
   return (
@@ -175,16 +182,12 @@ return daysDiference + " days"
           render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
         />
         <Table.Column
-          dataIndex="end_date"
-          title={"End Date"}
-          sorter={{ multiple: 1 }}
-          defaultSortOrder={getDefaultSortOrder("start_date", sorters)}
-          render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
+          title={"RA last rev"}
+          render={(_, resource) => <>{duration(resource.ra_revision_date)}</>}
         />
         <Table.Column 
-        dataIndex="duration" 
-        title={"Time lapsed"}
-        render={(_, resource) => <>{duration(resource.start_date)}</>}
+        title={"MS last rev"}
+        render={(_, resource) => <>{duration(resource.ms_revision_date)}</>}
          />
         <Table.Column dataIndex="approval_status" title={"Status"} />
         <Table.Column
