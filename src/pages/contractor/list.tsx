@@ -117,15 +117,6 @@ export const ContractorList = () => {
           hidden={colState.contracor_nr_users}
           render={(_, resource) => Object.keys(resource.users).length}
         />
-        <Table.Column
-          dataIndex="start_on_project"
-          title={"Start on project date"}
-          render={(value) => <DateField value={value} format="DD-MM-YYYY" />}
-        />
-        <Table.Column
-          dataIndex="completed_project"
-          title={"Has completed project"}
-        />
         <Table.Column<{ documentId: string }>
           title="Actions"
           dataIndex="actions"
