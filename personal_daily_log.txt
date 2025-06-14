@@ -6,11 +6,18 @@
     - for MCS user in contractor page add option to show all contractors that work for user
     - filter out own contractor name 
 
+    - implement strapi-jwt-cookies by bwyx githib to split the jwt tocken for better security 
+
 
 
 2. Daily loog 
-    - 22.05.25 
+    - 14.06.25 - working on approval process of WA for main contractor - 
 
 3. Current issues 
     - 23.05.25 - bug in clearing project state when user log out not clearing the state. The project remain if another user log until refresh the page. 
     - 23.05.25 - make contractor field in user required in strapi otherwhise can lead to bugs if contractor is not set. - sorted (need testing)
+
+
+
+Refine CLI:
+- add new resource: npm run refine add resource resource_name

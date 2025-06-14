@@ -110,6 +110,16 @@ export const WorkActivityListDisplay = () => {
 return <Tag color={color}> {daysDiference + " days ago"} </Tag>
   }
 
+const status = (tag: string) => {
+  let color =  tag === " pending review" ? 'green':'orange';
+  if (tag === "require review"){
+    color = 'magenta';
+  }
+  return <Tag color={color} key={tag}>
+    {tag.toUpperCase()}
+  </Tag>
+}
+
   return (
     <List>
       <Form {...searchFormProps} layout="inline">
@@ -189,7 +199,11 @@ return <Tag color={color}> {daysDiference + " days ago"} </Tag>
         title={"MS last rev"}
         render={(_, resource) => <>{duration(resource.ms_revision_date)}</>}
          />
-        <Table.Column dataIndex="approval_status" title={"Status"} />
+        <Table.Column 
+        dataIndex="approval_status" 
+        title={"Status"}
+        render={(value) => status(value)}
+         />
         <Table.Column
           dataIndex="approval_status"
           title={"Require review"}

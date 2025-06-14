@@ -18,6 +18,8 @@ import {
 import { API_URL } from "../../constants/constants";
 import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import { ISignSheet } from "../../interfaces";
+import useGetUserIdentity from "../../store/user_data";
+import { useShallow } from "zustand/shallow";
 
 interface ISearch {
   title: string;
@@ -26,9 +28,8 @@ interface ISearch {
 export const WorkActivityShow = () => {
   const { query } = useShow({});
   const { data, isLoading } = query;
-
   const record = data?.data;
-
+ const user = useGetUserIdentity(useShallow((state) => state?.user));
   const { tableProps, setFilters, searchFormProps } = useTable<
     ISignSheet,
     HttpError,
@@ -75,7 +76,12 @@ export const WorkActivityShow = () => {
 
   let confirm_ra_read = false;
   let confirm_ms_read = false;
+  let main_contractor = false;
   const [isEnabled, setIsEnabled] = useState(false);
+
+  if (user?.user_role === "Main_contractor_super" || user?.user_role === "Main_contractor"){
+    main_contractor = true;
+  }
 
   const itemsTab1: DescriptionsProps["items"] = [
     {
@@ -134,6 +140,29 @@ export const WorkActivityShow = () => {
             Read method statement{" "}
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;
+          { main_contractor ? 
+           <Button
+            icon={<EyeOutlined />}
+            disabled={!isEnabled}
+            size={"large"}
+            type="primary"
+            onClick={() => {
+              go({
+                to: {
+                  resource: "wa-comments",
+                  action: "create",
+                },
+                query: {
+                  wa: record?.documentId,
+                  ra: record?.ra_revision,
+                  ms: record?.ms_revision,
+                },
+                type: "push",
+              });
+            }}
+          >
+            Review & approve{" "}
+          </Button> :
           <Button
             icon={<EyeOutlined />}
             disabled={!isEnabled}
@@ -155,7 +184,8 @@ export const WorkActivityShow = () => {
             }}
           >
             Consent and sign{" "}
-          </Button>
+          </Button> 
+        }
         </>
       ),
     },
@@ -199,6 +229,7 @@ export const WorkActivityShow = () => {
       label: "Preview risk assessment",
       span: { xl: 2, xxl: 2 },
       children: (
+        <>
         <Button
           icon={<EyeOutlined />}
           size={"large"}
@@ -209,6 +240,54 @@ export const WorkActivityShow = () => {
         >
           Preview
         </Button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        { main_contractor ? 
+           <Button
+            icon={<EyeOutlined />}
+            disabled={!isEnabled}
+            size={"large"}
+            type="primary"
+            onClick={() => {
+              go({
+                to: {
+                  resource: "wa-comments",
+                  action: "create",
+                },
+                query: {
+                  wa: record?.documentId,
+                  ra: record?.ra_revision,
+                  ms: record?.ms_revision,
+                },
+                type: "push",
+              });
+            }}
+          >
+            Review & approve{" "}
+          </Button> :
+          <Button
+            icon={<EyeOutlined />}
+            disabled={!isEnabled}
+            size={"large"}
+            type="primary"
+            onClick={() => {
+              go({
+                to: {
+                  resource: "sign-sheets",
+                  action: "create",
+                },
+                query: {
+                  wa: record?.documentId,
+                  ra: record?.ra_revision,
+                  ms: record?.ms_revision,
+                },
+                type: "push",
+              });
+            }}
+          >
+            Revise {" "}
+          </Button> 
+        }
+        </>
       ),
     },
     {
@@ -267,6 +346,7 @@ export const WorkActivityShow = () => {
       label: "Preview method statement",
       span: { xl: 2, xxl: 2 },
       children: (
+        <>
         <Button
           icon={<EyeOutlined />}
           size={"large"}
@@ -275,6 +355,54 @@ export const WorkActivityShow = () => {
         >
           Preview
         </Button>
+         &nbsp;&nbsp;&nbsp;&nbsp;
+        { main_contractor ? 
+           <Button
+            icon={<EyeOutlined />}
+            disabled={!isEnabled}
+            size={"large"}
+            type="primary"
+            onClick={() => {
+              go({
+                to: {
+                  resource: "sign-sheets",
+                  action: "create",
+                },
+                query: {
+                  wa: record?.documentId,
+                  ra: record?.ra_revision,
+                  ms: record?.ms_revision,
+                },
+                type: "push",
+              });
+            }}
+          >
+            Review & approve{" "}
+          </Button> :
+          <Button
+            icon={<EyeOutlined />}
+            disabled={!isEnabled}
+            size={"large"}
+            type="primary"
+            onClick={() => {
+              go({
+                to: {
+                  resource: "wa-comments",
+                  action: "create",
+                },
+                query: {
+                  wa: record?.documentId,
+                  ra: record?.ra_revision,
+                  ms: record?.ms_revision,
+                },
+                type: "push",
+              });
+            }}
+          >
+            Revise {" "}
+          </Button> 
+        }
+      </>
       ),
     },
     {

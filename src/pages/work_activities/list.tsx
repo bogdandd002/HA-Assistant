@@ -8,7 +8,7 @@ export const WorkActivityList = () => {
   const [display, setDisplay] = useState(false);
   useEffect(() => {
     // const selectedProject = localStorage.getItem("selected_project");
-    if (isProject) setDisplay(true);
+    if (isProject.project_id) setDisplay(true);
   }, [isProject]);
 
   return (

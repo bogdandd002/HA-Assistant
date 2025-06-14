@@ -161,4 +161,9 @@ export const adapter = new StringAdapter(`
     p, Main_contractor, users, create
     p, Main_contractor, users, (list)|(edit)|(delete)
 
+    p, Main_contractor, wa-comments, show
+    p, Main_contractor, wa-comments, list
+    p, Main_contractor, wa-comments, create
+    p, Main_contractor, wa-comments, (list)|(edit)|(delete)
+
   `);

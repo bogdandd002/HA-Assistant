@@ -62,6 +62,7 @@ import {
 
 import { lazy, Suspense } from "react";
 import { customDataProvider } from "./providers/dataProvider";
+import { WaCommentsCreate, WaCommentsList, WaCommentsShow } from "./pages/wa_comments";
 
 
 
@@ -81,18 +82,17 @@ function App() {
                 resources={[// {
                 //   name: "select_project", list: () => null
                 // },
-                 {
-                  name: "dashboard",
-                  list: "/dashboard",
-                  create: "/dashboard/create",
-                  edit: "/dashboard/edit/:id",
-                  show: "/dashboard/show/:id",
-                  icon: <Icons.DashboardOutlined />,
-                  meta:{
-                    label: "Dashboard" ,
-                  }
-                },
                 {
+                 name: "dashboard",
+                 list: "/dashboard",
+                 create: "/dashboard/create",
+                 edit: "/dashboard/edit/:id",
+                 show: "/dashboard/show/:id",
+                 icon: <Icons.DashboardOutlined />,
+                 meta:{
+                   label: "Dashboard" ,
+                 }
+               }, {
                   name: "projects",
                   list: "/projects",
                   create: "/projects/create",
@@ -102,9 +102,7 @@ function App() {
                   meta: {
                     label: "Projects",
                   },
-                },
-               
-                {
+                }, {
                   name: "contractors",
                   list: "/contractors",
                   create: "/contractors/create",
@@ -148,8 +146,13 @@ function App() {
                   edit: "/sign-sheets/edit/:id",
                   show: "/sign-sheets/show/:id",
                   icon: <Icons.FormOutlined />,
-                },
-              ]}
+                }, {
+                  name: "wa-comments",
+                  list: "/wa-comments",
+                  create: "/wa-comments/create",
+                  edit: "/wa-comments/edit/:id",
+                  show: "/wa-comments/show/:id"
+                }]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -206,6 +209,12 @@ function App() {
                       <Route path="create" element={<SignSheetCreate />} />
                       <Route path="edit/:id" element={<SignSheetEdit />} />
                       <Route path="show/:id" element={<SignSheetShow />} />
+                    </Route>
+                    <Route path="/wa-comments">
+                      <Route index element={<WaCommentsList />} />
+                      <Route path="create" element={<WaCommentsCreate />} />
+                      <Route path="edit/:id" element={<WaCommentsCreate />} />
+                      <Route path="show/:id" element={<WaCommentsShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />

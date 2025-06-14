@@ -28,3 +28,11 @@ export type UserDetails = {
   contractor_documentId: string,
   contractor_id: number,
 }
+
+export type Status = {
+  status: "pending approval" | "approved" | "require review"
+}
+
+export type Comment = {
+  type: "approved" | "rejected" | "revised"
+}

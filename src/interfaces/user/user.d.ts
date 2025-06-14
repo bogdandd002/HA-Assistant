@@ -18,7 +18,6 @@ export interface IUser{
     projects: IProject[] ;
     is_superuser: boolean;
     last_logged: Date;
-
 }
 
 export interface IRole{
