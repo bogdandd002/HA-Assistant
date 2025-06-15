@@ -14,6 +14,7 @@ export const WorkActivityEdit = () => {
     const record = query?.data?.data;
     const { TextArea } = Input;
     const tabItems: TabsProps['items'] = [
+      //General tab
           {
             key: '1',
             label: 'Work activity ',
@@ -77,6 +78,7 @@ export const WorkActivityEdit = () => {
                 </Form>
             ),
           },
+      // Risk Assesment tab
           {
             key: '2',
             label: 'Risk assestment',
@@ -191,6 +193,7 @@ export const WorkActivityEdit = () => {
                 </Form>
             ),
           },
+      // Method statement tab
           {
             key: '3',
             label: 'Method statement',
