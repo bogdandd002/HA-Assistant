@@ -102,61 +102,57 @@ export const WaCommentsCreate = () => {
       label: "Work activity ",
       children: (
         <>
-          <Form
-                        {...formProps}
-                        form={form}
-                        layout="vertical"
-                      >  
-          <Form.Item
-          name={["wa_comment_type"]}></Form.Item>
-          <Row>
-            <Col span={8}></Col>
-            <Col span={8}>
-              <Title level={4}>Review work activity here </Title>
-            </Col>
-            <Col span={8}></Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <List
-                itemLayout="horizontal"
-                dataSource={question_values}
-                renderItem={(item) => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={
-                        <Radio.Group
-                          options={answers}
-                          onChange={(value) => onChange(value, item.q_number)}
-                          value={item.q_state}
-                          optionType="button"
-                          buttonStyle="solid"
-                        />
-                      }
-                      title={item.q_title}
-                    />
-                    {redStar(item.q_condition)}
-                  </List.Item>
-                )}
-              />
-            </Col>
-          </Row>
+          <Form {...formProps} form={form} layout="vertical"
+          >
+            <Form.Item name={["wa_comment_type"]}></Form.Item>
+            <Row>
+              <Col span={8}></Col>
+              <Col span={8}>
+                <Title level={4}>Review work activity here </Title>
+              </Col>
+              <Col span={8}></Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={question_values}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={
+                          <Radio.Group
+                            options={answers}
+                            onChange={(value) => onChange(value, item.q_number)}
+                            value={item.q_state}
+                            optionType="button"
+                            buttonStyle="solid"
+                          />
+                        }
+                        title={item.q_title}
+                      />
+                      {redStar(item.q_condition)}
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
 
-          <Row>
-            <Col span={4}>
-              <Radio.Group
-                options={approval}
-                onChange={(value)=>{
-                  form.setFieldValue("wa_comment_type", value.target.value)
-                }}
-                optionType="button"
-                buttonStyle="solid"
-              />
-            </Col>
-            <Col span={20}>
-              <Title level={5}>Can this work activity begin? </Title>
-            </Col>
-          </Row>
+            <Row>
+              <Col span={4}>
+                <Radio.Group
+                  options={approval}
+                  onChange={(value) => {
+                    form.setFieldValue("wa_comment_type", value.target.value);
+                  }}
+                  optionType="button"
+                  buttonStyle="solid"
+                />
+              </Col>
+              <Col span={20}>
+                <Title level={5}>Can this work activity begin? </Title>
+              </Col>
+            </Row>
           </Form>
         </>
       ),
@@ -168,59 +164,65 @@ export const WaCommentsCreate = () => {
       label: "Risk assesment ",
       children: (
         <>
-         <Row>
-            <Col span={8}></Col>
-            <Col span={8}>
-              <Title level={4}>Review work activity here </Title>
-            </Col>
-            <Col span={8}></Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <List
-                itemLayout="horizontal"
-                dataSource={question_values}
-                renderItem={(item) => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={
-                        <Radio.Group
-                          options={answers}
-                          onChange={(value) => onChange(value, item.q_number)}
-                          value={item.q_state}
-                          optionType="button"
-                          buttonStyle="solid"
-                        />
-                      }
-                      title={item.q_title}
-                    />
-                    {redStar(item.q_condition)}
-                  </List.Item>
-                )}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Checkbox onChange={checkboxonChange}>
-                Risk Assesment Meets Expectation
-              </Checkbox>
-            </Col>
-          </Row>
-          <br></br>
-          <Row>
-            <Title level={5}> Comments </Title>
-            <Col span={24}>
-              {" "}
-              <TextArea
-                placeholder="Please insert only your Risk assesment comments in this box"
-                showCount
-                allowClear
-                maxLength={500}
-                style={{ height: 220}}
-              />
-            </Col>
-          </Row>
+          <Form {...formProps} form={form} layout="vertical">
+            <Form.Item name={["ra_comment_type"]}></Form.Item>
+            <Form.Item name={["ra_comment"]}></Form.Item>
+            <Row>
+              <Col span={8}></Col>
+              <Col span={8}>
+                <Title level={4}>Review work activity here </Title>
+              </Col>
+              <Col span={8}></Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={question_values}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={
+                          <Radio.Group
+                            options={answers}
+                            onChange={(value) => onChange(value, item.q_number)}
+                            value={item.q_state}
+                            optionType="button"
+                            buttonStyle="solid"
+                          />
+                        }
+                        title={item.q_title}
+                      />
+                      {redStar(item.q_condition)}
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Checkbox onChange={checkboxonChange}>
+                  Risk Assesment Meets Expectation
+                </Checkbox>
+              </Col>
+            </Row>
+            <br></br>
+            <Row>
+              <Title level={5}> Comments </Title>
+
+              <Col span={24}>
+                <Form.Item name={["ra_comment"]}>
+                  <TextArea
+                    placeholder="Please insert only your Risk assesment comments in this box"
+                    showCount
+                    allowClear
+                    maxLength={500}
+                    style={{ height: 220 }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
         </>
       ),
     },
@@ -229,7 +231,7 @@ export const WaCommentsCreate = () => {
       key: "3",
       label: "Method statement ",
       children: (
-         <>
+        <>
           <Row>
             <Col span={8}></Col>
             <Col span={8}>
