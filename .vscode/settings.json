@@ -1,3 +1,4 @@
 {
-    "editor.guides.bracketPairs": "active"
+    "editor.guides.bracketPairs": "active",
+    "workbench.editor.limit.value": 5
 }

@@ -1,20 +1,42 @@
 import React from "react";
-import { Create, useForm } from "@refinedev/antd";
-import { Form, Input, DatePicker, Upload, Divider, InputNumber } from "antd";
+import { Create, useForm, useSelect } from "@refinedev/antd";
+import { Form, Input, DatePicker, Upload, Divider, InputNumber, Select } from "antd";
 import dayjs from "dayjs";
 import { InboxOutlined } from "@ant-design/icons";
-import { IWorkActivity } from "../../interfaces";
+import { IContractor, IUser, IWorkActivity } from "../../interfaces";
 
 import { API_URL, TOKEN_KEY } from "../../constants/constants";
 import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
-
-const project = localStorage.getItem("selected_project_id");
+import { useOne } from "@refinedev/core";
+import { useProjectDetails } from "../../store/app_data";
 
 export const WorkActivityCreate = () => {
+  const project = useProjectDetails.getState().project;
   const { form, formProps, saveButtonProps, onFinish } = useForm<IWorkActivity>();
   const user = useGetUserIdentity(useShallow((state) => state?.user));
+
+
+  const { selectProps: users } = useSelect<IUser>({
+      resource: "users",
+      optionLabel: (item) => `${item.name} ${item.surname}`,
+      optionValue: "id",
+  
+      filters: [
+        {
+          field: "contractor.id",
+          operator: "eq",
+          value: project.project_owner,
+        },
+        // activate this filter to also filter users by alocated project
+        // {
+        //   field: "projects.documentId",
+        //   operator: "containss",
+        //   value: project.project_id,
+        // },
+      ],
+    });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnFinish = (values: any) => {
@@ -23,7 +45,7 @@ export const WorkActivityCreate = () => {
       approval_status: "pending review", 
       ra_approval_status: "pending review", 
       ms_approval_status: "pending review",
-      project: project,
+      project: project.project_id,
       contractor: user?.contractor_id,
       created_by_user: user?.name + user?.surname
     });
@@ -277,6 +299,26 @@ export const WorkActivityCreate = () => {
             </p>
           </Upload.Dragger>
         </Form.Item>
+        <Divider style={{ borderColor: "#7cb305" }}>
+            Who should verify this work activity
+        </Divider>
+        <Form.Item
+            label="Send it for attention of: "
+            name={["reviewers"]}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select projects access for this user"
+              style={{ width: 300 }}
+              mode="multiple"
+              allowClear
+              {...users}
+               />
+          </Form.Item>
         <Form.Item noStyle name={["ms_file_url"]}></Form.Item>
         <Form.Item noStyle name={["ms_file_id"]}></Form.Item>
         <Form.Item noStyle name={["project"]}></Form.Item>

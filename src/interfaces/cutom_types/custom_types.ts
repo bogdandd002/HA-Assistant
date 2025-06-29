@@ -14,6 +14,7 @@ export type ProjectDetails = {
   project_id?: string;
   project_name?: string;
   project_number?: number;
+  project_owner?: number;
 }
 
 

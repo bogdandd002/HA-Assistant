@@ -17,6 +17,9 @@ const useGetUserIdentity = create<UserState>()(
     user_role: "",
     contractor_documentId: "",
     contractor_id: -1,
+    documentId: "",
+    name: "",
+    surname: ""
   },
 
   setUserState: (logeduser: UserDetails) => 

@@ -5,7 +5,7 @@ import {
   ShowButton,
   useTable,
 } from "@refinedev/antd";
-import { BaseRecord, HttpError, useGo, useSelect } from "@refinedev/core";
+import { BaseRecord, CrudFilter, HttpError, useGo, useOne, useSelect } from "@refinedev/core";
 import {
   Button,
   Col,
@@ -18,7 +18,7 @@ import {
   Table,
   Typography,
 } from "antd";
-import { IProject, IUser } from "../../../interfaces";
+import { IContractor, IProject, IUser } from "../../../interfaces";
 import useGetUserIdentity from "../../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import  { useProjectDetails } from "../../../store/app_data";
@@ -29,18 +29,37 @@ const { Title } = Typography;
 export const SelectProjectComponent = () => {
   const user = useGetUserIdentity(useShallow((state) => state?.user));
    const go = useGo();
+    let permanentFilter: CrudFilter[] = [
+        {
+             field: "contractors.id",
+             operator: "contains",
+             value: user?.contractor_id,
+           },
+     ]; 
+         const { data: contractor } = useOne<IContractor>({
+         resource: "contractors",
+         id: user?.contractor_documentId,
+         meta: {
+           populate: "work_for"
+         }
+       })
+   
+     if(user.user_role === "Contractor_super" || user.user_role === "Contractor"){
+       const listOfcontractors = contractor?.data.work_for.map((c) => c.id)
+       permanentFilter = [
+          {
+             field: "contractors.id",
+             operator: "contains",
+             value: listOfcontractors,
+           },
+       ]
+     }
   const { options, query } = useSelect<IProject>({
     resource: "projects",
     optionLabel: "name",
     optionValue: "documentId",
     searchField: "name",
-    filters: [
-      {
-        field: "contractors.documentId",
-        operator: "eq",
-        value: user?.contractor_documentId,
-      },
-    ],
+    filters: permanentFilter,
     debounce: 500,
   });
 

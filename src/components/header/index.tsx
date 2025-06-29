@@ -84,6 +84,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
         />
         <Space style={{ marginLeft: "8px" }} size="middle">
           {user?.id && <Text strong>{user.id}</Text>}
+          {user?.name && <Text strong>{user.name}</Text>}
           {user?.user_role && <Text strong>{user.user_role}</Text>}
           {/* {user?.avatar && <Avatar src={user?.avatar} alt={user?.username} />} */}
         </Space>

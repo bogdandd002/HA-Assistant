@@ -7,9 +7,9 @@ import {
   ShowButton,
   useTable,
 } from "@refinedev/antd";
-import { HttpError } from "@refinedev/core";
+import { CrudFilter, HttpError, useOne } from "@refinedev/core";
 import { Space, Table, Form, Input, Button } from "antd";
-import { IProject } from "../../interfaces/index";
+import { IContractor, IProject } from "../../interfaces/index";
 import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import useGetUserIdentity from "../../store/user_data";
 import { ProjectDetails } from "../../interfaces/cutom_types/custom_types";
@@ -26,6 +26,31 @@ function selectProject(project: ProjectDetails) {
 export const ProjectList = () => {
   const colState = useSelectColumns.getState().columnsControl;
   const user = useGetUserIdentity((state) => state?.user);
+  let permanentFilter: CrudFilter[] = [
+     {
+          field: "contractors.id",
+          operator: "contains",
+          value: user?.contractor_id,
+        },
+  ]; 
+      const { data: contractor } = useOne<IContractor>({
+      resource: "contractors",
+      id: user?.contractor_documentId,
+      meta: {
+        populate: "work_for"
+      }
+    })
+
+  if(user.user_role === "Contractor_super" || user.user_role === "Contractor"){
+    const listOfcontractors = contractor?.data.work_for.map((c) => c.id)
+    permanentFilter = [
+       {
+          field: "contractors.id",
+          operator: "contains",
+          value: listOfcontractors,
+        },
+    ]
+  }
   const { tableProps, setFilters, sorters, searchFormProps } = useTable<
     IProject,
     HttpError,
@@ -50,13 +75,7 @@ export const ProjectList = () => {
       ];
     },
     filters: {
-      permanent: [
-        {
-          field: "users.id",
-          operator: "contains",
-          value: user?.id,
-        },
-      ],
+      permanent: permanentFilter
     },
     liveMode: "auto",
     meta: {
@@ -114,6 +133,7 @@ export const ProjectList = () => {
                   project_id: record.documentId,
                   project_name: record.name,
                   project_number: record.project_nr,
+                  project_owner: record.project_owner.id
                 })
               }
             >

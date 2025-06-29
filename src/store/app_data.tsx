@@ -14,6 +14,7 @@ const projectInitialState: ProjectDetails = {
     project_id: "",
     project_name: "",
     project_number: 0,
+    project_owner: 0
 }
 
 export const useProjectDetails = create<ProjectDetails & ProjectStateActions>()(
@@ -39,6 +40,7 @@ export const useProjectDetails = create<ProjectDetails & ProjectStateActions>()(
   )
 );
 // end of set project store
+
 // Set which columns to hide based on user role - store start below
 
 interface ColumnsStateActions {

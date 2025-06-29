@@ -115,6 +115,9 @@ const status = (tag: string) => {
   if (tag === "require review"){
     color = 'magenta';
   }
+  if(tag === "approved"){
+    color = 'green';
+  }
   return <Tag color={color} key={tag}>
     {tag.toUpperCase()}
   </Tag>

@@ -35,6 +35,7 @@ export interface IProject {
   contractors: IContractor[];
   work_activity: IWorkActivity[];
   contact_person: IContactPerson[];
+  project_owner: IContractor;
 }
 
 export interface IWorkActivity {
@@ -63,6 +64,7 @@ export interface IWorkActivity {
   contractor: IContractor;
   project: IProject;
   created_by_user: string;
+  project_owner: IContractor;
 }
 
 export interface ISignSheet {

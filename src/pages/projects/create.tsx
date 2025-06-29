@@ -17,9 +17,9 @@ export const ProjectCreate = () => {
       contractors: user?.contractor_documentId,
       users: user?.id,
       duration: daysDiference,
+      project_owner: user.contractor_id
       // contractor: contractor, //set contractor id same as the user crating
     });
-    console.log(typeof(e_date))
     return form.getFieldsValue(true);
   };
 
@@ -69,7 +69,7 @@ export const ProjectCreate = () => {
           name={["start_date"]}
           rules={[
             {
-              required: false,
+              required: true,
             },
           ]}
           // getValueProps={(value) => ({
@@ -86,7 +86,7 @@ export const ProjectCreate = () => {
           name={["end_date"]}
           rules={[
             {
-              required: false,
+              required: true,
             },
           ]}
           // getValueProps={(value) => ({
@@ -101,6 +101,7 @@ export const ProjectCreate = () => {
         <Form.Item name={["contractors"]}></Form.Item>
         <Form.Item name={["users"]}></Form.Item>
         <Form.Item name={["duration"]}></Form.Item>
+        <Form.Item name={["project_owner"]}></Form.Item>
       </Form>
     </Create>
   );

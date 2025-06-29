@@ -88,9 +88,9 @@ export const UsersTable = () => {
     allowCreateUser = true;
   }
 
-  let curentNrUsers= 0 ;
-  if(data?.data){
-    curentNrUsers = data?.data.max_nr_users
+  let curentNrUsers = 0;
+  if (data?.data) {
+    curentNrUsers = data?.data.max_nr_users;
   }
 
   const increaseNrContractors = () => {
@@ -105,29 +105,32 @@ export const UsersTable = () => {
   };
 
   const addUser = () => {
-        navigate("create", { state: { tab: "1" } });
- };
+    navigate("create", { state: { tab: "1" } });
+  };
 
- const show = () => {
-            Modal.confirm({
-              title: 'Can not add any more new users',
-              content: 'You have reached the maximum number of allowed users. Please contact us to increase number or delete existing user.',
-              footer: (_, { OkBtn }) => (
-                <>
-                  <Button>Contact us</Button>
-                  <OkBtn />
-                </>
-              ),
-            });      
- }
+  const show = () => {
+    Modal.confirm({
+      title: "Can not add any more new users",
+      content:
+        "You have reached the maximum number of allowed users. Please contact us to increase number or delete existing user.",
+      footer: (_, { OkBtn }) => (
+        <>
+          <Button>Contact us</Button>
+          <OkBtn />
+        </>
+      ),
+    });
+  };
 
   return (
     <List
       title="Internal users"
       headerButtons={
-        <Button type="primary" 
-        onClick={(curentNrUsers > 0) ? addUser : show } 
-        disabled={allowCreateUser}>
+        <Button
+          type="primary"
+          onClick={curentNrUsers > 0 ? addUser : show}
+          disabled={allowCreateUser}
+        >
           Add new internal user
         </Button>
       }
@@ -156,8 +159,13 @@ export const UsersTable = () => {
         <Table.Column dataIndex={"surname"} title={"Surname"} />
         <Table.Column dataIndex="email" title={"Email"} />
         <Table.Column dataIndex="position" title={"Position"} />
-        <Table.Column dataIndex="is_superuser" title={"Super user"}
-        render={(_, record) => <> </>} />
+        <Table.Column
+          dataIndex="is_superuser"
+          title={"Super user"}
+          render={(_, record) => (
+            <>{record.role.name === "Main_contractor" ? "No" : "Yes"}</>
+          )}
+        />
         <Table.Column
           title="Actions"
           dataIndex="actions"
@@ -173,7 +181,7 @@ export const UsersTable = () => {
               <DeleteButton
                 hideText
                 size="small"
-                recordItemId={record.documentId}
+                recordItemId={record.id}
                 disabled={allowCreateUser}
                 meta={{ mainUserId: user.contractor_id }}
                 onSuccess={increaseNrContractors}

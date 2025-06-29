@@ -14,7 +14,8 @@ import { useProjectDetails, useSelectColumns } from "../../store/app_data";
 import { useNavigate } from "react-router";
 
 interface ISearch {
-  title: string;
+  value_c: string;
+  value_n: string;
 }
 
 export const ContractorsUsersTable = () => {
@@ -57,8 +58,7 @@ export const ContractorsUsersTable = () => {
   const { tableProps, setFilters, searchFormProps } = useTable<
     IUser,
     HttpError,
-    ISearch
-  >({
+    ISearch>({
     resource: "users",
     sorters: {
       initial: [
@@ -69,12 +69,17 @@ export const ContractorsUsersTable = () => {
       ],
       mode: "server",
     },
-    onSearch: (values) => {
+    onSearch: (search_value) => {
       return [
+        {
+          field: "contractor",
+          operator: "contains",
+          value: search_value.value_c,
+        },
         {
           field: "name",
           operator: "contains",
-          value: values,
+          value: search_value.value_n,
         },
       ];
     },
@@ -135,7 +140,23 @@ const show = () => {
       }
     >
       <Form {...searchFormProps} layout="inline">
-        <Form.Item name="name">
+        <Form.Item name="contractor">
+          <Input
+            placeholder="Search by contractor"
+            onChange={(e) => {
+              setFilters([
+                {
+                  field: "contractor.name",
+                  operator: "contains",
+                  value: e.currentTarget.value
+                    ? e.currentTarget.value
+                    : undefined,
+                },
+              ]);
+            }}
+          />
+          </Form.Item>
+          <Form.Item name="name">
           <Input
             placeholder="Search by name"
             onChange={(e) => {

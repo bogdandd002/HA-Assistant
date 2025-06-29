@@ -12,11 +12,11 @@ import {
   TabsProps,
   Typography,
   Checkbox,
-  CheckboxProps,
 } from "antd";
 import useGetUserIdentity from "../../store/user_data";
 import { useShallow } from "zustand/shallow";
 import { CheckboxGroupProps } from "antd/es/checkbox";
+import { useParsed, useUpdate } from "@refinedev/core";
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -56,7 +56,9 @@ const predefQuestions: Array<questions> = [
   },
 ];
 export const WaCommentsCreate = () => {
+  const { params: {...restParams} } = useParsed();
   const { form, formProps, saveButtonProps, query, onFinish } = useForm();
+  const { mutate } =useUpdate({ resource: "work-activities" });
   const user = useGetUserIdentity(useShallow((state) => state?.user));
   const [question_values, setQuestionValue] = useState(predefQuestions);
   const [approve, setApproval] = useState(true);
@@ -75,9 +77,7 @@ export const WaCommentsCreate = () => {
       })
     );
   };
-  const checkboxonChange: CheckboxProps["onChange"] = (e) => {
-    console.log(`checked = ${e.target.checked}`);
-  };
+
   useEffect(() => {
     question_values.map((question) => {
       if (question.q_condition === true) {
@@ -102,9 +102,6 @@ export const WaCommentsCreate = () => {
       label: "Work activity ",
       children: (
         <>
-          <Form {...formProps} form={form} layout="vertical"
-          >
-            <Form.Item name={["wa_comment_type"]}></Form.Item>
             <Row>
               <Col span={8}></Col>
               <Col span={8}>
@@ -153,20 +150,17 @@ export const WaCommentsCreate = () => {
                 <Title level={5}>Can this work activity begin? </Title>
               </Col>
             </Row>
-          </Form>
+          
         </>
       ),
     },
 
-    //Rams review TAB
+    //Ra review TAB
     {
       key: "2",
       label: "Risk assesment ",
       children: (
         <>
-          <Form {...formProps} form={form} layout="vertical">
-            <Form.Item name={["ra_comment_type"]}></Form.Item>
-            <Form.Item name={["ra_comment"]}></Form.Item>
             <Row>
               <Col span={8}></Col>
               <Col span={8}>
@@ -201,7 +195,13 @@ export const WaCommentsCreate = () => {
             </Row>
             <Row>
               <Col span={24}>
-                <Checkbox onChange={checkboxonChange}>
+                <Checkbox onChange={(e)=> {
+                  if(e.target.checked){
+                    form.setFieldValue("ra_comment_type", "approved")
+                  } else {
+                    form.setFieldValue("ra_comment_type", "rejected")
+                  }
+                }}>
                   Risk Assesment Meets Expectation
                 </Checkbox>
               </Col>
@@ -222,7 +222,6 @@ export const WaCommentsCreate = () => {
                 </Form.Item>
               </Col>
             </Row>
-          </Form>
         </>
       ),
     },
@@ -232,6 +231,7 @@ export const WaCommentsCreate = () => {
       label: "Method statement ",
       children: (
         <>
+
           <Row>
             <Col span={8}></Col>
             <Col span={8}>
@@ -266,7 +266,13 @@ export const WaCommentsCreate = () => {
           </Row>
           <Row>
             <Col span={24}>
-              <Checkbox onChange={checkboxonChange}>
+              <Checkbox onChange={(e)=> {
+              if(e.target.checked){
+              form.setFieldValue("ms_comment_type", "approved")
+              } else {
+              form.setFieldValue("ms_comment_type", "rejected")
+              }
+              }}>
                 Method Statement Meets Expectation
               </Checkbox>
             </Col>
@@ -275,7 +281,7 @@ export const WaCommentsCreate = () => {
           <Row>
             <Title level={5}> Comments </Title>
             <Col span={24}>
-              {" "}
+            <Form.Item name={["ms_comment"]}>
               <TextArea
                 placeholder="Please insert only your Method statement comments in this box"
                 showCount
@@ -283,6 +289,7 @@ export const WaCommentsCreate = () => {
                 maxLength={500}
                 style={{ height: 220 }}
               />
+              </Form.Item>
             </Col>
           </Row>
         </>
@@ -301,62 +308,41 @@ export const WaCommentsCreate = () => {
   };
 
   const handleOnFinish = () => {
+    const wa_status = form.getFieldValue("wa_comment_type")
+    const ra_status = form.getFieldValue("ra_comment_type")
+    const ms_status = form.getFieldValue("ms_comment_type")
     form.setFieldsValue({
       user: user?.id,
+      work_activity: restParams.wa,
     });
+    mutate({
+      id: restParams.wa,
+      values: {
+        approval_status: wa_status,
+        ra_approval_status: ra_status,
+        ms_approval_status: ms_status
+      }
+    })
 
     return form.getFieldsValue(true);
   };
 
   return (
     <Create saveButtonProps={saveButtonProps} title="Review work activity RAMS">
+       <Form {...formProps} form={form} layout="vertical"
+          onFinish={() => onFinish?.(handleOnFinish())}>
+  
       <Tabs defaultActiveKey="1" items={tabItems} size="large" type="card" />
-      {/* <Form 
-      {...formProps} 
-      form={form}
-      layout="vertical"
-      onFinish={() => onFinish?.(handleOnFinish())}>
-        <Form.Item
-          label="General Comment"
-          name={["comment"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <TextArea />
-        </Form.Item>
-        <Form.Item
-          label="Reason for comment"
-          name={["comment_type"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>{" "}
-        <Form.Item
-          name={["work_activity"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-        </Form.Item>
-         <Form.Item
-          name={["user"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-        </Form.Item>
-      </Form> */}
+
+       <Form.Item name={["user"]}></Form.Item>
+             <Form.Item name={["work_activity"]}></Form.Item>
+            <Form.Item name={["wa_comment_type"]} 
+            initialValue={"rejected"}></Form.Item>
+            <Form.Item name={["ms_comment_type"]}
+            initialValue={"rejected"}></Form.Item>
+            <Form.Item name={["ra_comment_type"]}
+            initialValue={"rejected"}></Form.Item>
+      </Form>
     </Create>
   );
 };
